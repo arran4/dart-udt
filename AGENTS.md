@@ -37,9 +37,13 @@
 - Epoll porting milestone: keep the API centered on a pure-Dart `UdtEpoll` readiness model over typed socket IDs, with `UdtRawDatagramEventSource` as the adapter boundary; defer mixed local/system descriptor parity as explicit TODO until socket-layer modules are ported.
 
 - Threading/locking parity note: when porting upstream `pthread_mutex_t`/`pthread_cond_t` sections (for example in `queue.h`/`queue.cpp`), prefer pure-Dart async wrappers (`UdtAsyncMutex`, `UdtAsyncSignal`, `UdtSerialExecutor`) and cover ordering/wakeup behavior with deterministic tests.
-- Documentation note: keep `docs/migration_from_cpp.md` updated when public API wrappers are added so `dart doc` output has explicit C++ migration breadcrumbs.
+- Documentation note: keep `docs/migration.md` updated when public API wrappers are added so `dart doc` output has explicit C++ migration breadcrumbs.
 - Epoll robustness note: guard `UdtEpoll.wait` to a single concurrent waiter per poll ID and only complete waiters once, then cover both paths with deterministic fake event-source tests.
 - CCC base porting note: keep upstream `CCC` side effects injectable (for example custom control-message sending) so base callback/configuration parity can be tested deterministically without socket I/O.
 - CUDTCC porting note: keep `UdtDefaultCongestionControl` clock and randomization hooks injectable so `init`/`onACK`/`onLoss`/`onTimeout` parity tests stay deterministic without network resources.
 
 - MD5 porting note: upstream `md5.h`/`md5.cpp` are now represented by pure-Dart `UdtMd5` with deterministic RFC1321 vectors and incremental append/finalize tests; retire large commented MD5 scaffold blocks once replacement parity lands.
+
+- Congestion-control parity note: keep deterministic `CUDTCC` trace-fixture tests for ACK/loss/timeout transitions so `ccc.cpp` branches remain auditable without socket I/O.
+
+- Cache porting note: upstream `CCache`/`CInfoBlock` behavior should remain in typed pure-Dart wrappers (`UdtLruCache`, `UdtInfoBlock`) with deterministic no-network tests for key/equality/LRU semantics.

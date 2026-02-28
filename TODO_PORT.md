@@ -16,6 +16,7 @@
 - [x] Port upstream `md5.h`/`md5.cpp` into pure-Dart incremental hashing (`UdtMd5`) with deterministic RFC1321 test vectors and no external dependencies.
 - [x] Port upstream `list.h`/`list.cpp` sender/receiver loss-list behavior into typed pure-Dart interval models (`UdtSndLossList`, `UdtRcvLossList`) with deterministic no-socket tests.
 - [x] Port upstream `window.h`/`window.cpp` ACK/timing window behavior into pure-Dart typed models (`UdtAckWindow`, `UdtPacketTimeWindow`) with injectable fake-clock deterministic tests.
+- [x] Port upstream `cache.h`/`cache.cpp` cache/info behavior into pure-Dart typed models (`UdtLruCache`, `UdtInfoBlock`) with deterministic no-network tests.
 
 ## 3. Concurrency and eventing
 - [x] Port threading/locking model to Dart isolates and async primitives.
@@ -29,7 +30,7 @@
 - [ ] Define mobile constraints (backgrounding, power/network transitions).
 
 ## 5. Reliability, congestion control, and performance
-- [ ] Port congestion control base (`CCC`) and verify algorithmic equivalence with trace fixtures.
+- [x] Port congestion control base (`CCC`) and verify algorithmic equivalence with trace fixtures.
   - [x] Port upstream `CCC` base callback/configuration surface (`setACKTimer`, `setACKInterval`, `setRTO`, `setUserParam`, and injectable custom control-message send path) as a pure-Dart wrapper with deterministic unit tests.
   - [x] Port upstream default `CUDTCC` algorithm behavior (`onACK`/`onLoss`/`onTimeout`) with deterministic parity tests (rate-control interval, slow-start, loss decrease, timeout branches) that avoid real socket I/O.
 - [ ] Build reproducible latency/loss simulation tests (delay, reordering, jitter, drop).
