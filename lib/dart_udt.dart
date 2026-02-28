@@ -6,6 +6,7 @@ export 'src/udt_port/core/ack_nak_timer_model.dart';
 export 'src/udt_port/core/threading.dart';
 export 'src/udt_port/ccc/congestion_control.dart';
 export 'src/udt_port/common/md5.dart';
+export 'src/udt_port/common/sequence_numbers.dart';
 export 'src/udt_port/epoll/poll.dart';
 export 'src/udt_port/protocol/handshake.dart';
 export 'src/udt_port/protocol/control_packet.dart';
