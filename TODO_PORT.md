@@ -37,7 +37,7 @@
 
 ## 6. Testing strategy (full coverage goal)
 - [ ] Unit tests for each ported module with branch coverage targets.
-- [ ] Golden protocol tests from captured upstream packet traces.
+- [x] Golden protocol tests from captured upstream packet traces.
 - [ ] Integration tests: loopback client/server file transfer with integrity checks.
 - [ ] Cross-platform CI matrix: Linux, macOS, Windows (and optional Android/iOS emulation).
 - [x] Fuzz/property tests for packet parser and state machine transitions.
