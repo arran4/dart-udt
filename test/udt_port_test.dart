@@ -217,6 +217,29 @@ void main() {
     expect(ack2.header.additionalInfo, equals(99));
   });
 
+  test('congestion warning and shutdown packets are typed zero-payload controls', () {
+    final congestion = UdtControlPacket.congestionWarning(
+      timestamp: 31,
+      destinationSocketId: 32,
+    );
+    final shutdown = UdtControlPacket.shutdown(
+      timestamp: 33,
+      destinationSocketId: 34,
+    );
+
+    final reparsedCongestion = UdtControlPacket.parse(
+      UdtPacket.parse(congestion.toPacket().toBytes()),
+    );
+    final reparsedShutdown = UdtControlPacket.parse(
+      UdtPacket.parse(shutdown.toPacket().toBytes()),
+    );
+
+    expect(reparsedCongestion.type, equals(UdtControlType.congestionWarning));
+    expect(reparsedCongestion.controlInformation, isEmpty);
+    expect(reparsedShutdown.type, equals(UdtControlType.shutdown));
+    expect(reparsedShutdown.controlInformation, isEmpty);
+  });
+
   test('NAK and message drop request control payloads are deterministic', () {
     final nak = UdtControlPacket.nak(
       lossList: [0x10000001, 0x00000042],
@@ -242,6 +265,34 @@ void main() {
     expect(reparsedDrop.parseMessageDropRequest().lastSequenceNumber, equals(700));
   });
 
+  test('error signal and user-defined control wrappers preserve header fields', () {
+    final errorSignal = UdtControlPacket.errorSignal(
+      errorType: 404,
+      timestamp: 41,
+      destinationSocketId: 42,
+    );
+    final userDefined = UdtControlPacket.userDefined(
+      extendedType: 0xBEEF,
+      timestamp: 43,
+      destinationSocketId: 44,
+      controlInformation: Uint8List.fromList([9, 8, 7, 6]),
+    );
+
+    final reparsedErrorSignal = UdtControlPacket.parse(
+      UdtPacket.parse(errorSignal.toPacket().toBytes()),
+    );
+    final reparsedUserDefined = UdtControlPacket.parse(
+      UdtPacket.parse(userDefined.toPacket().toBytes()),
+    );
+
+    expect(reparsedErrorSignal.type, equals(UdtControlType.errorSignal));
+    expect(reparsedErrorSignal.parseErrorSignalType(), equals(404));
+    expect(reparsedErrorSignal.controlInformation, isEmpty);
+    expect(reparsedUserDefined.type, equals(UdtControlType.userDefined));
+    expect(reparsedUserDefined.parseUserDefinedExtendedType(), equals(0xBEEF));
+    expect(reparsedUserDefined.controlInformation, equals([9, 8, 7, 6]));
+  });
+
   test('invalid payload size throws', () {
     expect(
       () => UdtPacketHeader.parse(Uint8List(8)),
@@ -259,6 +310,17 @@ void main() {
   test('invalid ACK payload throws', () {
     expect(
       () => UdtAckControlInfo.parse(Uint8List.fromList([1, 2, 3])),
+      throwsA(isA<ArgumentError>()),
+    );
+  });
+
+  test('invalid user-defined extended type throws', () {
+    expect(
+      () => UdtControlPacket.userDefined(
+        extendedType: 0x10000,
+        timestamp: 1,
+        destinationSocketId: 2,
+      ),
       throwsA(isA<ArgumentError>()),
     );
   });

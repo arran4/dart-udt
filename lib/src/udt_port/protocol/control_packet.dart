@@ -151,6 +151,19 @@ final class UdtControlPacket {
     );
   }
 
+  factory UdtControlPacket.congestionWarning({
+    required int timestamp,
+    required int destinationSocketId,
+  }) {
+    return UdtControlPacket._(
+      header: UdtPacketHeader.control(
+        controlType: UdtControlType.congestionWarning.code,
+        timestamp: timestamp,
+        destinationSocketId: destinationSocketId,
+      ),
+    );
+  }
+
   factory UdtControlPacket.ack({
     required int ackSequenceNumber,
     required UdtAckControlInfo info,
@@ -207,6 +220,19 @@ final class UdtControlPacket {
     );
   }
 
+  factory UdtControlPacket.shutdown({
+    required int timestamp,
+    required int destinationSocketId,
+  }) {
+    return UdtControlPacket._(
+      header: UdtPacketHeader.control(
+        controlType: UdtControlType.shutdown.code,
+        timestamp: timestamp,
+        destinationSocketId: destinationSocketId,
+      ),
+    );
+  }
+
   factory UdtControlPacket.messageDropRequest({
     required int messageId,
     required UdtMessageDropRequestControlInfo info,
@@ -222,6 +248,47 @@ final class UdtControlPacket {
         destinationSocketId: destinationSocketId,
       ),
       controlInformation: info.toBytes(),
+    );
+  }
+
+  factory UdtControlPacket.errorSignal({
+    required int errorType,
+    required int timestamp,
+    required int destinationSocketId,
+  }) {
+    _checkInt32(errorType, 'errorType');
+    return UdtControlPacket._(
+      header: UdtPacketHeader.control(
+        controlType: UdtControlType.errorSignal.code,
+        additionalInfo: errorType,
+        timestamp: timestamp,
+        destinationSocketId: destinationSocketId,
+      ),
+    );
+  }
+
+  factory UdtControlPacket.userDefined({
+    required int extendedType,
+    required int timestamp,
+    required int destinationSocketId,
+    Uint8List? controlInformation,
+  }) {
+    if (extendedType < 0 || extendedType > 0xFFFF) {
+      throw ArgumentError.value(
+        extendedType,
+        'extendedType',
+        'Must be in uint16 range',
+      );
+    }
+
+    return UdtControlPacket._(
+      header: UdtPacketHeader.control(
+        controlType: UdtControlType.userDefined.code,
+        controlReserved: extendedType,
+        timestamp: timestamp,
+        destinationSocketId: destinationSocketId,
+      ),
+      controlInformation: controlInformation,
     );
   }
 
@@ -276,6 +343,16 @@ final class UdtControlPacket {
   UdtMessageDropRequestControlInfo parseMessageDropRequest() {
     _ensureType(UdtControlType.messageDropRequest);
     return UdtMessageDropRequestControlInfo.parse(controlInformation);
+  }
+
+  int parseErrorSignalType() {
+    _ensureType(UdtControlType.errorSignal);
+    return header.additionalInfo;
+  }
+
+  int parseUserDefinedExtendedType() {
+    _ensureType(UdtControlType.userDefined);
+    return header.controlReserved!;
   }
 
   void _ensureType(UdtControlType expected) {
