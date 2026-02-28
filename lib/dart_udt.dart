@@ -8,6 +8,7 @@ export 'src/udt_port/ccc/congestion_control.dart';
 export 'src/udt_port/common/md5.dart';
 export 'src/udt_port/common/sequence_numbers.dart';
 export 'src/udt_port/epoll/poll.dart';
+export 'src/udt_port/list/loss_list.dart';
 export 'src/udt_port/protocol/handshake.dart';
 export 'src/udt_port/protocol/control_packet.dart';
 export 'src/udt_port/protocol/packet.dart';

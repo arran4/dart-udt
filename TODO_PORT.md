@@ -14,6 +14,7 @@
 - [x] Add initial pure-Dart packet header codec (`UdtPacketHeader`) using `ByteData` and deterministic tests as first protocol building block.
 - [x] Add typed deterministic wrappers/tests for all upstream control packet variants in `CPacket::pack` (handshake, keep-alive, ACK, NAK, congestion warning, shutdown, ACK-2, message-drop, error signal, user-defined).
 - [x] Port upstream `md5.h`/`md5.cpp` into pure-Dart incremental hashing (`UdtMd5`) with deterministic RFC1321 test vectors and no external dependencies.
+- [x] Port upstream `list.h`/`list.cpp` sender/receiver loss-list behavior into typed pure-Dart interval models (`UdtSndLossList`, `UdtRcvLossList`) with deterministic no-socket tests.
 
 ## 3. Concurrency and eventing
 - [x] Port threading/locking model to Dart isolates and async primitives.
