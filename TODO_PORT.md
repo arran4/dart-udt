@@ -8,9 +8,9 @@
 
 ## 2. Source decomposition (from C++ modules)
 - [x] Map these modules into Dart libraries: `api`, `core`, `channel`, `epoll`, `queue`, `buffer`, `packet`, `window`, `cache`, `list`, `ccc`, `md5`, `common`.
-- [ ] Replace pointer-heavy data structures with typed Dart classes/records.
-- [ ] Define memory/packet layout adapters using `ByteData` and `Uint8List`.
-- [ ] Create deterministic serialization/deserialization tests for packet headers and control messages.
+- [x] Replace pointer-heavy data structures with typed Dart classes/records.
+- [x] Define memory/packet layout adapters using `ByteData` and `Uint8List`.
+- [ ] Create deterministic serialization/deserialization tests for packet headers and control messages (handshake complete; ACK/NAK/KEEPALIVE/etc. pending).
 - [x] Add initial pure-Dart packet header codec (`UdtPacketHeader`) using `ByteData` and deterministic tests as first protocol building block.
 
 ## 3. Concurrency and eventing

@@ -17,3 +17,9 @@
 
 - Keep dependencies minimal; prefer in-house helpers for small needs.
 - Run `dart format .` after changes.
+
+
+## Porting notes discovered during implementation
+
+- For protocol structs mirrored from upstream (for example `CHandShake` in `packet.h`), prefer explicit fixed-word constants and `ByteData` offsets over reflection/dynamic maps so binary layouts stay auditable and deterministic.
+- When replacing upstream pointer/alias packet fields, prefer immutable typed wrappers (`UdtPacketHeader` + `Uint8List` payload in a typed container) to preserve ownership semantics without pointer abstractions.
