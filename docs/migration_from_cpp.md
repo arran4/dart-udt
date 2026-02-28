@@ -11,6 +11,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 - Upstream `epoll.h` / `epoll.cpp` -> `lib/src/udt_port/epoll/`
 - Upstream lock/cond/worker-loop usage in `queue.h` / `queue.cpp` ->
   `lib/src/udt_port/core/threading.dart`
+- Upstream `ccc.h` / `ccc.cpp` base `CCC` wrapper ->
+  `lib/src/udt_port/ccc/congestion_control.dart`
 
 ## API shape changes
 
@@ -22,6 +24,9 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 - Pthread primitives (`pthread_mutex_t`, `pthread_cond_t`, worker threads) are
   mapped to pure-Dart async primitives: `UdtAsyncMutex`, `UdtAsyncSignal`, and
   `UdtSerialExecutor`.
+- Base congestion-control callback/configuration surface from `CCC` is mapped to
+  `UdtCongestionControl` with injectable side effects (for example custom
+  control-message send) to keep no-socket deterministic tests feasible.
 
 ## Current limitations
 

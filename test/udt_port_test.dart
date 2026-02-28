@@ -374,6 +374,58 @@ void main() {
     expect(() => clock.advanceMicros(-1), throwsA(isA<ArgumentError>()));
   });
 
+  test('CCC constructor rejects non-positive syn interval', () {
+    expect(
+      () => UdtCongestionControl(synIntervalMillis: 0),
+      throwsA(isA<ArgumentError>()),
+    );
+  });
+
+  test('CCC setACKTimer caps at SYN interval and keeps small values', () {
+    final ccc = UdtCongestionControl(synIntervalMillis: 10);
+
+    ccc.setAckTimer(3);
+    expect(ccc.ackPeriodMillis, equals(3));
+
+    ccc.setAckTimer(20);
+    expect(ccc.ackPeriodMillis, equals(10));
+  });
+
+  test('CCC custom message sender is injectable and deterministic', () {
+    UdtControlPacket? sent;
+    final ccc = UdtCongestionControl(
+      customMessageSender: (packet) => sent = packet,
+    );
+
+    final userDefined = UdtControlPacket.userDefined(
+      extendedType: 0x1111,
+      timestamp: 7,
+      destinationSocketId: 8,
+      controlInformation: Uint8List.fromList([1, 2]),
+    );
+
+    ccc.sendCustomMessage(userDefined);
+
+    expect(sent, isNotNull);
+    expect(sent!.type, equals(UdtControlType.userDefined));
+    expect(sent!.parseUserDefinedExtendedType(), equals(0x1111));
+    expect(sent!.controlInformation, equals([1, 2]));
+  });
+
+  test('CCC RTO and user-param setters preserve base-state parity', () {
+    final ccc = UdtCongestionControl();
+
+    ccc.setRto(2500);
+    expect(ccc.hasUserDefinedRto, isTrue);
+    expect(ccc.retransmissionTimeoutMicros, equals(2500));
+
+    final input = Uint8List.fromList([4, 5, 6]);
+    ccc.setUserParam(input);
+    input[0] = 9;
+
+    expect(ccc.userParam, equals([4, 5, 6]));
+  });
+
   _epollTests();
 }
 

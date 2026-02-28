@@ -49,6 +49,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Deterministic ACK/NAK retransmission timer modeling is available via `UdtAckNakTimerModel` with an injectable fake clock (`UdtFakeClock`) for no-socket tests.
 - Pure-Dart threading/locking primitives (`UdtAsyncMutex`, `UdtAsyncSignal`, `UdtSerialExecutor`) now model upstream mutex/condition/worker-loop behavior without pthreads.
 - Incremental pure-Dart epoll abstraction (`UdtEpoll`) is available with a stream-based adapter for `RawDatagramSocket` readiness events and deterministic fake event-source tests.
+- A pure-Dart `UdtCongestionControl` base wrapper now ports upstream `CCC` callback/configuration surface with injectable custom-control send behavior for deterministic tests.
 
 ## Temporary measures tracked
 
@@ -56,6 +57,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - ACK/NAK timeout modeling currently targets deterministic unit tests first; full integration with live socket scheduling remains TODO.
 - Threading helpers currently target isolate-free async primitives for deterministic tests; optional isolate-backed execution can be layered later if needed.
 - Epoll abstraction currently focuses on UDT-socket ID readiness sets; parity for mixed local/system descriptor polling remains TODO.
+- Congestion control currently ports upstream `CCC` base surfaces only; default `CUDTCC` algorithm parity remains TODO.
 
 ## Example
 
