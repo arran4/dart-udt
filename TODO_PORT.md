@@ -15,7 +15,7 @@
 
 ## 3. Concurrency and eventing
 - [ ] Port threading/locking model to Dart isolates and async primitives.
-- [ ] Model timers, retransmission, ACK/NAK handling with deterministic fake clocks for tests.
+- [x] Model timers, retransmission, ACK/NAK handling with deterministic fake clocks for tests.
 - [ ] Provide poll/epoll-style API abstraction mapped to `RawDatagramSocket` event streams.
 
 ## 4. Networking and platform compatibility
@@ -40,9 +40,9 @@
 - [x] Add deterministic protocol codec tests that avoid real network/file resources.
 
 ## 7. Tooling, docs, and pub.dev readiness
-- [ ] Enable strict lints, formatting, and static analysis in CI.
+- [x] Enable strict lints, formatting, and static analysis in CI.
 - [ ] Generate API docs (`dart doc`) with migration notes from C++ API.
-- [ ] Add examples (`example/`) for client/server usage.
+- [x] Add examples (`example/`) for client/server usage.
 - [x] Provide platform support table and known limitations in README.
 - [ ] Validate pub score inputs: license, topics, screenshots/badges, example quality.
 - [ ] Publish as pre-release first (`-dev`), gather feedback, then stable release.

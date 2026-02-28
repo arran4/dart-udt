@@ -25,3 +25,9 @@
 - When replacing upstream pointer/alias packet fields, prefer immutable typed wrappers (`UdtPacketHeader` + `Uint8List` payload in a typed container) to preserve ownership semantics without pointer abstractions.
 
 - For control packet variants from upstream `CPacket::pack`, prefer a typed `UdtControlPacket` wrapper with dedicated payload value objects (for example ACK and message-drop payload classes) so deterministic tests can cover each variant without socket I/O.
+
+## Additional implementation notes (session updates)
+
+- Keep protocol-state timing logic injectable via a clock interface (`UdtProtocolClock`) with a fake clock implementation (`UdtFakeClock`) so ACK/NAK retransmission behavior can be tested deterministically without sockets.
+- Maintain CI checks for `dart format --set-exit-if-changed .`, `dart analyze`, and `dart test` to enforce pure-Dart quality gates before merging.
+- Keep runnable examples network-free where possible (codec/protocol-state examples) unless a TODO item explicitly requires live socket behavior.
