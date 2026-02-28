@@ -42,9 +42,10 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Package scaffold is present.
 - Deterministic pure-Dart UDT packet header parsing/serialization is implemented.
 - Deterministic pure-Dart `CHandShake` payload encoding/decoding is implemented as a `ByteData`-backed layout adapter.
+- Deterministic pure-Dart control packet wrappers are implemented for handshake, ACK, NAK, keep-alive, ACK-2, and message drop request payloads.
 - A typed `UdtPacket` container replaces pointer/alias-style packet ownership for header + payload composition.
 - A starter TODO plan for cross-platform implementation and full testing exists in `TODO_PORT.md`.
 
 ## Temporary measures tracked
 
-- Control packet coverage is currently focused on handshake payload layout and generic packet header encoding; additional control-message variants (ACK/NAK/KEEPALIVE/etc.) remain listed in `TODO_PORT.md`.
+- Control packet wrapper coverage exists for handshake/ACK/NAK/keep-alive/ACK-2/message-drop deterministic codecs, while congestion warning, shutdown, error signal, and user-defined control extensions still need dedicated typed wrappers.

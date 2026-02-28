@@ -157,6 +157,91 @@ void main() {
     expect(reparsed.peerIp, equals(const [0x0A000001, 0, 0, 0]));
   });
 
+  test('control handshake packet round-trips through typed wrapper', () {
+    final handshake = UdtHandshake(
+      version: 5,
+      socketType: 2,
+      initialSequenceNumber: 0x11111111,
+      maximumSegmentSize: 1400,
+      flightFlagSize: 8192,
+      requestType: 1,
+      socketId: 300,
+      cookie: 0x7F7F7F7F,
+      peerIp: const [0x7F000001, 0, 0, 0],
+    );
+    final controlPacket = UdtControlPacket.handshake(
+      handshake: handshake,
+      timestamp: 100,
+      destinationSocketId: 200,
+    );
+
+    final reparsed = UdtControlPacket.parse(
+      UdtPacket.parse(controlPacket.toPacket().toBytes()),
+    );
+
+    expect(reparsed.type, equals(UdtControlType.handshake));
+    expect(reparsed.parseHandshake().socketId, equals(300));
+  });
+
+  test('ACK control packet keeps sequence and optional metrics', () {
+    final packet = UdtControlPacket.ack(
+      ackSequenceNumber: 77,
+      info: const UdtAckControlInfo(
+        receivedSequenceNumber: 1200,
+        optionalMetrics: [50, 7, 4096, 64, 900],
+      ),
+      timestamp: 10,
+      destinationSocketId: 11,
+    );
+
+    final reparsed = UdtControlPacket.parse(UdtPacket.parse(packet.toPacket().toBytes()));
+    expect(reparsed.type, equals(UdtControlType.ack));
+    expect(reparsed.header.additionalInfo, equals(77));
+    expect(reparsed.parseAckControlInfo().receivedSequenceNumber, equals(1200));
+    expect(reparsed.parseAckControlInfo().optionalMetrics, equals([50, 7, 4096, 64, 900]));
+  });
+
+  test('keep-alive and ACK2 control packets carry no payload bytes', () {
+    final keepAlive = UdtControlPacket.keepAlive(
+      timestamp: 12,
+      destinationSocketId: 13,
+    );
+    final ack2 = UdtControlPacket.ack2(
+      ackSequenceNumber: 99,
+      timestamp: 14,
+      destinationSocketId: 15,
+    );
+
+    expect(keepAlive.controlInformation, isEmpty);
+    expect(ack2.controlInformation, isEmpty);
+    expect(ack2.header.additionalInfo, equals(99));
+  });
+
+  test('NAK and message drop request control payloads are deterministic', () {
+    final nak = UdtControlPacket.nak(
+      lossList: [0x10000001, 0x00000042],
+      timestamp: 21,
+      destinationSocketId: 22,
+    );
+    final drop = UdtControlPacket.messageDropRequest(
+      messageId: 123,
+      info: const UdtMessageDropRequestControlInfo(
+        firstSequenceNumber: 500,
+        lastSequenceNumber: 700,
+      ),
+      timestamp: 23,
+      destinationSocketId: 24,
+    );
+
+    final reparsedNak = UdtControlPacket.parse(UdtPacket.parse(nak.toPacket().toBytes()));
+    final reparsedDrop = UdtControlPacket.parse(UdtPacket.parse(drop.toPacket().toBytes()));
+
+    expect(reparsedNak.parseNakLossList(), equals([0x10000001, 0x00000042]));
+    expect(reparsedDrop.header.additionalInfo, equals(123));
+    expect(reparsedDrop.parseMessageDropRequest().firstSequenceNumber, equals(500));
+    expect(reparsedDrop.parseMessageDropRequest().lastSequenceNumber, equals(700));
+  });
+
   test('invalid payload size throws', () {
     expect(
       () => UdtPacketHeader.parse(Uint8List(8)),
@@ -167,6 +252,13 @@ void main() {
   test('invalid handshake size throws', () {
     expect(
       () => UdtHandshake.parse(Uint8List(8)),
+      throwsA(isA<ArgumentError>()),
+    );
+  });
+
+  test('invalid ACK payload throws', () {
+    expect(
+      () => UdtAckControlInfo.parse(Uint8List.fromList([1, 2, 3])),
       throwsA(isA<ArgumentError>()),
     );
   });
