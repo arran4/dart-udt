@@ -15,7 +15,7 @@
 - [x] Add typed deterministic wrappers/tests for all upstream control packet variants in `CPacket::pack` (handshake, keep-alive, ACK, NAK, congestion warning, shutdown, ACK-2, message-drop, error signal, user-defined).
 
 ## 3. Concurrency and eventing
-- [ ] Port threading/locking model to Dart isolates and async primitives.
+- [x] Port threading/locking model to Dart isolates and async primitives.
 - [x] Model timers, retransmission, ACK/NAK handling with deterministic fake clocks for tests.
 - [x] Provide poll/epoll-style API abstraction mapped to `RawDatagramSocket` event streams.
 
@@ -42,7 +42,7 @@
 
 ## 7. Tooling, docs, and pub.dev readiness
 - [x] Enable strict lints, formatting, and static analysis in CI.
-- [ ] Generate API docs (`dart doc`) with migration notes from C++ API.
+- [x] Generate API docs (`dart doc`) with migration notes from C++ API.
 - [x] Add examples (`example/`) for client/server usage.
 - [x] Provide platform support table and known limitations in README.
 - [ ] Validate pub score inputs: license, topics, screenshots/badges, example quality.

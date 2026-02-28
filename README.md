@@ -13,6 +13,7 @@ Work-in-progress **pure Dart-first** port of the UDT (UDP-based Data Transfer) l
 - Goal: provide practical parity with core UDT socket/session behavior from `udt.h`.
 - Non-goals for first release: legacy/deprecated APIs that conflict with Dart's async model or require platform-specific native hooks.
 - Temporary measure: packet header serialization/deserialization is implemented first as a deterministic building block while higher-level transport state machines remain TODO.
+- Migration notes for C++ users live in `docs/migration_from_cpp.md` and are generated alongside API docs with `dart doc`.
 
 ## Platform and SDK support target
 
@@ -46,15 +47,23 @@ These files are **not executable Dart implementations**; they are preserved as l
 - A typed `UdtPacket` container replaces pointer/alias-style packet ownership for header + payload composition.
 - A starter TODO plan for cross-platform implementation and full testing exists in `TODO_PORT.md`.
 - Deterministic ACK/NAK retransmission timer modeling is available via `UdtAckNakTimerModel` with an injectable fake clock (`UdtFakeClock`) for no-socket tests.
+- Pure-Dart threading/locking primitives (`UdtAsyncMutex`, `UdtAsyncSignal`, `UdtSerialExecutor`) now model upstream mutex/condition/worker-loop behavior without pthreads.
 - Incremental pure-Dart epoll abstraction (`UdtEpoll`) is available with a stream-based adapter for `RawDatagramSocket` readiness events and deterministic fake event-source tests.
 
 ## Temporary measures tracked
 
 - Control packet wrappers now cover every upstream `CPacket::pack` control type branch; semantic handling above deterministic encoding/decoding is still incremental in higher protocol layers.
 - ACK/NAK timeout modeling currently targets deterministic unit tests first; full integration with live socket scheduling remains TODO.
+- Threading helpers currently target isolate-free async primitives for deterministic tests; optional isolate-backed execution can be layered later if needed.
 - Epoll abstraction currently focuses on UDT-socket ID readiness sets; parity for mixed local/system descriptor polling remains TODO.
 
 ## Example
 
 - Run the deterministic control codec example (no network needed):
   - `dart run example/control_packet_codec.dart`
+
+
+## Docs
+
+- Generate API docs locally with: `dart doc`.
+- C++ to Dart API migration notes: `docs/migration_from_cpp.md`.

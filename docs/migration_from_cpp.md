@@ -1,0 +1,29 @@
+# Migrating from upstream C++ UDT APIs
+
+This port keeps upstream source references in `lib/src/upstream_udt_comment/` and
+moves implementation to pure Dart typed wrappers.
+
+## Module mapping
+
+Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
+
+- Upstream `packet.h` / `packet.cpp` -> `lib/src/udt_port/protocol/`
+- Upstream `epoll.h` / `epoll.cpp` -> `lib/src/udt_port/epoll/`
+- Upstream lock/cond/worker-loop usage in `queue.h` / `queue.cpp` ->
+  `lib/src/udt_port/core/threading.dart`
+
+## API shape changes
+
+- Pointer/alias packet ownership (`CPacket`) is replaced by immutable typed
+  wrappers: `UdtPacketHeader`, `UdtPacket`, `UdtControlPacket`, and typed payload
+  value objects.
+- Binary payload layouts are encoded via explicit `ByteData` offsets to keep
+  packet formats deterministic and auditable.
+- Pthread primitives (`pthread_mutex_t`, `pthread_cond_t`, worker threads) are
+  mapped to pure-Dart async primitives: `UdtAsyncMutex`, `UdtAsyncSignal`, and
+  `UdtSerialExecutor`.
+
+## Current limitations
+
+- Socket-level parity, mixed local/system descriptor polling, and full
+  congestion-control behavior are still tracked in `TODO_PORT.md`.
