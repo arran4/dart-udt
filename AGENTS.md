@@ -31,3 +31,5 @@
 - Keep protocol-state timing logic injectable via a clock interface (`UdtProtocolClock`) with a fake clock implementation (`UdtFakeClock`) so ACK/NAK retransmission behavior can be tested deterministically without sockets.
 - Maintain CI checks for `dart format --set-exit-if-changed .`, `dart analyze`, and `dart test` to enforce pure-Dart quality gates before merging.
 - Keep runnable examples network-free where possible (codec/protocol-state examples) unless a TODO item explicitly requires live socket behavior.
+
+- Control packet porting note: upstream `CPacket::pack` control variants are now all represented by typed constructors (`UdtControlPacket.*`), and tests should keep asserting branch-level parity on header fields and payload layout without socket I/O.
