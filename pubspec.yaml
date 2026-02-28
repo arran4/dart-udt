@@ -3,6 +3,13 @@ description: A work-in-progress pure Dart port scaffold of the UDT (UDP-based Da
 version: 0.0.1-dev
 repository: https://github.com/arran4/dart-udt
 homepage: https://github.com/arran4/dart-udt
+issue_tracker: https://github.com/arran4/dart-udt/issues
+topics:
+  - networking
+  - udp
+  - protocol
+  - reliability
+  - transport
 environment:
   sdk: ^3.3.0
 

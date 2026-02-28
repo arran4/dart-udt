@@ -50,5 +50,5 @@
 - [x] Generate API docs (`dart doc`) with migration notes from C++ API.
 - [x] Add examples (`example/`) for client/server usage.
 - [x] Provide platform support table and known limitations in README.
-- [ ] Validate pub score inputs: license, topics, screenshots/badges, example quality.
+- [x] Validate pub score inputs: license, topics, screenshots/badges, example quality.
 - [ ] Publish as pre-release first (`-dev`), gather feedback, then stable release.
