@@ -45,7 +45,14 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Deterministic pure-Dart control packet wrappers are implemented for handshake, ACK, NAK, keep-alive, ACK-2, and message drop request payloads.
 - A typed `UdtPacket` container replaces pointer/alias-style packet ownership for header + payload composition.
 - A starter TODO plan for cross-platform implementation and full testing exists in `TODO_PORT.md`.
+- Deterministic ACK/NAK retransmission timer modeling is available via `UdtAckNakTimerModel` with an injectable fake clock (`UdtFakeClock`) for no-socket tests.
 
 ## Temporary measures tracked
 
 - Control packet wrapper coverage exists for handshake/ACK/NAK/keep-alive/ACK-2/message-drop deterministic codecs, while congestion warning, shutdown, error signal, and user-defined control extensions still need dedicated typed wrappers.
+- ACK/NAK timeout modeling currently targets deterministic unit tests first; full integration with live socket scheduling remains TODO.
+
+## Example
+
+- Run the deterministic control codec example (no network needed):
+  - `dart run example/control_packet_codec.dart`

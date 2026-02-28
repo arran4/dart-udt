@@ -2,6 +2,7 @@
 library;
 
 export 'src/udt_port/planning/module_map.dart';
+export 'src/udt_port/core/ack_nak_timer_model.dart';
 export 'src/udt_port/protocol/handshake.dart';
 export 'src/udt_port/protocol/control_packet.dart';
 export 'src/udt_port/protocol/packet.dart';

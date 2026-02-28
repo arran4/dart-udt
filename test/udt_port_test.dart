@@ -262,4 +262,44 @@ void main() {
       throwsA(isA<ArgumentError>()),
     );
   });
+
+  test('ACK/NAK timer model supports deterministic fake clock timeouts', () {
+    final clock = UdtFakeClock();
+    final model = UdtAckNakTimerModel(
+      clock: clock,
+      retransmissionTimeoutMicros: 100,
+    );
+
+    model.onPacketSent(10);
+    model.onPacketSent(11);
+    clock.advanceMicros(99);
+    expect(model.collectTimedOutSequences(), isEmpty);
+
+    clock.advanceMicros(1);
+    expect(model.collectTimedOutSequences(), equals([10, 11]));
+
+    model.onAckReceived(10);
+    expect(model.collectTimedOutSequences(), equals([11]));
+  });
+
+  test('NAK path marks known lost packets as immediately retransmittable', () {
+    final clock = UdtFakeClock(initialMicros: 1000);
+    final model = UdtAckNakTimerModel(
+      clock: clock,
+      retransmissionTimeoutMicros: 50,
+    );
+
+    model.onPacketSent(20);
+    model.onPacketSent(30);
+
+    final dueNow = model.onNakReceived([30, 40]);
+    expect(dueNow, equals([30]));
+    expect(model.collectTimedOutSequences(), equals([30]));
+  });
+
+  test('fake clock rejects negative advancement', () {
+    final clock = UdtFakeClock();
+    expect(() => clock.advanceMicros(-1), throwsA(isA<ArgumentError>()));
+  });
+
 }
