@@ -38,3 +38,4 @@
 
 - Threading/locking parity note: when porting upstream `pthread_mutex_t`/`pthread_cond_t` sections (for example in `queue.h`/`queue.cpp`), prefer pure-Dart async wrappers (`UdtAsyncMutex`, `UdtAsyncSignal`, `UdtSerialExecutor`) and cover ordering/wakeup behavior with deterministic tests.
 - Documentation note: keep `docs/migration_from_cpp.md` updated when public API wrappers are added so `dart doc` output has explicit C++ migration breadcrumbs.
+- Epoll robustness note: guard `UdtEpoll.wait` to a single concurrent waiter per poll ID and only complete waiters once, then cover both paths with deterministic fake event-source tests.
