@@ -40,3 +40,4 @@
 - Documentation note: keep `docs/migration_from_cpp.md` updated when public API wrappers are added so `dart doc` output has explicit C++ migration breadcrumbs.
 - Epoll robustness note: guard `UdtEpoll.wait` to a single concurrent waiter per poll ID and only complete waiters once, then cover both paths with deterministic fake event-source tests.
 - CCC base porting note: keep upstream `CCC` side effects injectable (for example custom control-message sending) so base callback/configuration parity can be tested deterministically without socket I/O.
+- CUDTCC porting note: keep `UdtDefaultCongestionControl` clock and randomization hooks injectable so `init`/`onACK`/`onLoss`/`onTimeout` parity tests stay deterministic without network resources.

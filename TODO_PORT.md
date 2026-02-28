@@ -28,7 +28,7 @@
 ## 5. Reliability, congestion control, and performance
 - [ ] Port congestion control base (`CCC`) and verify algorithmic equivalence with trace fixtures.
   - [x] Port upstream `CCC` base callback/configuration surface (`setACKTimer`, `setACKInterval`, `setRTO`, `setUserParam`, and injectable custom control-message send path) as a pure-Dart wrapper with deterministic unit tests.
-  - [ ] Port upstream default `CUDTCC` algorithm behavior (`onACK`/`onLoss`/`onTimeout`) with trace-level parity checks.
+  - [x] Port upstream default `CUDTCC` algorithm behavior (`onACK`/`onLoss`/`onTimeout`) with deterministic parity tests (rate-control interval, slow-start, loss decrease, timeout branches) that avoid real socket I/O.
 - [ ] Build reproducible latency/loss simulation tests (delay, reordering, jitter, drop).
 - [ ] Add benchmarks: throughput, CPU, memory, connection setup latency.
 - [ ] Compare against upstream UDT behavior on identical network simulation scenarios.
