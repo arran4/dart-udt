@@ -41,4 +41,10 @@ These files are **not executable Dart implementations**; they are preserved as l
 
 - Package scaffold is present.
 - Deterministic pure-Dart UDT packet header parsing/serialization is implemented.
+- Deterministic pure-Dart `CHandShake` payload encoding/decoding is implemented as a `ByteData`-backed layout adapter.
+- A typed `UdtPacket` container replaces pointer/alias-style packet ownership for header + payload composition.
 - A starter TODO plan for cross-platform implementation and full testing exists in `TODO_PORT.md`.
+
+## Temporary measures tracked
+
+- Control packet coverage is currently focused on handshake payload layout and generic packet header encoding; additional control-message variants (ACK/NAK/KEEPALIVE/etc.) remain listed in `TODO_PORT.md`.
