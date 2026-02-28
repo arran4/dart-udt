@@ -1,5 +1,9 @@
 # dart-udt
 
+[![Pub Version](https://img.shields.io/pub/v/dart_udt?label=pub.dev)](https://pub.dev/packages/dart_udt)
+[![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](LICENSE)
+[![Dart SDK](https://img.shields.io/badge/dart-%5E3.3.0-blue.svg)](https://dart.dev/)
+
 Work-in-progress **pure Dart-first** port of the UDT (UDP-based Data Transfer) library.
 
 ## Scope and architecture
