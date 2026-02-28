@@ -364,4 +364,76 @@ void main() {
     expect(() => clock.advanceMicros(-1), throwsA(isA<ArgumentError>()));
   });
 
+  _epollTests();
+}
+
+
+final class _FakeSocketEventSource implements UdtSocketEventSource {
+  final Map<int, StreamController<UdtSocketIoEvent>> _controllers =
+      <int, StreamController<UdtSocketIoEvent>>{};
+
+  @override
+  Stream<UdtSocketIoEvent> eventsFor(int socketId) {
+    return _controllers.putIfAbsent(
+      socketId,
+      () => StreamController<UdtSocketIoEvent>.broadcast(sync: true),
+    ).stream;
+  }
+
+  void emit(int socketId, UdtPollEvent event) {
+    final controller = _controllers[socketId];
+    if (controller == null) {
+      throw StateError('socket $socketId not registered');
+    }
+    controller.add(UdtSocketIoEvent(socketId: socketId, event: event));
+  }
+
+  Future<void> close() async {
+    for (final controller in _controllers.values) {
+      await controller.close();
+    }
+  }
+}
+
+void _epollTests() {
+  test('epoll wait returns watched ready socket sets and drains snapshot', () async {
+    final source = _FakeSocketEventSource();
+    addTearDown(source.close);
+
+    final epoll = UdtEpoll(eventSource: source);
+    final pollId = epoll.create();
+
+    epoll.addUdtSocket(pollId, 10, events: {UdtPollEvent.inEvent});
+    epoll.addUdtSocket(pollId, 20, events: {UdtPollEvent.outEvent});
+
+    source.emit(10, UdtPollEvent.inEvent);
+    source.emit(20, UdtPollEvent.outEvent);
+    source.emit(10, UdtPollEvent.errEvent); // ignored (not watched)
+
+    final ready = await epoll.wait(pollId, timeout: const Duration(milliseconds: 1));
+    expect(ready.readSockets, equals(<int>{10}));
+    expect(ready.writeSockets, equals(<int>{20}));
+    expect(ready.errorSockets, isEmpty);
+
+    final drained = await epoll.wait(
+      pollId,
+      timeout: const Duration(milliseconds: 1),
+    );
+    expect(drained.isEmpty, isTrue);
+  });
+
+  test('epoll remove stops reporting events for removed sockets', () async {
+    final source = _FakeSocketEventSource();
+    addTearDown(source.close);
+
+    final epoll = UdtEpoll(eventSource: source);
+    final pollId = epoll.create();
+    epoll.addUdtSocket(pollId, 30);
+
+    await epoll.removeUdtSocket(pollId, 30);
+    source.emit(30, UdtPollEvent.inEvent);
+
+    final ready = await epoll.wait(pollId, timeout: const Duration(milliseconds: 1));
+    expect(ready.isEmpty, isTrue);
+  });
 }
