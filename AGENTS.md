@@ -43,3 +43,6 @@
 - CUDTCC porting note: keep `UdtDefaultCongestionControl` clock and randomization hooks injectable so `init`/`onACK`/`onLoss`/`onTimeout` parity tests stay deterministic without network resources.
 
 - MD5 porting note: upstream `md5.h`/`md5.cpp` are now represented by pure-Dart `UdtMd5` with deterministic RFC1321 vectors and incremental append/finalize tests; retire large commented MD5 scaffold blocks once replacement parity lands.
+
+- Window timing porting note: keep upstream `CACKWindow`/`CPktTimeWindow` behavior in pure-Dart wrappers (`UdtAckWindow`, `UdtPacketTimeWindow`) with injectable clocks so RTT/speed estimation tests remain deterministic and socket-free.
+

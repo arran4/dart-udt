@@ -15,6 +15,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/ccc/congestion_control.dart`
 - Upstream `md5.h` / `md5.cpp` hashing utility ->
   `lib/src/udt_port/common/md5.dart`
+- Upstream `window.h` / `window.cpp` timing windows ->
+  `lib/src/udt_port/window/window.dart`
 
 ## API shape changes
 
@@ -33,6 +35,9 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `UdtDefaultCongestionControl` (pure Dart), with injectable clock and seeded
   random providers so ACK/loss/timeout state transitions can be tested without
   socket I/O.
+- Window timing helpers are mapped to pure-Dart classes `UdtAckWindow` and
+  `UdtPacketTimeWindow`, with injectable microsecond clocks for deterministic
+  ACK-2 RTT and packet-speed estimation tests.
 
 ## Current limitations
 

@@ -52,6 +52,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - A pure-Dart `UdtCongestionControl` base wrapper now ports upstream `CCC` callback/configuration surface with injectable custom-control send behavior for deterministic tests.
 - A pure-Dart `UdtDefaultCongestionControl` now ports upstream `CUDTCC` `init`/`onACK`/`onLoss`/`onTimeout` behavior with injectable clock/random hooks for deterministic no-socket tests.
 - A pure-Dart incremental MD5 utility (`UdtMd5`) now ports upstream `md5.h`/`md5.cpp` behavior with deterministic RFC1321 vector tests and no external dependencies.
+- Pure-Dart window timing models now port upstream `CACKWindow`/`CPktTimeWindow` as `UdtAckWindow` and `UdtPacketTimeWindow` with injectable clocks for deterministic tests.
 
 ## Temporary measures tracked
 
@@ -61,6 +62,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Epoll abstraction currently focuses on UDT-socket ID readiness sets; parity for mixed local/system descriptor polling remains TODO.
 - `CUDTCC` behavior is currently validated with deterministic branch-level tests; captured upstream traffic-trace golden parity is still tracked in `TODO_PORT.md`.
 - Upstream commented MD5 references were retired after full pure-Dart replacement (`lib/src/udt_port/common/md5.dart`) to keep expansion areas free of stale commented implementation blocks.
+- Upstream commented window references were retired after full pure-Dart replacement (`lib/src/udt_port/window/window.dart`) to keep expansion areas free of stale commented implementation blocks.
 
 ## Example
 
