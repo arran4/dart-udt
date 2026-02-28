@@ -27,6 +27,10 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 - Base congestion-control callback/configuration surface from `CCC` is mapped to
   `UdtCongestionControl` with injectable side effects (for example custom
   control-message send) to keep no-socket deterministic tests feasible.
+- Upstream default congestion control `CUDTCC` is mapped to
+  `UdtDefaultCongestionControl` (pure Dart), with injectable clock and seeded
+  random providers so ACK/loss/timeout state transitions can be tested without
+  socket I/O.
 
 ## Current limitations
 

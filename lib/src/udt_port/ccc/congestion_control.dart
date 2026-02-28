@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:math' as math;
 
 import '../protocol/control_packet.dart';
 import '../protocol/packet.dart';
@@ -65,6 +66,9 @@ class UdtCongestionControl {
   bool get hasUserDefinedRto => _hasUserDefinedRto;
 
   int get retransmissionTimeoutMicros => _retransmissionTimeoutMicros;
+
+  /// Mirrors upstream `CCC::m_iSYNInterval` transport tuning base interval.
+  int get synIntervalMillis => _synIntervalMillis;
 
   /// Called when a connection starts.
   void init() {}
@@ -157,4 +161,219 @@ class UdtCongestionControl {
   void setCongestionWindowSize(double windowPackets) {
     _congestionWindowSize = windowPackets;
   }
+}
+
+/// Pure-Dart default congestion-control algorithm mirroring upstream `CUDTCC`
+/// in `ccc.cpp` (`init`, `onACK`, `onLoss`, and `onTimeout`).
+class UdtDefaultCongestionControl extends UdtCongestionControl {
+  UdtDefaultCongestionControl({
+    super.synIntervalMillis,
+    super.customMessageSender,
+    int Function()? nowMicros,
+    double Function(int seed)? seededRandomFraction,
+  }) : _nowMicros = nowMicros ?? _defaultNowMicros,
+       _seededRandomFraction =
+           seededRandomFraction ?? _defaultSeededRandomFraction;
+
+  static const int _sequenceThreshold = 0x3FFFFFFF;
+  static const int _maxSequenceNumber = 0x7FFFFFFF;
+  static const double _minimumAckIncrease = 0.01;
+
+  static final Stopwatch _clock = Stopwatch()..start();
+
+  static int _defaultNowMicros() => _clock.elapsedMicroseconds;
+
+  static double _defaultSeededRandomFraction(int seed) =>
+      math.Random(seed).nextDouble();
+
+  final int Function() _nowMicros;
+  final double Function(int seed) _seededRandomFraction;
+
+  int _rateControlIntervalMicros = 0;
+  int _lastRateControlTimeMicros = 0;
+  bool _isSlowStart = true;
+  int _lastAckSequenceNumber = 0;
+  bool _lossReportedSinceLastAck = false;
+  int _lastDecreaseSequenceNumber = 0;
+  double _lastDecreasePeriodMicros = 1.0;
+  int _nakCount = 0;
+  int _decreaseRandom = 1;
+  int _averageNakNumber = 0;
+  int _decreaseCount = 0;
+
+  @override
+  void init() {
+    _rateControlIntervalMicros = synIntervalMillis * 1000;
+    _lastRateControlTimeMicros = _nowMicros();
+    setAckTimer(synIntervalMillis);
+
+    _isSlowStart = true;
+    _lastAckSequenceNumber = sendCurrentSequenceNumber;
+    _lossReportedSinceLastAck = false;
+    _lastDecreaseSequenceNumber = _decrementSequence(_lastAckSequenceNumber);
+    _lastDecreasePeriodMicros = 1.0;
+    _averageNakNumber = 0;
+    _nakCount = 0;
+    _decreaseRandom = 1;
+
+    setCongestionWindowSize(16.0);
+    setPacketSendPeriodMicros(1.0);
+  }
+
+  @override
+  void onAck(int acknowledgedSequenceNumber) {
+    final currentTimeMicros = _nowMicros();
+    if (currentTimeMicros - _lastRateControlTimeMicros < _rateControlIntervalMicros) {
+      return;
+    }
+
+    _lastRateControlTimeMicros = currentTimeMicros;
+
+    if (_isSlowStart) {
+      setCongestionWindowSize(
+        congestionWindowSize +
+            _sequenceLength(_lastAckSequenceNumber, acknowledgedSequenceNumber),
+      );
+      _lastAckSequenceNumber = acknowledgedSequenceNumber;
+
+      if (congestionWindowSize > maxCongestionWindowSize) {
+        _isSlowStart = false;
+        if (receiveRatePacketsPerSec > 0) {
+          setPacketSendPeriodMicros(1000000.0 / receiveRatePacketsPerSec);
+        } else {
+          setPacketSendPeriodMicros(
+            (roundTripTimeMicros + _rateControlIntervalMicros) / congestionWindowSize,
+          );
+        }
+      }
+    } else {
+      setCongestionWindowSize(
+        receiveRatePacketsPerSec / 1000000.0 *
+                (roundTripTimeMicros + _rateControlIntervalMicros) +
+            16,
+      );
+    }
+
+    if (_isSlowStart) {
+      return;
+    }
+
+    if (_lossReportedSinceLastAck) {
+      _lossReportedSinceLastAck = false;
+      return;
+    }
+
+    final currentBandwidthPacketsPerSec = bandwidthPacketsPerSec;
+    var estimatedSpareBandwidth =
+        (currentBandwidthPacketsPerSec - 1000000.0 / packetSendPeriodMicros)
+            .toInt();
+
+    if (packetSendPeriodMicros > _lastDecreasePeriodMicros &&
+        (currentBandwidthPacketsPerSec / 9) < estimatedSpareBandwidth) {
+      estimatedSpareBandwidth = (currentBandwidthPacketsPerSec / 9).toInt();
+    }
+
+    final effectiveMss = maximumSegmentSize > 0 ? maximumSegmentSize : 1;
+    final double increase;
+    if (estimatedSpareBandwidth <= 0) {
+      increase = _minimumAckIncrease;
+    } else {
+      var computedIncrease =
+          math.pow(
+                10.0,
+                _log10(estimatedSpareBandwidth * effectiveMss * 8.0).ceil(),
+              ) *
+              0.0000015 /
+              effectiveMss;
+      if (computedIncrease < _minimumAckIncrease) {
+        computedIncrease = _minimumAckIncrease;
+      }
+      increase = computedIncrease.toDouble();
+    }
+
+    setPacketSendPeriodMicros(
+      (packetSendPeriodMicros * _rateControlIntervalMicros) /
+          (packetSendPeriodMicros * increase + _rateControlIntervalMicros),
+    );
+  }
+
+  @override
+  void onLoss(List<int> lossList) {
+    if (lossList.isEmpty) {
+      return;
+    }
+
+    if (_isSlowStart) {
+      _isSlowStart = false;
+      if (receiveRatePacketsPerSec > 0) {
+        setPacketSendPeriodMicros(1000000.0 / receiveRatePacketsPerSec);
+        return;
+      }
+
+      final rateControl = roundTripTimeMicros + _rateControlIntervalMicros;
+      final safeRateControl = rateControl <= 0 ? 1 : rateControl;
+      setPacketSendPeriodMicros(congestionWindowSize / safeRateControl);
+    }
+
+    _lossReportedSinceLastAck = true;
+    final normalizedLoss = lossList.first & 0x7FFFFFFF;
+    if (_compareSequence(normalizedLoss, _lastDecreaseSequenceNumber) > 0) {
+      _lastDecreasePeriodMicros = packetSendPeriodMicros;
+      setPacketSendPeriodMicros((packetSendPeriodMicros * 1.125).ceilToDouble());
+
+      _averageNakNumber = (_averageNakNumber * 0.875 + _nakCount * 0.125).ceil();
+      _nakCount = 1;
+      _decreaseCount = 1;
+
+      _lastDecreaseSequenceNumber = sendCurrentSequenceNumber;
+      _decreaseRandom =
+          (_averageNakNumber * _seededRandomFraction(_lastDecreaseSequenceNumber)).ceil();
+      if (_decreaseRandom < 1) {
+        _decreaseRandom = 1;
+      }
+      return;
+    }
+
+    final previousDecreaseCount = _decreaseCount;
+    _decreaseCount += 1;
+    if (previousDecreaseCount < 5) {
+      _nakCount += 1;
+      if (_nakCount % _decreaseRandom == 0) {
+        setPacketSendPeriodMicros((packetSendPeriodMicros * 1.125).ceilToDouble());
+        _lastDecreaseSequenceNumber = sendCurrentSequenceNumber;
+      }
+    }
+  }
+
+  @override
+  void onTimeout() {
+    if (_isSlowStart) {
+      _isSlowStart = false;
+      if (receiveRatePacketsPerSec > 0) {
+        setPacketSendPeriodMicros(1000000.0 / receiveRatePacketsPerSec);
+      } else {
+        final rateControl = roundTripTimeMicros + _rateControlIntervalMicros;
+        final safeRateControl = rateControl <= 0 ? 1 : rateControl;
+        setPacketSendPeriodMicros(congestionWindowSize / safeRateControl);
+      }
+    }
+  }
+
+  static int _compareSequence(int sequence1, int sequence2) {
+    final absoluteDifference = (sequence1 - sequence2).abs();
+    return absoluteDifference < _sequenceThreshold
+        ? sequence1 - sequence2
+        : sequence2 - sequence1;
+  }
+
+  static int _sequenceLength(int fromSequence, int toSequence) {
+    return fromSequence <= toSequence
+        ? toSequence - fromSequence + 1
+        : toSequence - fromSequence + _maxSequenceNumber + 2;
+  }
+
+  static int _decrementSequence(int sequence) =>
+      sequence == 0 ? _maxSequenceNumber : sequence - 1;
+
+  static double _log10(num value) => math.log(value) / math.ln10;
 }
