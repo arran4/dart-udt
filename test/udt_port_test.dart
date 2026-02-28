@@ -359,6 +359,16 @@ void main() {
     expect(model.collectTimedOutSequences(), equals([30]));
   });
 
+  test('timer model rejects non-positive retransmission timeout', () {
+    expect(
+      () => UdtAckNakTimerModel(
+        clock: UdtFakeClock(),
+        retransmissionTimeoutMicros: 0,
+      ),
+      throwsA(isA<ArgumentError>()),
+    );
+  });
+
   test('fake clock rejects negative advancement', () {
     final clock = UdtFakeClock();
     expect(() => clock.advanceMicros(-1), throwsA(isA<ArgumentError>()));
@@ -420,6 +430,49 @@ void _epollTests() {
       timeout: const Duration(milliseconds: 1),
     );
     expect(drained.isEmpty, isTrue);
+  });
+
+  test('epoll rejects concurrent wait calls on same poll id', () async {
+    final source = _FakeSocketEventSource();
+    addTearDown(source.close);
+
+    final epoll = UdtEpoll(eventSource: source);
+    final pollId = epoll.create();
+    epoll.addUdtSocket(pollId, 40);
+
+    final firstWait = epoll.wait(pollId, timeout: const Duration(milliseconds: 10));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(
+      () => epoll.wait(pollId, timeout: const Duration(milliseconds: 1)),
+      throwsA(isA<StateError>()),
+    );
+
+    source.emit(40, UdtPollEvent.inEvent);
+    final ready = await firstWait;
+    expect(ready.readSockets, equals(<int>{40}));
+  });
+
+  test('epoll close and unknown poll id paths throw deterministically', () async {
+    final source = _FakeSocketEventSource();
+    addTearDown(source.close);
+
+    final epoll = UdtEpoll(eventSource: source);
+    final pollId = epoll.create();
+    epoll.addUdtSocket(pollId, 50);
+
+    epoll.close(pollId);
+
+    expect(() => epoll.close(pollId), throwsA(isA<ArgumentError>()));
+    expect(
+      () => epoll.wait(pollId, timeout: const Duration(milliseconds: 1)),
+      throwsA(isA<ArgumentError>()),
+    );
+    expect(() => epoll.addUdtSocket(pollId, 50), throwsA(isA<ArgumentError>()));
+    await expectLater(
+      epoll.removeUdtSocket(pollId, 50),
+      throwsA(isA<ArgumentError>()),
+    );
   });
 
   test('epoll remove stops reporting events for removed sockets', () async {

@@ -97,7 +97,10 @@ final class UdtEpoll {
             descriptor.readyErrors.add(event.socketId);
         }
 
-        descriptor.waiter?.complete();
+        final waiter = descriptor.waiter;
+        if (waiter != null && !waiter.isCompleted) {
+          waiter.complete();
+        }
       },
     );
   }
@@ -114,6 +117,11 @@ final class UdtEpoll {
 
   Future<UdtPollReadySet> wait(int pollId, {Duration? timeout}) async {
     final descriptor = _lookup(pollId);
+
+    final existingWaiter = descriptor.waiter;
+    if (existingWaiter != null && !existingWaiter.isCompleted) {
+      throw StateError('Only one concurrent wait() is supported per pollId');
+    }
 
     if (_hasReadyEvents(descriptor)) {
       return _drainReady(descriptor);
