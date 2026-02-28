@@ -46,11 +46,13 @@ These files are **not executable Dart implementations**; they are preserved as l
 - A typed `UdtPacket` container replaces pointer/alias-style packet ownership for header + payload composition.
 - A starter TODO plan for cross-platform implementation and full testing exists in `TODO_PORT.md`.
 - Deterministic ACK/NAK retransmission timer modeling is available via `UdtAckNakTimerModel` with an injectable fake clock (`UdtFakeClock`) for no-socket tests.
+- Incremental pure-Dart epoll abstraction (`UdtEpoll`) is available with a stream-based adapter for `RawDatagramSocket` readiness events and deterministic fake event-source tests.
 
 ## Temporary measures tracked
 
 - Control packet wrappers now cover every upstream `CPacket::pack` control type branch; semantic handling above deterministic encoding/decoding is still incremental in higher protocol layers.
 - ACK/NAK timeout modeling currently targets deterministic unit tests first; full integration with live socket scheduling remains TODO.
+- Epoll abstraction currently focuses on UDT-socket ID readiness sets; parity for mixed local/system descriptor polling remains TODO.
 
 ## Example
 

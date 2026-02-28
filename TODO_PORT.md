@@ -17,7 +17,7 @@
 ## 3. Concurrency and eventing
 - [ ] Port threading/locking model to Dart isolates and async primitives.
 - [x] Model timers, retransmission, ACK/NAK handling with deterministic fake clocks for tests.
-- [ ] Provide poll/epoll-style API abstraction mapped to `RawDatagramSocket` event streams.
+- [x] Provide poll/epoll-style API abstraction mapped to `RawDatagramSocket` event streams.
 
 ## 4. Networking and platform compatibility
 - [ ] Implement IPv4/IPv6 behavior parity and dual-stack test matrix.

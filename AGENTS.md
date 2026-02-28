@@ -33,3 +33,5 @@
 - Keep runnable examples network-free where possible (codec/protocol-state examples) unless a TODO item explicitly requires live socket behavior.
 
 - Control packet porting note: upstream `CPacket::pack` control variants are now all represented by typed constructors (`UdtControlPacket.*`), and tests should keep asserting branch-level parity on header fields and payload layout without socket I/O.
+
+- Epoll porting milestone: keep the API centered on a pure-Dart `UdtEpoll` readiness model over typed socket IDs, with `UdtRawDatagramEventSource` as the adapter boundary; defer mixed local/system descriptor parity as explicit TODO until socket-layer modules are ported.
