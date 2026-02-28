@@ -19,6 +19,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `CAckNo`) -> `lib/src/udt_port/common/sequence_numbers.dart`
 - Upstream sender/receiver loss lists in `list.h` / `list.cpp` ->
   `lib/src/udt_port/list/loss_list.dart`
+- Upstream ACK/timing windows in `window.h` / `window.cpp` ->
+  `lib/src/udt_port/window/window.dart`
 
 ## API shape changes
 

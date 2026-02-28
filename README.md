@@ -36,9 +36,11 @@ The upstream UDT sources were cloned from:
 
 - `https://git.code.sf.net/p/udt/git`
 
-Reference copies of upstream `udt4/src/*.{h,cpp}` have been renamed to `.dart` files and fully commented out under:
+Reference copies of upstream `udt4/src/*.{h,cpp}` are tracked as commented `.dart` scaffolds under:
 
 - `lib/src/upstream_udt_comment/`
+
+As modules are fully ported (for example `window.h`/`window.cpp`), their commented scaffolds are retired to avoid stale duplicate implementations.
 
 These files are **not executable Dart implementations**; they are preserved as line-by-line references while porting.
 
@@ -58,6 +60,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - A pure-Dart incremental MD5 utility (`UdtMd5`) now ports upstream `md5.h`/`md5.cpp` behavior with deterministic RFC1321 vector tests and no external dependencies.
 - Pure-Dart sequence/message/ACK wraparound helpers (`UdtSequenceNumber`, `UdtMessageNumber`, `UdtAckNumber`) now port upstream `common.h` arithmetic with deterministic corpus tests for parser round-trip invariants.
 - Pure-Dart sender/receiver loss-list wrappers (`UdtSndLossList`, `UdtRcvLossList`) now port upstream `list.h`/`list.cpp` interval semantics with deterministic NAK payload and removal tests that avoid socket I/O.
+- Pure-Dart ACK/timing windows (`UdtAckWindow`, `UdtPacketTimeWindow`) now port upstream `window.h`/`window.cpp` with deterministic fake-clock tests for RTT, receive-speed, and probe-bandwidth calculations.
 
 ## Temporary measures tracked
 
