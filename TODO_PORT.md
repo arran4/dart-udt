@@ -39,7 +39,7 @@
 - [ ] Golden protocol tests from captured upstream packet traces.
 - [ ] Integration tests: loopback client/server file transfer with integrity checks.
 - [ ] Cross-platform CI matrix: Linux, macOS, Windows (and optional Android/iOS emulation).
-- [ ] Fuzz/property tests for packet parser and state machine transitions.
+- [x] Fuzz/property tests for packet parser and state machine transitions.
 - [ ] Long-running soak tests for stability and resource leaks.
 - [x] Add deterministic protocol codec tests that avoid real network/file resources.
 - [x] Expand deterministic unit tests for currently ported pure-Dart modules (`epoll`, timer model, codec wrappers) to cover error and concurrency branches without socket/file I/O.

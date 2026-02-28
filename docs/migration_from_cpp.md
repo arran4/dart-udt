@@ -15,6 +15,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/ccc/congestion_control.dart`
 - Upstream `md5.h` / `md5.cpp` hashing utility ->
   `lib/src/udt_port/common/md5.dart`
+- Upstream sequence/message/ACK arithmetic in `common.h` (`CSeqNo`, `CMsgNo`,
+  `CAckNo`) -> `lib/src/udt_port/common/sequence_numbers.dart`
 
 ## API shape changes
 

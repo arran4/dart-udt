@@ -52,6 +52,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - A pure-Dart `UdtCongestionControl` base wrapper now ports upstream `CCC` callback/configuration surface with injectable custom-control send behavior for deterministic tests.
 - A pure-Dart `UdtDefaultCongestionControl` now ports upstream `CUDTCC` `init`/`onACK`/`onLoss`/`onTimeout` behavior with injectable clock/random hooks for deterministic no-socket tests.
 - A pure-Dart incremental MD5 utility (`UdtMd5`) now ports upstream `md5.h`/`md5.cpp` behavior with deterministic RFC1321 vector tests and no external dependencies.
+- Pure-Dart sequence/message/ACK wraparound helpers (`UdtSequenceNumber`, `UdtMessageNumber`, `UdtAckNumber`) now port upstream `common.h` arithmetic with deterministic corpus tests for parser round-trip invariants.
 
 ## Temporary measures tracked
 
