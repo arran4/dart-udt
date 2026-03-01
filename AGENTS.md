@@ -49,3 +49,5 @@
 - Cache porting note: upstream `CCache`/`CInfoBlock` behavior should remain in typed pure-Dart wrappers (`UdtLruCache`, `UdtInfoBlock`) with deterministic no-network tests for key/equality/LRU semantics.
 
 - Buffer porting note: keep upstream `CSndBuffer`/`CRcvBuffer` transitions explicit in typed wrappers; prioritize deterministic sender-buffer (`UdtSendBuffer`) chunking/ACK/TTL tests before receiver/socket integration.
+
+- CI note: keep `dart analyze` running on every push (all branches) while allowing heavier checks (`dart format --set-exit-if-changed .`, `dart test`, `dart doc`) to be conditional on event/ref as needed.
