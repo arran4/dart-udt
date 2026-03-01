@@ -208,8 +208,10 @@ final class UdtRawDatagramEventSource implements UdtSocketEventSource {
               socketId: socketId,
               event: UdtPollEvent.errEvent,
             ),
+            _ => null,
           },
         )
-        .whereType<UdtSocketIoEvent>();
+        .where((event) => event != null)
+        .cast<UdtSocketIoEvent>();
   }
 }

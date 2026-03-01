@@ -174,6 +174,9 @@ final class UdtInfoBlock implements UdtCacheEntry<UdtInfoBlock> {
     congestionWindow: congestionWindow,
   );
 
+  @override
+  void release() {}
+
   /// Port of `CInfoBlock::convert` using deterministic word layout.
   static List<int> convertIpWords(InternetAddress address) {
     final raw = address.rawAddress;

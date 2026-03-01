@@ -42,7 +42,7 @@ final class UdtReceiveUnitQueueCounter {
   int inUseCount = 0;
 }
 
-enum _UdtReceiveUnitState { free, available, readAfterPassAck, dropped }
+enum _UdtReceiveUnitState { available, readAfterPassAck, dropped }
 
 final class _UdtReceiveSlot {
   _UdtReceiveSlot({required this.unit, required this.state});

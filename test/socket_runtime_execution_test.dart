@@ -78,7 +78,7 @@ void main() {
   });
 
   test('executor short-circuits when runtime plan has blocking failure', () async {
-    const blockingPlan = UdtSocketRuntimePlan(
+    final blockingPlan = UdtSocketRuntimePlan(
       bindPlans: plan.bindPlans,
       applyReport: UdtSocketOptionApplicationReport([
         UdtSocketOptionApplyResult(

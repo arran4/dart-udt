@@ -3,10 +3,11 @@ import 'dart:io';
 import 'compatibility_profile.dart';
 import 'mobile_constraints.dart';
 import 'platform_compatibility.dart';
+import 'socket_connectivity.dart';
+import 'socket_lifecycle.dart';
+import 'socket_option_application.dart';
 import 'socket_runtime_execution.dart';
 import 'socket_runtime_plan.dart';
-import 'socket_connectivity.dart';
-import 'socket_option_application.dart';
 
 /// Result of executing one deterministic dual-stack matrix row through the
 /// socket runtime planner + executor pipeline.
@@ -24,7 +25,6 @@ final class UdtSocketMatrixIntegrationResult {
   final UdtSocketRuntimeExecutionReport executionReport;
   final List<UdtConnectPlan> connectPlans;
   final UdtSocketConnectReport connectReport;
-
 
   Set<InternetAddressType> get plannedBindFamilies => {
     for (final plan in runtimePlan.bindPlans)
