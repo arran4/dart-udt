@@ -21,6 +21,10 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/list/loss_list.dart`
 - Upstream ACK/timing windows in `window.h` / `window.cpp` ->
   `lib/src/udt_port/window/window.dart`
+- Upstream cache entries/helpers in `cache.h` / `cache.cpp` ->
+  `lib/src/udt_port/cache/cache.dart`
+- Upstream sender buffer in `buffer.h` / `buffer.cpp` (`CSndBuffer`) ->
+  `lib/src/udt_port/buffer/send_buffer.dart`
 
 ## API shape changes
 
@@ -37,10 +41,10 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   control-message send) to keep no-socket deterministic tests feasible.
 - Upstream default congestion control `CUDTCC` is mapped to
   `UdtDefaultCongestionControl` (pure Dart), with injectable clock and seeded
-  random providers so ACK/loss/timeout state transitions can be tested without
+  random providers so ACK/loss/timeout state transitions and deterministic trace fixtures can be tested without
   socket I/O.
 
 ## Current limitations
 
-- Socket-level parity, mixed local/system descriptor polling, and full
-  congestion-control behavior are still tracked in `TODO_PORT.md`.
+- Socket-level parity and mixed local/system descriptor polling are still tracked
+  in `TODO_PORT.md`.

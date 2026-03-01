@@ -17,7 +17,7 @@ Work-in-progress **pure Dart-first** port of the UDT (UDP-based Data Transfer) l
 - Goal: provide practical parity with core UDT socket/session behavior from `udt.h`.
 - Non-goals for first release: legacy/deprecated APIs that conflict with Dart's async model or require platform-specific native hooks.
 - Temporary measure: packet header serialization/deserialization is implemented first as a deterministic building block while higher-level transport state machines remain TODO.
-- Migration notes for C++ users live in `docs/migration_from_cpp.md` and are generated alongside API docs with `dart doc`.
+- Migration notes for C++ users live in `docs/migration.md` and are generated alongside API docs with `dart doc`.
 
 ## Platform and SDK support target
 
@@ -61,6 +61,8 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Pure-Dart sequence/message/ACK wraparound helpers (`UdtSequenceNumber`, `UdtMessageNumber`, `UdtAckNumber`) now port upstream `common.h` arithmetic with deterministic corpus tests for parser round-trip invariants.
 - Pure-Dart sender/receiver loss-list wrappers (`UdtSndLossList`, `UdtRcvLossList`) now port upstream `list.h`/`list.cpp` interval semantics with deterministic NAK payload and removal tests that avoid socket I/O.
 - Pure-Dart ACK/timing windows (`UdtAckWindow`, `UdtPacketTimeWindow`) now port upstream `window.h`/`window.cpp` with deterministic fake-clock tests for RTT, receive-speed, and probe-bandwidth calculations.
+- Pure-Dart cache/info wrappers (`UdtLruCache`, `UdtInfoBlock`) now port upstream `cache.h`/`cache.cpp` entry/key semantics with deterministic no-network tests.
+- Pure-Dart sender-buffer wrapper (`UdtSendBuffer`) now ports upstream `CSndBuffer` chunking/ACK/TTL behavior with deterministic no-network tests.
 
 ## Temporary measures tracked
 
@@ -68,8 +70,9 @@ These files are **not executable Dart implementations**; they are preserved as l
 - ACK/NAK timeout modeling currently targets deterministic unit tests first; full integration with live socket scheduling remains TODO.
 - Threading helpers currently target isolate-free async primitives for deterministic tests; optional isolate-backed execution can be layered later if needed.
 - Epoll abstraction currently focuses on UDT-socket ID readiness sets; parity for mixed local/system descriptor polling remains TODO.
-- `CUDTCC` behavior is currently validated with deterministic branch-level tests; captured upstream traffic-trace golden parity is still tracked in `TODO_PORT.md`.
-- Upstream commented MD5 references were retired after full pure-Dart replacement (`lib/src/udt_port/common/md5.dart`) to keep expansion areas free of stale commented implementation blocks.
+- `CUDTCC` behavior now includes deterministic no-socket trace fixtures for ACK/loss/timeout transitions; broader live-network equivalence remains tracked in `TODO_PORT.md`.
+- Upstream commented MD5/cache references were retired after full pure-Dart replacements (`lib/src/udt_port/common/md5.dart`, `lib/src/udt_port/cache/cache.dart`) to keep expansion areas free of stale commented implementation blocks.
+- `CRcvBuffer` parity from upstream `buffer.cpp` remains incremental; current pure-Dart `UdtSendBuffer` covers sender-side chunking/retransmission/TTL branches first.
 
 ## Example
 
@@ -80,4 +83,4 @@ These files are **not executable Dart implementations**; they are preserved as l
 ## Docs
 
 - Generate API docs locally with: `dart doc`.
-- C++ to Dart API migration notes: `docs/migration_from_cpp.md`.
+- C++ to Dart API migration notes: `docs/migration.md`.
