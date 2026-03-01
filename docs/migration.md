@@ -33,6 +33,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/buffer/receive_buffer.dart`
 - Upstream networking/platform compatibility branches in `api.cpp`/socket setup paths ->
   `lib/src/udt_port/network/platform_compatibility.dart`
+- Upstream socket-option apply/degrade behavior in socket setup paths ->
+  `lib/src/udt_port/network/socket_option_application.dart`
 
 ## API shape changes
 

@@ -62,6 +62,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Pure-Dart IP helpers (`UdtIpAddress`) now port upstream `CIPAddress` word-layout compare/convert behavior with deterministic IPv4/IPv6 no-network tests.
 - Pure-Dart timer/event helpers (`UdtTimer`) now port upstream `CTimer` sleep/interrupt/tick/event fallback behavior with deterministic fake-clock tests.
 - Deterministic networking-compatibility planners (`UdtSocketOptionPlanner`, `buildUdtDualStackMatrix`) now cover section-4 socket-option and dual-stack planning branches without real socket I/O.
+- Deterministic socket-option application (`UdtSocketOptionApplier`) now covers required-vs-optional failure semantics before live socket wiring.
 - Pure-Dart sender/receiver loss-list wrappers (`UdtSndLossList`, `UdtRcvLossList`) now port upstream `list.h`/`list.cpp` interval semantics with deterministic NAK payload and removal tests that avoid socket I/O.
 - Pure-Dart ACK/timing windows (`UdtAckWindow`, `UdtPacketTimeWindow`) now port upstream `window.h`/`window.cpp` with deterministic fake-clock tests for RTT, receive-speed, and probe-bandwidth calculations.
 - Pure-Dart cache/info wrappers (`UdtLruCache`, `UdtInfoBlock`) now port upstream `cache.h`/`cache.cpp` entry/key semantics with deterministic no-network tests.

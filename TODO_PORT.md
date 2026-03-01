@@ -33,6 +33,7 @@
   - [ ] Wire matrix expectations into socket-layer integration tests once live bind/connect modules are ported.
 - [ ] Handle socket options per-platform (buffer sizes, reuse flags) with graceful degradation.
   - [x] Add deterministic per-platform socket-option planner (`UdtSocketOptionPlanner`) for pre-bind compatibility policy.
+  - [x] Add deterministic socket-option application engine (`UdtSocketOptionApplier`) with required/optional failure semantics tests.
   - [ ] Apply planned options to live sockets in upcoming socket-layer modules with graceful fallback logging.
 - [ ] Validate MTU/path-MTU assumptions across Linux/macOS/Windows.
 - [ ] Define mobile constraints (backgrounding, power/network transitions).

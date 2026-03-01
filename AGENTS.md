@@ -59,3 +59,5 @@
 - Networking compatibility note: for section-4 parity, keep socket-option and dual-stack behavior first modeled as deterministic planners/matrices (`UdtSocketOptionPlanner`, `buildUdtDualStackMatrix`) before wiring live socket I/O.
 
 - Source-retirement guardrail: only replace `lib/src/upstream_udt_comment/*` scaffolds after full behavior translation + deterministic tests are in place; track file-level status in `docs/translation_status.md`.
+
+- Socket-option application note: keep required-vs-optional apply semantics explicit via a deterministic adapter (`UdtSocketOptionApplier`) before binding to live socket APIs.
