@@ -35,6 +35,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/network/platform_compatibility.dart`
 - Upstream socket-option apply/degrade behavior in socket setup paths ->
   `lib/src/udt_port/network/socket_option_application.dart`
+- Upstream mobile/backgrounding and path-MTU compatibility concerns in socket/runtime paths ->
+  `lib/src/udt_port/network/mobile_constraints.dart`, `lib/src/udt_port/network/mtu_planning.dart`
 
 ## API shape changes
 

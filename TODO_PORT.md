@@ -36,7 +36,9 @@
   - [x] Add deterministic socket-option application engine (`UdtSocketOptionApplier`) with required/optional failure semantics tests.
   - [ ] Apply planned options to live sockets in upcoming socket-layer modules with graceful fallback logging.
 - [ ] Validate MTU/path-MTU assumptions across Linux/macOS/Windows.
+  - [x] Add deterministic MTU/path-MTU planner (`UdtMtuPlanner`) with bounded hints and per-platform defaults.
 - [ ] Define mobile constraints (backgrounding, power/network transitions).
+  - [x] Add deterministic mobile constraint policy model (`UdtMobileConstraintsPolicy`) for background/power/network transitions.
 
 ## 5. Reliability, congestion control, and performance
 - [x] Port congestion control base (`CCC`) and verify algorithmic equivalence with trace fixtures.

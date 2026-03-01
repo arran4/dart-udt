@@ -61,3 +61,5 @@
 - Source-retirement guardrail: only replace `lib/src/upstream_udt_comment/*` scaffolds after full behavior translation + deterministic tests are in place; track file-level status in `docs/translation_status.md`.
 
 - Socket-option application note: keep required-vs-optional apply semantics explicit via a deterministic adapter (`UdtSocketOptionApplier`) before binding to live socket APIs.
+
+- MTU/mobile compatibility note: keep section-4 path-MTU and mobile background/power/network transitions modeled with deterministic policies (`UdtMtuPlanner`, `UdtMobileConstraintsPolicy`) before live platform integration.

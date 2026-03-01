@@ -12,6 +12,8 @@ export 'src/udt_port/common/timer.dart';
 export 'src/udt_port/epoll/poll.dart';
 export 'src/udt_port/network/platform_compatibility.dart';
 export 'src/udt_port/network/socket_option_application.dart';
+export 'src/udt_port/network/mobile_constraints.dart';
+export 'src/udt_port/network/mtu_planning.dart';
 export 'src/udt_port/buffer/send_buffer.dart';
 export 'src/udt_port/buffer/receive_buffer.dart';
 export 'src/udt_port/list/loss_list.dart';
