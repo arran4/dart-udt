@@ -63,4 +63,5 @@
 - [x] Validate pub score inputs: license, topics, screenshots/badges, example quality.
 - [ ] Publish as pre-release first (`-dev`), gather feedback, then stable release.
 
+- [x] Add explicit upstream-source removal guardrail + per-file translation status tracker (`docs/translation_status.md`) to ensure commented references are only retired after full pure-Dart replacement + deterministic tests.
 - [ ] Final cleanup pass: retire or relocate all temporary migration/reference files once corresponding modules reach stable parity.

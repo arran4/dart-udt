@@ -57,3 +57,5 @@
 - Timer porting note: keep upstream `CTimer` sleep/sleepto/interrupt/tick/event behavior injectable with fake clocks/signals (`UdtTimer`) so no-socket deterministic timing tests stay stable.
 
 - Networking compatibility note: for section-4 parity, keep socket-option and dual-stack behavior first modeled as deterministic planners/matrices (`UdtSocketOptionPlanner`, `buildUdtDualStackMatrix`) before wiring live socket I/O.
+
+- Source-retirement guardrail: only replace `lib/src/upstream_udt_comment/*` scaffolds after full behavior translation + deterministic tests are in place; track file-level status in `docs/translation_status.md`.

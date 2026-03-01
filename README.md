@@ -89,3 +89,4 @@ These files are **not executable Dart implementations**; they are preserved as l
 
 - Generate API docs locally with: `dart doc`.
 - C++ to Dart API migration notes: `docs/migration.md`.
+- Source-removal guardrail and per-file translation tracking: `docs/translation_status.md`.
