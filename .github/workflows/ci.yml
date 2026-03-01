@@ -3,8 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - main
-      - master
+      - '**'
   pull_request:
 
 jobs:
@@ -16,10 +15,13 @@ jobs:
       - name: Install dependencies
         run: dart pub get
       - name: Verify formatting
+        if: ${{ github.event_name == 'pull_request' || github.ref_name == 'main' || github.ref_name == 'master' }}
         run: dart format --output=none --set-exit-if-changed .
       - name: Static analysis
         run: dart analyze
       - name: Run tests
+        if: ${{ github.event_name == 'pull_request' || github.ref_name == 'main' || github.ref_name == 'master' }}
         run: dart test
       - name: Generate API docs
+        if: ${{ github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'master') }}
         run: dart doc

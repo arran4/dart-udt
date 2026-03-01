@@ -17,10 +17,35 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/common/md5.dart`
 - Upstream sequence/message/ACK arithmetic in `common.h` (`CSeqNo`, `CMsgNo`,
   `CAckNo`) -> `lib/src/udt_port/common/sequence_numbers.dart`
+- Upstream IP helpers in `common.h` (`CIPAddress`) ->
+  `lib/src/udt_port/common/ip_address.dart`
+- Upstream timer/event helpers in `common.h` / `common.cpp` (`CTimer`) ->
+  `lib/src/udt_port/common/timer.dart`
 - Upstream sender/receiver loss lists in `list.h` / `list.cpp` ->
   `lib/src/udt_port/list/loss_list.dart`
 - Upstream ACK/timing windows in `window.h` / `window.cpp` ->
   `lib/src/udt_port/window/window.dart`
+- Upstream cache entries/helpers in `cache.h` / `cache.cpp` ->
+  `lib/src/udt_port/cache/cache.dart`
+- Upstream sender buffer in `buffer.h` / `buffer.cpp` (`CSndBuffer`) ->
+  `lib/src/udt_port/buffer/send_buffer.dart`
+- Upstream receiver buffer in `buffer.h` / `buffer.cpp` (`CRcvBuffer`) ->
+  `lib/src/udt_port/buffer/receive_buffer.dart`
+- Upstream networking/platform compatibility branches in `api.cpp`/socket setup paths ->
+  `lib/src/udt_port/network/platform_compatibility.dart`
+- Upstream socket-option apply/degrade behavior in socket setup paths ->
+  `lib/src/udt_port/network/socket_option_application.dart`
+- Upstream mobile/backgrounding and path-MTU compatibility concerns in socket/runtime paths ->
+  `lib/src/udt_port/network/mobile_constraints.dart`, `lib/src/udt_port/network/mtu_planning.dart`,
+  `lib/src/udt_port/network/transition_simulation.dart`,
+  `lib/src/udt_port/network/compatibility_profile.dart`,
+  `lib/src/udt_port/network/socket_runtime_plan.dart`,
+  `lib/src/udt_port/network/socket_lifecycle.dart`,
+  `lib/src/udt_port/network/socket_runtime_execution.dart`,
+  `lib/src/udt_port/network/socket_connectivity.dart`,
+  `lib/src/udt_port/network/socket_matrix_integration.dart`,
+  `lib/src/udt_port/network/connectivity_recovery.dart`,
+  `lib/src/udt_port/network/circuit_breaker.dart`
 
 ## API shape changes
 
@@ -37,10 +62,10 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   control-message send) to keep no-socket deterministic tests feasible.
 - Upstream default congestion control `CUDTCC` is mapped to
   `UdtDefaultCongestionControl` (pure Dart), with injectable clock and seeded
-  random providers so ACK/loss/timeout state transitions can be tested without
+  random providers so ACK/loss/timeout state transitions and deterministic trace fixtures can be tested without
   socket I/O.
 
 ## Current limitations
 
-- Socket-level parity, mixed local/system descriptor polling, and full
-  congestion-control behavior are still tracked in `TODO_PORT.md`.
+- Socket-level parity and mixed local/system descriptor polling are still tracked
+  in `TODO_PORT.md`.
