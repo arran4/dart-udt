@@ -7,6 +7,7 @@ export 'src/udt_port/core/threading.dart';
 export 'src/udt_port/ccc/congestion_control.dart';
 export 'src/udt_port/common/md5.dart';
 export 'src/udt_port/common/sequence_numbers.dart';
+export 'src/udt_port/common/ip_address.dart';
 export 'src/udt_port/epoll/poll.dart';
 export 'src/udt_port/buffer/send_buffer.dart';
 export 'src/udt_port/buffer/receive_buffer.dart';

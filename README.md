@@ -59,6 +59,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - A pure-Dart `UdtDefaultCongestionControl` now ports upstream `CUDTCC` `init`/`onACK`/`onLoss`/`onTimeout` behavior with injectable clock/random hooks for deterministic no-socket tests.
 - A pure-Dart incremental MD5 utility (`UdtMd5`) now ports upstream `md5.h`/`md5.cpp` behavior with deterministic RFC1321 vector tests and no external dependencies.
 - Pure-Dart sequence/message/ACK wraparound helpers (`UdtSequenceNumber`, `UdtMessageNumber`, `UdtAckNumber`) now port upstream `common.h` arithmetic with deterministic corpus tests for parser round-trip invariants.
+- Pure-Dart IP helpers (`UdtIpAddress`) now port upstream `CIPAddress` word-layout compare/convert behavior with deterministic IPv4/IPv6 no-network tests.
 - Pure-Dart sender/receiver loss-list wrappers (`UdtSndLossList`, `UdtRcvLossList`) now port upstream `list.h`/`list.cpp` interval semantics with deterministic NAK payload and removal tests that avoid socket I/O.
 - Pure-Dart ACK/timing windows (`UdtAckWindow`, `UdtPacketTimeWindow`) now port upstream `window.h`/`window.cpp` with deterministic fake-clock tests for RTT, receive-speed, and probe-bandwidth calculations.
 - Pure-Dart cache/info wrappers (`UdtLruCache`, `UdtInfoBlock`) now port upstream `cache.h`/`cache.cpp` entry/key semantics with deterministic no-network tests.

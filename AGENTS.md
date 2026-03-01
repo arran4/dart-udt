@@ -51,3 +51,5 @@
 - Buffer porting note: keep upstream `CSndBuffer`/`CRcvBuffer` transitions explicit in typed wrappers; maintain deterministic no-network tests for sender (`UdtSendBuffer`) and receiver (`UdtReceiveBuffer`) branches before socket integration.
 
 - CI note: keep `dart analyze` running on every push (all branches) while allowing heavier checks (`dart format --set-exit-if-changed .`, `dart test`, `dart doc`) to be conditional on event/ref as needed.
+
+- Common/IP porting note: keep upstream `CIPAddress` compare/ntop/pton behavior represented by deterministic typed helpers (`UdtIpAddress`) with IPv4/IPv6 tests that avoid sockets.

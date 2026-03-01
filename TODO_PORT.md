@@ -19,6 +19,7 @@
 - [x] Port upstream `cache.h`/`cache.cpp` cache/info behavior into pure-Dart typed models (`UdtLruCache`, `UdtInfoBlock`) with deterministic no-network tests.
 - [x] Port upstream `CSndBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed models (`UdtSendBuffer`) with deterministic chunking/ACK/TTL tests.
 - [x] Port upstream `CRcvBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed receive-message buffering models with deterministic no-network tests.
+- [x] Port upstream `CIPAddress` helpers from `common.h` into pure-Dart typed conversion/comparison helpers (`UdtIpAddress`) with deterministic IPv4/IPv6 tests.
 
 ## 3. Concurrency and eventing
 - [x] Port threading/locking model to Dart isolates and async primitives.
@@ -56,3 +57,5 @@
 - [x] Provide platform support table and known limitations in README.
 - [x] Validate pub score inputs: license, topics, screenshots/badges, example quality.
 - [ ] Publish as pre-release first (`-dev`), gather feedback, then stable release.
+
+- [ ] Final cleanup pass: retire or relocate all temporary migration/reference files once corresponding modules reach stable parity.
