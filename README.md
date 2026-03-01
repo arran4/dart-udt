@@ -74,6 +74,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Deterministic runtime socket plan (`UdtSocketRuntimePlanner`) now turns compatibility profiles into typed bind-strategy + option-application reports before live socket wiring.
 - Deterministic socket lifecycle coordinator (`UdtSocketLifecycleCoordinator`) now models bind/pause/resume/shutdown transitions from runtime plans without real sockets.
 - Deterministic runtime bind executor (`UdtSocketRuntimeExecutor`) now validates primary/fallback bind attempts and blocking-failure short-circuit behavior before live socket APIs.
+- Runtime-plan application now includes graceful fallback logging and a live datagram bind adapter (`UdtSocketRuntimeApplier`, `UdtRawDatagramRuntimeTarget`) for socket-layer modules.
 - Deterministic matrix integration harness (`UdtSocketMatrixIntegrationHarness`) now wires `buildUdtDualStackMatrix` expectations into socket-layer runtime planner/executor integration tests without live sockets.
 - IPv4/IPv6 parity coverage now asserts dual-stack matrix families across planned bind + planned connect stages in deterministic integration tests.
 - Deterministic connect planner/executor (`UdtSocketConnectPlanner`, `UdtSocketConnectExecutor`) now models IPv4/IPv6 endpoint connect ordering and fallback before live connect hooks.

@@ -43,6 +43,7 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/network/socket_runtime_plan.dart`,
   `lib/src/udt_port/network/socket_lifecycle.dart`,
   `lib/src/udt_port/network/socket_runtime_execution.dart`,
+  `lib/src/udt_port/network/socket_runtime_application.dart`,
   `lib/src/udt_port/network/socket_connectivity.dart`,
   `lib/src/udt_port/network/socket_matrix_integration.dart`,
   `lib/src/udt_port/network/connectivity_recovery.dart`,

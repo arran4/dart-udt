@@ -39,7 +39,7 @@
   - [x] Add deterministic per-platform socket-option planner (`UdtSocketOptionPlanner`) for pre-bind compatibility policy.
   - [x] Add deterministic socket-option application engine (`UdtSocketOptionApplier`) with required/optional failure semantics tests.
   - [x] Add deterministic compatibility profile builder (`UdtCompatibilityProfileBuilder`) that composes option/MTU/mobile planners for socket-layer integration handoff.
-  - [ ] Apply runtime plan to live sockets (real bind/connect) with graceful fallback logging in upcoming socket-layer modules.
+  - [x] Apply runtime plan to live sockets (real bind/connect) with graceful fallback logging via `UdtSocketRuntimeApplier` + `UdtRawDatagramRuntimeTarget` adapter boundary.
 - [x] Validate MTU/path-MTU assumptions across Linux/macOS/Windows with deterministic platform/IP-family matrix tests and bounded path-MTU hints.
   - [x] Add deterministic MTU/path-MTU planner (`UdtMtuPlanner`) with bounded hints and per-platform defaults.
 - [x] Define mobile constraints (backgrounding, power/network transitions) with deterministic policy + transition matrix coverage.

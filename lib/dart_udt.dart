@@ -24,6 +24,7 @@ export 'src/udt_port/network/socket_connectivity.dart';
 export 'src/udt_port/network/socket_lifecycle.dart';
 export 'src/udt_port/network/socket_matrix_integration.dart';
 export 'src/udt_port/network/socket_option_application.dart';
+export 'src/udt_port/network/socket_runtime_application.dart';
 export 'src/udt_port/network/socket_runtime_execution.dart';
 export 'src/udt_port/network/socket_runtime_plan.dart';
 export 'src/udt_port/network/transition_simulation.dart';
