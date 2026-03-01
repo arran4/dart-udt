@@ -39,7 +39,7 @@
   - [x] Add deterministic per-platform socket-option planner (`UdtSocketOptionPlanner`) for pre-bind compatibility policy.
   - [x] Add deterministic socket-option application engine (`UdtSocketOptionApplier`) with required/optional failure semantics tests.
   - [x] Add deterministic compatibility profile builder (`UdtCompatibilityProfileBuilder`) that composes option/MTU/mobile planners for socket-layer integration handoff.
-  - [x] Apply runtime plan to live sockets (real bind/connect) with graceful fallback logging via `UdtSocketRuntimeApplier` + `UdtRawDatagramRuntimeTarget` adapter boundary.
+  - [ ] Apply runtime plan to live sockets (real bind/connect) with graceful fallback logging in production socket modules (current `UdtSocketRuntimeApplier` + `UdtRawDatagramRuntimeTarget` cover bind-path adapter scaffolding only; connect/socket-option plumbing is still partial).
 - [x] Validate MTU/path-MTU assumptions across Linux/macOS/Windows with deterministic platform/IP-family matrix tests and bounded path-MTU hints.
   - [x] Add deterministic MTU/path-MTU planner (`UdtMtuPlanner`) with bounded hints and per-platform defaults.
 - [x] Define mobile constraints (backgrounding, power/network transitions) with deterministic policy + transition matrix coverage.
@@ -76,3 +76,11 @@
 
 - [x] Add explicit upstream-source removal guardrail + per-file translation status tracker (`docs/translation_status.md`) to ensure commented references are only retired after full pure-Dart replacement + deterministic tests.
 - [ ] Final cleanup pass: retire or relocate all temporary migration/reference files once corresponding modules reach stable parity.
+
+
+## 8. Discrepancies / follow-ups discovered while comparing against original upstream scope
+- [ ] Reconcile runtime-plan status with README limitations: keep TODO state aligned with what is truly live-socket-ready versus deterministic scaffolding-only behavior.
+- [ ] Add explicit connect-stage live adapter parity (`RawDatagramSocket`-backed connect boundary) and wire it through `UdtSocketRuntimeApplier` so bind+connect are both exercised against real sockets.
+- [ ] Add live socket-option application bridge (mapping `UdtSocketOptionRecommendation` to concrete socket setters) and verify required-vs-optional handling against runtime sockets, not only fake targets.
+- [ ] Add upstream trace-fixture corpus versioning notes for network impairment parity tests (seed/config/expected output provenance) to keep long-term parity auditable.
+- [ ] Split deterministic completion vs live-runtime completion in TODO checkboxes for every section-4 item to avoid false-positive “done” status when only planners/simulators are complete.
