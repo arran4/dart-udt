@@ -29,7 +29,11 @@
 
 ## 4. Networking and platform compatibility
 - [ ] Implement IPv4/IPv6 behavior parity and dual-stack test matrix.
+  - [x] Add deterministic dual-stack planning matrix generator for Linux/macOS/Windows (`buildUdtDualStackMatrix`) with no-socket tests.
+  - [ ] Wire matrix expectations into socket-layer integration tests once live bind/connect modules are ported.
 - [ ] Handle socket options per-platform (buffer sizes, reuse flags) with graceful degradation.
+  - [x] Add deterministic per-platform socket-option planner (`UdtSocketOptionPlanner`) for pre-bind compatibility policy.
+  - [ ] Apply planned options to live sockets in upcoming socket-layer modules with graceful fallback logging.
 - [ ] Validate MTU/path-MTU assumptions across Linux/macOS/Windows.
 - [ ] Define mobile constraints (backgrounding, power/network transitions).
 

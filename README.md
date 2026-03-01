@@ -61,6 +61,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Pure-Dart sequence/message/ACK wraparound helpers (`UdtSequenceNumber`, `UdtMessageNumber`, `UdtAckNumber`) now port upstream `common.h` arithmetic with deterministic corpus tests for parser round-trip invariants.
 - Pure-Dart IP helpers (`UdtIpAddress`) now port upstream `CIPAddress` word-layout compare/convert behavior with deterministic IPv4/IPv6 no-network tests.
 - Pure-Dart timer/event helpers (`UdtTimer`) now port upstream `CTimer` sleep/interrupt/tick/event fallback behavior with deterministic fake-clock tests.
+- Deterministic networking-compatibility planners (`UdtSocketOptionPlanner`, `buildUdtDualStackMatrix`) now cover section-4 socket-option and dual-stack planning branches without real socket I/O.
 - Pure-Dart sender/receiver loss-list wrappers (`UdtSndLossList`, `UdtRcvLossList`) now port upstream `list.h`/`list.cpp` interval semantics with deterministic NAK payload and removal tests that avoid socket I/O.
 - Pure-Dart ACK/timing windows (`UdtAckWindow`, `UdtPacketTimeWindow`) now port upstream `window.h`/`window.cpp` with deterministic fake-clock tests for RTT, receive-speed, and probe-bandwidth calculations.
 - Pure-Dart cache/info wrappers (`UdtLruCache`, `UdtInfoBlock`) now port upstream `cache.h`/`cache.cpp` entry/key semantics with deterministic no-network tests.
@@ -76,6 +77,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - `CUDTCC` behavior now includes deterministic no-socket trace fixtures for ACK/loss/timeout transitions; broader live-network equivalence remains tracked in `TODO_PORT.md`.
 - Upstream commented MD5/cache/buffer references were retired after full pure-Dart replacements (`lib/src/udt_port/common/md5.dart`, `lib/src/udt_port/cache/cache.dart`, `lib/src/udt_port/buffer/send_buffer.dart`, `lib/src/udt_port/buffer/receive_buffer.dart`) to keep expansion areas free of stale commented implementation blocks.
 - Sender/receiver buffer semantics are now covered by pure-Dart `UdtSendBuffer`/`UdtReceiveBuffer`; integration with live socket scheduling remains incremental.
+- Networking/platform compatibility currently uses deterministic planning helpers first; live socket option application and dual-stack bind/connect validation remain TODO.
 
 ## Example
 

@@ -55,3 +55,5 @@
 - Common/IP porting note: keep upstream `CIPAddress` compare/ntop/pton behavior represented by deterministic typed helpers (`UdtIpAddress`) with IPv4/IPv6 tests that avoid sockets.
 
 - Timer porting note: keep upstream `CTimer` sleep/sleepto/interrupt/tick/event behavior injectable with fake clocks/signals (`UdtTimer`) so no-socket deterministic timing tests stay stable.
+
+- Networking compatibility note: for section-4 parity, keep socket-option and dual-stack behavior first modeled as deterministic planners/matrices (`UdtSocketOptionPlanner`, `buildUdtDualStackMatrix`) before wiring live socket I/O.
