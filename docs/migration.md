@@ -25,6 +25,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/cache/cache.dart`
 - Upstream sender buffer in `buffer.h` / `buffer.cpp` (`CSndBuffer`) ->
   `lib/src/udt_port/buffer/send_buffer.dart`
+- Upstream receiver buffer in `buffer.h` / `buffer.cpp` (`CRcvBuffer`) ->
+  `lib/src/udt_port/buffer/receive_buffer.dart`
 
 ## API shape changes
 

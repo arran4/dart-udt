@@ -18,7 +18,7 @@
 - [x] Port upstream `window.h`/`window.cpp` ACK/timing window behavior into pure-Dart typed models (`UdtAckWindow`, `UdtPacketTimeWindow`) with injectable fake-clock deterministic tests.
 - [x] Port upstream `cache.h`/`cache.cpp` cache/info behavior into pure-Dart typed models (`UdtLruCache`, `UdtInfoBlock`) with deterministic no-network tests.
 - [x] Port upstream `CSndBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed models (`UdtSendBuffer`) with deterministic chunking/ACK/TTL tests.
-- [ ] Port upstream `CRcvBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed receive-message buffering models with deterministic no-network tests.
+- [x] Port upstream `CRcvBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed receive-message buffering models with deterministic no-network tests.
 
 ## 3. Concurrency and eventing
 - [x] Port threading/locking model to Dart isolates and async primitives.

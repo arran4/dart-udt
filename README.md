@@ -63,6 +63,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Pure-Dart ACK/timing windows (`UdtAckWindow`, `UdtPacketTimeWindow`) now port upstream `window.h`/`window.cpp` with deterministic fake-clock tests for RTT, receive-speed, and probe-bandwidth calculations.
 - Pure-Dart cache/info wrappers (`UdtLruCache`, `UdtInfoBlock`) now port upstream `cache.h`/`cache.cpp` entry/key semantics with deterministic no-network tests.
 - Pure-Dart sender-buffer wrapper (`UdtSendBuffer`) now ports upstream `CSndBuffer` chunking/ACK/TTL behavior with deterministic no-network tests.
+- Pure-Dart receiver-buffer wrapper (`UdtReceiveBuffer`) now ports upstream `CRcvBuffer` circular buffering/message-scan behavior with deterministic no-network tests.
 
 ## Temporary measures tracked
 
@@ -71,8 +72,8 @@ These files are **not executable Dart implementations**; they are preserved as l
 - Threading helpers currently target isolate-free async primitives for deterministic tests; optional isolate-backed execution can be layered later if needed.
 - Epoll abstraction currently focuses on UDT-socket ID readiness sets; parity for mixed local/system descriptor polling remains TODO.
 - `CUDTCC` behavior now includes deterministic no-socket trace fixtures for ACK/loss/timeout transitions; broader live-network equivalence remains tracked in `TODO_PORT.md`.
-- Upstream commented MD5/cache references were retired after full pure-Dart replacements (`lib/src/udt_port/common/md5.dart`, `lib/src/udt_port/cache/cache.dart`) to keep expansion areas free of stale commented implementation blocks.
-- `CRcvBuffer` parity from upstream `buffer.cpp` remains incremental; current pure-Dart `UdtSendBuffer` covers sender-side chunking/retransmission/TTL branches first.
+- Upstream commented MD5/cache/buffer references were retired after full pure-Dart replacements (`lib/src/udt_port/common/md5.dart`, `lib/src/udt_port/cache/cache.dart`, `lib/src/udt_port/buffer/send_buffer.dart`, `lib/src/udt_port/buffer/receive_buffer.dart`) to keep expansion areas free of stale commented implementation blocks.
+- Sender/receiver buffer semantics are now covered by pure-Dart `UdtSendBuffer`/`UdtReceiveBuffer`; integration with live socket scheduling remains incremental.
 
 ## Example
 

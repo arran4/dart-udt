@@ -9,6 +9,7 @@ export 'src/udt_port/common/md5.dart';
 export 'src/udt_port/common/sequence_numbers.dart';
 export 'src/udt_port/epoll/poll.dart';
 export 'src/udt_port/buffer/send_buffer.dart';
+export 'src/udt_port/buffer/receive_buffer.dart';
 export 'src/udt_port/list/loss_list.dart';
 export 'src/udt_port/cache/cache.dart';
 export 'src/udt_port/window/window.dart';
