@@ -38,6 +38,7 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 - Upstream mobile/backgrounding and path-MTU compatibility concerns in socket/runtime paths ->
   `lib/src/udt_port/network/mobile_constraints.dart`, `lib/src/udt_port/network/mtu_planning.dart`,
   `lib/src/udt_port/network/transition_simulation.dart`,
+  `lib/src/udt_port/network/latency_loss_simulation.dart`,
   `lib/src/udt_port/network/compatibility_profile.dart`,
   `lib/src/udt_port/network/socket_runtime_plan.dart`,
   `lib/src/udt_port/network/socket_lifecycle.dart`,

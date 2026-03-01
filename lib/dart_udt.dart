@@ -15,6 +15,7 @@ export 'src/udt_port/network/socket_option_application.dart';
 export 'src/udt_port/network/mobile_constraints.dart';
 export 'src/udt_port/network/mtu_planning.dart';
 export 'src/udt_port/network/transition_simulation.dart';
+export 'src/udt_port/network/latency_loss_simulation.dart';
 export 'src/udt_port/network/compatibility_profile.dart';
 export 'src/udt_port/network/socket_runtime_plan.dart';
 export 'src/udt_port/network/socket_lifecycle.dart';

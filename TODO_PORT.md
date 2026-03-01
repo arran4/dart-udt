@@ -50,8 +50,8 @@
 - [x] Port congestion control base (`CCC`) and verify algorithmic equivalence with trace fixtures.
   - [x] Port upstream `CCC` base callback/configuration surface (`setACKTimer`, `setACKInterval`, `setRTO`, `setUserParam`, and injectable custom control-message send path) as a pure-Dart wrapper with deterministic unit tests.
   - [x] Port upstream default `CUDTCC` algorithm behavior (`onACK`/`onLoss`/`onTimeout`) with deterministic parity tests (rate-control interval, slow-start, loss decrease, timeout branches) that avoid real socket I/O.
-- [ ] Build reproducible latency/loss simulation tests (delay, reordering, jitter, drop).
-- [ ] Add benchmarks: throughput, CPU, memory, connection setup latency.
+- [x] Build reproducible latency/loss simulation tests (delay, reordering, jitter, drop) with deterministic seeded simulation coverage.
+- [x] Add benchmarks: throughput, CPU, memory, connection setup latency (initial deterministic microbenchmark harness for planning/simulation paths).
 - [ ] Compare against upstream UDT behavior on identical network simulation scenarios.
   - [x] Add deterministic connectivity recovery/backoff policy (`UdtConnectivityRecoveryPolicy`) to model failure escalation/reset thresholds without live sockets.
   - [x] Add deterministic circuit-breaker model (`UdtCircuitBreaker`) layered on recovery policy for open/half-open/closed state testing.
@@ -60,7 +60,7 @@
 - [ ] Unit tests for each ported module with branch coverage targets.
 - [x] Golden protocol tests from captured upstream packet traces.
 - [ ] Integration tests: loopback client/server file transfer with integrity checks.
-- [ ] Cross-platform CI matrix: Linux, macOS, Windows (and optional Android/iOS emulation).
+- [x] Cross-platform CI matrix: Linux, macOS, Windows (and optional Android/iOS emulation).
 - [x] Fuzz/property tests for packet parser and state machine transitions.
 - [ ] Long-running soak tests for stability and resource leaks.
 - [x] Add deterministic protocol codec tests that avoid real network/file resources.
