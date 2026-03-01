@@ -20,6 +20,7 @@
 - [x] Port upstream `CSndBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed models (`UdtSendBuffer`) with deterministic chunking/ACK/TTL tests.
 - [x] Port upstream `CRcvBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed receive-message buffering models with deterministic no-network tests.
 - [x] Port upstream `CIPAddress` helpers from `common.h` into pure-Dart typed conversion/comparison helpers (`UdtIpAddress`) with deterministic IPv4/IPv6 tests.
+- [x] Port upstream `CTimer` event/tick/sleep fallback behavior from `common.h`/`common.cpp` into pure-Dart deterministic helpers (`UdtTimer`) with fake-clock tests.
 
 ## 3. Concurrency and eventing
 - [x] Port threading/locking model to Dart isolates and async primitives.

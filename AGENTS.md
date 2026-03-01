@@ -53,3 +53,5 @@
 - CI note: keep `dart analyze` running on every push (all branches) while allowing heavier checks (`dart format --set-exit-if-changed .`, `dart test`, `dart doc`) to be conditional on event/ref as needed.
 
 - Common/IP porting note: keep upstream `CIPAddress` compare/ntop/pton behavior represented by deterministic typed helpers (`UdtIpAddress`) with IPv4/IPv6 tests that avoid sockets.
+
+- Timer porting note: keep upstream `CTimer` sleep/sleepto/interrupt/tick/event behavior injectable with fake clocks/signals (`UdtTimer`) so no-socket deterministic timing tests stay stable.
