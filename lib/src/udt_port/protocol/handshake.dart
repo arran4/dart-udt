@@ -13,7 +13,7 @@ final class UdtHandshake {
     required this.socketId,
     required this.cookie,
     required this.peerIp,
-  }) : assert(peerIp.length == _peerIpWords, 'peerIp must contain 4 words');
+  });
 
   static const int _peerIpWords = 4;
   static const int _scalarWords = 8;
