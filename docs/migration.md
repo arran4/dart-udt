@@ -70,3 +70,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 
 - Socket-level parity and mixed local/system descriptor polling are still tracked
   in `TODO_PORT.md`.
+
+
+## Deterministic simulation examples
+
+- `example/network_simulation_trace.dart` demonstrates seeded delay/reorder/drop trace generation for reproducible no-socket parity checks.

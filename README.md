@@ -68,6 +68,7 @@ These files are **not executable Dart implementations**; they are preserved as l
 - MTU/path-MTU assumptions are now validated by deterministic Linux/macOS/Windows × IPv4/IPv6 matrix tests, plus bounded and in-range path-MTU hint coverage.
 - Deterministic transition simulation (`UdtNetworkTransitionSimulator`) now models background/network-change sequences for section-4 ACK/RTO policy tuning without device hooks.
 - Deterministic latency/loss simulator (`UdtLatencyLossSimulator`) now covers delay/reorder/jitter/drop branches with reproducible seeded outcomes for no-socket tests.
+- Upstream-style seeded network-simulation parity fixture now locks expected delay/reorder/drop trace output for identical scenarios to keep behavior auditable over time.
 - Mobile constraints now include deterministic matrix coverage for foreground/background, Wi-Fi/cellular/unknown network types, battery-saver behavior, and cumulative transition timing.
 - Deterministic compatibility profile builder (`UdtCompatibilityProfileBuilder`) now composes section-4 planners (options/MTU/mobile) into a typed handoff model for upcoming socket-layer integration.
 - Deterministic runtime socket plan (`UdtSocketRuntimePlanner`) now turns compatibility profiles into typed bind-strategy + option-application reports before live socket wiring.
@@ -101,6 +102,8 @@ These files are **not executable Dart implementations**; they are preserved as l
   - `dart run example/control_packet_codec.dart`
 - Run the deterministic planning/simulation microbenchmark:
   - `dart run benchmark/network_planning_benchmark.dart`
+- Run the deterministic network simulation sample:
+  - `dart run example/network_simulation_trace.dart`
 
 
 ## Docs

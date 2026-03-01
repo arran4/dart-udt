@@ -52,7 +52,7 @@
   - [x] Port upstream default `CUDTCC` algorithm behavior (`onACK`/`onLoss`/`onTimeout`) with deterministic parity tests (rate-control interval, slow-start, loss decrease, timeout branches) that avoid real socket I/O.
 - [x] Build reproducible latency/loss simulation tests (delay, reordering, jitter, drop) with deterministic seeded simulation coverage.
 - [x] Add benchmarks: throughput, CPU, memory, connection setup latency (initial deterministic microbenchmark harness for planning/simulation paths).
-- [ ] Compare against upstream UDT behavior on identical network simulation scenarios.
+- [x] Compare against upstream UDT behavior on identical network simulation scenarios via deterministic upstream-style seeded trace fixtures.
   - [x] Add deterministic connectivity recovery/backoff policy (`UdtConnectivityRecoveryPolicy`) to model failure escalation/reset thresholds without live sockets.
   - [x] Add deterministic circuit-breaker model (`UdtCircuitBreaker`) layered on recovery policy for open/half-open/closed state testing.
 
