@@ -314,7 +314,7 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
 
       final rateControl = roundTripTimeMicros + _rateControlIntervalMicros;
       final safeRateControl = rateControl <= 0 ? 1 : rateControl;
-      setPacketSendPeriodMicros(congestionWindowSize / safeRateControl);
+      setPacketSendPeriodMicros(safeRateControl / congestionWindowSize);
     }
 
     _lossReportedSinceLastAck = true;
@@ -362,7 +362,7 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
       } else {
         final rateControl = roundTripTimeMicros + _rateControlIntervalMicros;
         final safeRateControl = rateControl <= 0 ? 1 : rateControl;
-        setPacketSendPeriodMicros(congestionWindowSize / safeRateControl);
+        setPacketSendPeriodMicros(safeRateControl / congestionWindowSize);
       }
     }
   }

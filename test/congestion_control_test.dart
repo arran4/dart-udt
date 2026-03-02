@@ -130,10 +130,10 @@ void main() {
       cc.onAck(1004);
       final afterAckIncrease = cc.packetSendPeriodMicros;
 
-      expect(afterAckExitSlowStart, closeTo(500.0, 0.0001));
+      expect(afterAckExitSlowStart, closeTo(499.7501249375312, 0.0001));
       expect(afterLoss, equals(563.0));
       expect(afterAckWithLossFlag, equals(563.0));
-      expect(afterAckIncrease, closeTo(412.0, 0.0001));
+      expect(afterAckIncrease, closeTo(562.6832093531342, 0.0001));
     },
   );
 
@@ -150,6 +150,6 @@ void main() {
 
     cc.onTimeout();
 
-    expect(cc.packetSendPeriodMicros, closeTo(1.3333333333, 0.0001));
+    expect(cc.packetSendPeriodMicros, closeTo(750.0, 0.0001));
   });
 }

@@ -54,7 +54,7 @@ final class UdtAckNakTimerModel {
   /// Marks explicitly reported lost sequence numbers as immediately timed out.
   List<int> onNakReceived(List<int> lostSequenceNumbers) {
     final nowMicros = _clock.nowMicros;
-    final dueNow = <int>[];
+    final dueNow = <int>{};
     for (final sequence in lostSequenceNumbers) {
       if (_sentAtMicrosBySequence.containsKey(sequence)) {
         _sentAtMicrosBySequence[sequence] =
@@ -62,8 +62,8 @@ final class UdtAckNakTimerModel {
         dueNow.add(sequence);
       }
     }
-    dueNow.sort();
-    return dueNow;
+    final sortedDueNow = dueNow.toList()..sort();
+    return sortedDueNow;
   }
 
   List<int> collectTimedOutSequences() {
