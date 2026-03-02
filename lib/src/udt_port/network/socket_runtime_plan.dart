@@ -48,36 +48,36 @@ final class UdtSocketRuntimePlanner {
 
     final bindPlans = switch (profile.ipMode) {
       UdtIpMode.ipv4Only => const <UdtBindPlan>[
-        UdtBindPlan(
-          family: UdtBindFamily.ipv4,
-          dualStack: false,
-          requireIpv6OnlyFalse: false,
-          reason: 'IPv4-only mode explicitly requested.',
-        ),
-      ],
+          UdtBindPlan(
+            family: UdtBindFamily.ipv4,
+            dualStack: false,
+            requireIpv6OnlyFalse: false,
+            reason: 'IPv4-only mode explicitly requested.',
+          ),
+        ],
       UdtIpMode.ipv6Only => const <UdtBindPlan>[
-        UdtBindPlan(
-          family: UdtBindFamily.ipv6,
-          dualStack: false,
-          requireIpv6OnlyFalse: false,
-          reason: 'IPv6-only mode explicitly requested.',
-        ),
-      ],
+          UdtBindPlan(
+            family: UdtBindFamily.ipv6,
+            dualStack: false,
+            requireIpv6OnlyFalse: false,
+            reason: 'IPv6-only mode explicitly requested.',
+          ),
+        ],
       UdtIpMode.dualStack => const <UdtBindPlan>[
-        UdtBindPlan(
-          family: UdtBindFamily.ipv6,
-          dualStack: true,
-          requireIpv6OnlyFalse: true,
-          reason: 'Dual-stack prefers IPv6 bind with IPv6-only disabled.',
-        ),
-        UdtBindPlan(
-          family: UdtBindFamily.ipv4,
-          dualStack: false,
-          requireIpv6OnlyFalse: false,
-          reason:
-              'Fallback IPv4 bind for platforms lacking dual-stack behavior.',
-        ),
-      ],
+          UdtBindPlan(
+            family: UdtBindFamily.ipv6,
+            dualStack: true,
+            requireIpv6OnlyFalse: true,
+            reason: 'Dual-stack prefers IPv6 bind with IPv6-only disabled.',
+          ),
+          UdtBindPlan(
+            family: UdtBindFamily.ipv4,
+            dualStack: false,
+            requireIpv6OnlyFalse: false,
+            reason:
+                'Fallback IPv4 bind for platforms lacking dual-stack behavior.',
+          ),
+        ],
     };
 
     return UdtSocketRuntimePlan(bindPlans: bindPlans, applyReport: report);

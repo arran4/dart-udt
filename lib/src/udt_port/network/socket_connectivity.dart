@@ -12,9 +12,9 @@ final class UdtConnectPlan {
   final String reason;
 
   InternetAddressType get addressType => switch (family) {
-    UdtEndpointFamily.ipv4 => InternetAddressType.IPv4,
-    UdtEndpointFamily.ipv6 => InternetAddressType.IPv6,
-  };
+        UdtEndpointFamily.ipv4 => InternetAddressType.IPv4,
+        UdtEndpointFamily.ipv6 => InternetAddressType.IPv6,
+      };
 }
 
 /// Deterministic connect strategy generator derived from a selected bind plan.
@@ -27,27 +27,27 @@ final class UdtSocketConnectPlanner {
   List<UdtConnectPlan> planFromBind(UdtBindPlan bindPlan) {
     return switch (bindPlan.family) {
       UdtBindFamily.ipv4 => const <UdtConnectPlan>[
-        UdtConnectPlan(
-          family: UdtEndpointFamily.ipv4,
-          reason: 'IPv4 bind requires IPv4 remote endpoint.',
-        ),
-      ],
+          UdtConnectPlan(
+            family: UdtEndpointFamily.ipv4,
+            reason: 'IPv4 bind requires IPv4 remote endpoint.',
+          ),
+        ],
       UdtBindFamily.ipv6 when bindPlan.dualStack => const <UdtConnectPlan>[
-        UdtConnectPlan(
-          family: UdtEndpointFamily.ipv6,
-          reason: 'Dual-stack prefers native IPv6 endpoint first.',
-        ),
-        UdtConnectPlan(
-          family: UdtEndpointFamily.ipv4,
-          reason: 'Dual-stack fallback allows IPv4 endpoint.',
-        ),
-      ],
+          UdtConnectPlan(
+            family: UdtEndpointFamily.ipv6,
+            reason: 'Dual-stack prefers native IPv6 endpoint first.',
+          ),
+          UdtConnectPlan(
+            family: UdtEndpointFamily.ipv4,
+            reason: 'Dual-stack fallback allows IPv4 endpoint.',
+          ),
+        ],
       UdtBindFamily.ipv6 => const <UdtConnectPlan>[
-        UdtConnectPlan(
-          family: UdtEndpointFamily.ipv6,
-          reason: 'IPv6-only bind requires IPv6 remote endpoint.',
-        ),
-      ],
+          UdtConnectPlan(
+            family: UdtEndpointFamily.ipv6,
+            reason: 'IPv6-only bind requires IPv6 remote endpoint.',
+          ),
+        ],
     };
   }
 }

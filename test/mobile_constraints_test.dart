@@ -24,82 +24,79 @@ void main() {
     () {
       const policy = UdtMobileConstraintsPolicy();
 
-      const scenarios =
-          <
-            ({
-              UdtMobilePolicyInput input,
-              bool pause,
-              bool keepReceiving,
-              double ackMultiplier,
-            })
-          >[
-            (
-              input: UdtMobilePolicyInput(
-                appState: UdtMobileAppState.foreground,
-                networkType: UdtMobileNetworkType.wifi,
-                allowBackgroundNetwork: true,
-                batterySaverEnabled: false,
-              ),
-              pause: false,
-              keepReceiving: true,
-              ackMultiplier: 1.0,
-            ),
-            (
-              input: UdtMobilePolicyInput(
-                appState: UdtMobileAppState.foreground,
-                networkType: UdtMobileNetworkType.cellular,
-                allowBackgroundNetwork: true,
-                batterySaverEnabled: true,
-              ),
-              pause: false,
-              keepReceiving: true,
-              ackMultiplier: 1.5,
-            ),
-            (
-              input: UdtMobilePolicyInput(
-                appState: UdtMobileAppState.background,
-                networkType: UdtMobileNetworkType.unknown,
-                allowBackgroundNetwork: false,
-                batterySaverEnabled: false,
-              ),
-              pause: true,
-              keepReceiving: false,
-              ackMultiplier: 2.0,
-            ),
-            (
-              input: UdtMobilePolicyInput(
-                appState: UdtMobileAppState.background,
-                networkType: UdtMobileNetworkType.cellular,
-                allowBackgroundNetwork: true,
-                batterySaverEnabled: false,
-              ),
-              pause: true,
-              keepReceiving: true,
-              ackMultiplier: 2.0,
-            ),
-            (
-              input: UdtMobilePolicyInput(
-                appState: UdtMobileAppState.background,
-                networkType: UdtMobileNetworkType.wifi,
-                allowBackgroundNetwork: true,
-                batterySaverEnabled: true,
-              ),
-              pause: true,
-              keepReceiving: true,
-              ackMultiplier: 2.0,
-            ),
-            (
-              input: UdtMobilePolicyInput(
-                appState: UdtMobileAppState.background,
-                networkType: UdtMobileNetworkType.wifi,
-                allowBackgroundNetwork: true,
-                batterySaverEnabled: false,
-              ),
-              pause: false,
-              keepReceiving: true,
-              ackMultiplier: 1.25,
-            ),
-          ];
+      const scenarios = <({
+        UdtMobilePolicyInput input,
+        bool pause,
+        bool keepReceiving,
+        double ackMultiplier,
+      })>[
+        (
+          input: UdtMobilePolicyInput(
+            appState: UdtMobileAppState.foreground,
+            networkType: UdtMobileNetworkType.wifi,
+            allowBackgroundNetwork: true,
+            batterySaverEnabled: false,
+          ),
+          pause: false,
+          keepReceiving: true,
+          ackMultiplier: 1.0,
+        ),
+        (
+          input: UdtMobilePolicyInput(
+            appState: UdtMobileAppState.foreground,
+            networkType: UdtMobileNetworkType.cellular,
+            allowBackgroundNetwork: true,
+            batterySaverEnabled: true,
+          ),
+          pause: false,
+          keepReceiving: true,
+          ackMultiplier: 1.5,
+        ),
+        (
+          input: UdtMobilePolicyInput(
+            appState: UdtMobileAppState.background,
+            networkType: UdtMobileNetworkType.unknown,
+            allowBackgroundNetwork: false,
+            batterySaverEnabled: false,
+          ),
+          pause: true,
+          keepReceiving: false,
+          ackMultiplier: 2.0,
+        ),
+        (
+          input: UdtMobilePolicyInput(
+            appState: UdtMobileAppState.background,
+            networkType: UdtMobileNetworkType.cellular,
+            allowBackgroundNetwork: true,
+            batterySaverEnabled: false,
+          ),
+          pause: true,
+          keepReceiving: true,
+          ackMultiplier: 2.0,
+        ),
+        (
+          input: UdtMobilePolicyInput(
+            appState: UdtMobileAppState.background,
+            networkType: UdtMobileNetworkType.wifi,
+            allowBackgroundNetwork: true,
+            batterySaverEnabled: true,
+          ),
+          pause: true,
+          keepReceiving: true,
+          ackMultiplier: 2.0,
+        ),
+        (
+          input: UdtMobilePolicyInput(
+            appState: UdtMobileAppState.background,
+            networkType: UdtMobileNetworkType.wifi,
+            allowBackgroundNetwork: true,
+            batterySaverEnabled: false,
+          ),
+          pause: false,
+          keepReceiving: true,
+          ackMultiplier: 1.25,
+        ),
+      ];
 
       for (final scenario in scenarios) {
         final decision = policy.evaluate(scenario.input);
