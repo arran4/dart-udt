@@ -8,11 +8,10 @@ final class UdtSndLossList {
   final List<_SeqInterval> _intervals = <_SeqInterval>[];
 
   int get lossLength => _intervals.fold<int>(
-        0,
-        (int sum, _SeqInterval interval) =>
-            sum +
-            UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
-      );
+    0,
+    (int sum, _SeqInterval interval) =>
+        sum + UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
+  );
 
   /// Inserts [seqno1, seqno2] and returns number of newly-added sequence IDs.
   int insert(int seqno1, int seqno2) {
@@ -102,11 +101,10 @@ final class UdtRcvLossList {
   final List<_SeqInterval> _intervals = <_SeqInterval>[];
 
   int get lossLength => _intervals.fold<int>(
-        0,
-        (int sum, _SeqInterval interval) =>
-            sum +
-            UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
-      );
+    0,
+    (int sum, _SeqInterval interval) =>
+        sum + UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
+  );
 
   int get firstLostSeq => _intervals.isEmpty ? -1 : _intervals.first.start;
 

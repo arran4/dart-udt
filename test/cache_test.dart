@@ -32,7 +32,10 @@ void main() {
       expect(cache.update(_FakeEntry(20, 200)), 0);
 
       _FakeEntry? found;
-      expect(cache.lookup(_FakeEntry(10, -1), (_FakeEntry value) => found = value), 0);
+      expect(
+        cache.lookup(_FakeEntry(10, -1), (_FakeEntry value) => found = value),
+        0,
+      );
       expect(found, isNotNull);
       expect(found!.value, 100);
     });
@@ -45,7 +48,10 @@ void main() {
       cache.update(_FakeEntry(1, 101, releaseCounter: releases));
 
       _FakeEntry? found;
-      expect(cache.lookup(_FakeEntry(1, 0), (_FakeEntry value) => found = value), 0);
+      expect(
+        cache.lookup(_FakeEntry(1, 0), (_FakeEntry value) => found = value),
+        0,
+      );
       expect(found!.value, 101);
       expect(cache.size, 1);
       expect(releases, [100]);

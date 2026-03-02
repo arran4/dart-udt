@@ -31,8 +31,8 @@ final class UdtNetworkTransitionSimulator {
   const UdtNetworkTransitionSimulator({
     UdtMobileConstraintsPolicy policy = const UdtMobileConstraintsPolicy(),
     int baseAckIntervalMillis = 10,
-  })  : _policy = policy,
-        _baseAckIntervalMillis = baseAckIntervalMillis;
+  }) : _policy = policy,
+       _baseAckIntervalMillis = baseAckIntervalMillis;
 
   final UdtMobileConstraintsPolicy _policy;
   final int _baseAckIntervalMillis;

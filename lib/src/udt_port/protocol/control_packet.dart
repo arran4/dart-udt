@@ -121,7 +121,7 @@ final class UdtMessageDropRequestControlInfo {
 /// Typed wrapper for UDT control packet header + control information field.
 final class UdtControlPacket {
   UdtControlPacket._({required this.header, Uint8List? controlInformation})
-      : controlInformation = controlInformation ?? Uint8List(0);
+    : controlInformation = controlInformation ?? Uint8List(0);
 
   factory UdtControlPacket.handshake({
     required UdtHandshake handshake,
@@ -308,9 +308,9 @@ final class UdtControlPacket {
   UdtControlType get type => UdtControlType.fromCode(header.controlType!);
 
   UdtPacket toPacket() => UdtPacket(
-        header: header,
-        payload: Uint8List.fromList(controlInformation),
-      );
+    header: header,
+    payload: Uint8List.fromList(controlInformation),
+  );
 
   UdtHandshake parseHandshake() {
     _ensureType(UdtControlType.handshake);
@@ -334,9 +334,11 @@ final class UdtControlPacket {
 
     final data = ByteData.sublistView(controlInformation);
     final words = <int>[];
-    for (var offset = 0;
-        offset < controlInformation.lengthInBytes;
-        offset += 4) {
+    for (
+      var offset = 0;
+      offset < controlInformation.lengthInBytes;
+      offset += 4
+    ) {
       words.add(data.getInt32(offset, Endian.big));
     }
     return words;

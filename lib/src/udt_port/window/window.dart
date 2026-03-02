@@ -4,11 +4,11 @@ import '../core/ack_nak_timer_model.dart';
 /// `CACKWindow`.
 final class UdtAckWindow {
   UdtAckWindow({required UdtProtocolClock clock, int size = 1024})
-      : _clock = clock,
-        _size = size,
-        _ackSeqNo = List<int>.filled(size, 0),
-        _ackNumbers = List<int>.filled(size, 0),
-        _timestampsMicros = List<int>.filled(size, 0) {
+    : _clock = clock,
+      _size = size,
+      _ackSeqNo = List<int>.filled(size, 0),
+      _ackNumbers = List<int>.filled(size, 0),
+      _timestampsMicros = List<int>.filled(size, 0) {
     if (size <= 0) {
       throw ArgumentError.value(size, 'size', 'Must be > 0');
     }
@@ -85,12 +85,12 @@ final class UdtPacketTimeWindow {
     required UdtProtocolClock clock,
     int arrivalWindowSize = 16,
     int probeWindowSize = 16,
-  })  : _clock = clock,
-        _arrivalWindowSize = arrivalWindowSize,
-        _probeWindowSize = probeWindowSize,
-        _packetIntervalsMicros = List<int>.filled(arrivalWindowSize, 1000000),
-        _probeIntervalsMicros = List<int>.filled(probeWindowSize, 1000),
-        _lastArrivalMicros = clock.nowMicros {
+  }) : _clock = clock,
+       _arrivalWindowSize = arrivalWindowSize,
+       _probeWindowSize = probeWindowSize,
+       _packetIntervalsMicros = List<int>.filled(arrivalWindowSize, 1000000),
+       _probeIntervalsMicros = List<int>.filled(probeWindowSize, 1000),
+       _lastArrivalMicros = clock.nowMicros {
     if (arrivalWindowSize <= 0) {
       throw ArgumentError.value(
         arrivalWindowSize,
