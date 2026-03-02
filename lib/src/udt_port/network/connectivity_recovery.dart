@@ -50,9 +50,8 @@ final class UdtConnectivityRecoveryPolicy {
       );
     }
 
-    final cappedFailures = input.consecutiveFailures > 6
-        ? 6
-        : input.consecutiveFailures;
+    final cappedFailures =
+        input.consecutiveFailures > 6 ? 6 : input.consecutiveFailures;
     final backoffMultiplier = 1 << cappedFailures;
 
     var nextDelay = input.baseRetryDelayMillis * backoffMultiplier;
@@ -77,8 +76,8 @@ final class UdtConnectivityRecoveryPolicy {
       reason: shouldEscalate
           ? 'High repeated failure count; escalate and reset aggressively.'
           : (shouldResetSession
-                ? 'Repeated failures; reset session before retry.'
-                : 'Initial retry backoff path.'),
+              ? 'Repeated failures; reset session before retry.'
+              : 'Initial retry backoff path.'),
     );
   }
 }

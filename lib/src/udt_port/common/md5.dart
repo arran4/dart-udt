@@ -78,9 +78,8 @@ final class UdtMd5 {
     final savedLow = _bitCountLow;
     final savedHigh = _bitCountHigh;
 
-    final padLength = _bufferLength < 56
-        ? 56 - _bufferLength
-        : 120 - _bufferLength;
+    final padLength =
+        _bufferLength < 56 ? 56 - _bufferLength : 120 - _bufferLength;
     final padding = Uint8List(padLength);
     padding[0] = 0x80;
     append(padding);

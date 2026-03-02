@@ -156,9 +156,11 @@ void main() {
             break;
           case 2:
             final losses = List<int>.generate(3, (_) => random.nextInt(20));
-            final expectedDueNow =
-                losses.where(referenceSentAt.containsKey).toSet().toList()
-                  ..sort();
+            final expectedDueNow = losses
+                .where(referenceSentAt.containsKey)
+                .toSet()
+                .toList()
+              ..sort();
             final dueNow = model.onNakReceived(losses);
             for (final sequence in expectedDueNow) {
               referenceSentAt[sequence] =
@@ -171,12 +173,11 @@ void main() {
             break;
           case 4:
             final deadline = clock.nowMicros - retransmissionTimeoutMicros;
-            final expectedTimedOut =
-                referenceSentAt.entries
-                    .where((entry) => entry.value <= deadline)
-                    .map((entry) => entry.key)
-                    .toList()
-                  ..sort();
+            final expectedTimedOut = referenceSentAt.entries
+                .where((entry) => entry.value <= deadline)
+                .map((entry) => entry.key)
+                .toList()
+              ..sort();
             expect(model.collectTimedOutSequences(), expectedTimedOut);
             break;
         }

@@ -21,14 +21,14 @@ final class UdtSendBufferRetransmitResult {
   const UdtSendBufferRetransmitResult.data({
     required this.payload,
     required this.messageNumber,
-  }) : isMessageExpired = false,
-       expiredMessagePacketLength = 0;
+  })  : isMessageExpired = false,
+        expiredMessagePacketLength = 0;
 
   const UdtSendBufferRetransmitResult.messageExpired({
     required this.messageNumber,
     required this.expiredMessagePacketLength,
-  }) : payload = null,
-       isMessageExpired = true;
+  })  : payload = null,
+        isMessageExpired = true;
 
   final Uint8List? payload;
   final int messageNumber;
@@ -45,9 +45,9 @@ final class UdtSendBuffer {
     int size = 32,
     int maximumSegmentSize = 1500,
     UdtProtocolClock? clock,
-  }) : _size = size,
-       _maximumSegmentSize = maximumSegmentSize,
-       _clock = clock ?? _MonotonicProtocolClock() {
+  })  : _size = size,
+        _maximumSegmentSize = maximumSegmentSize,
+        _clock = clock ?? _MonotonicProtocolClock() {
     if (size <= 0) {
       throw ArgumentError.value(size, 'size', 'must be positive');
     }

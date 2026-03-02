@@ -61,7 +61,7 @@ final class UdtImpairmentOutcome {
 /// Deterministic latency/loss/reordering simulator for reproducible tests.
 final class UdtLatencyLossSimulator {
   UdtLatencyLossSimulator({UdtRandomSource? random})
-    : random = random ?? UdtSeededRandomSource(1337);
+      : random = random ?? UdtSeededRandomSource(1337);
 
   final UdtRandomSource random;
 

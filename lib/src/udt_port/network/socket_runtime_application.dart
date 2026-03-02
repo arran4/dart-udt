@@ -31,10 +31,10 @@ final class UdtSocketRuntimeApplier {
     UdtSocketRuntimeExecutor runtimeExecutor = const UdtSocketRuntimeExecutor(),
     UdtSocketConnectPlanner connectPlanner = const UdtSocketConnectPlanner(),
     UdtSocketConnectExecutor connectExecutor = const UdtSocketConnectExecutor(),
-  }) : _runtimePlanner = runtimePlanner,
-       _runtimeExecutor = runtimeExecutor,
-       _connectPlanner = connectPlanner,
-       _connectExecutor = connectExecutor;
+  })  : _runtimePlanner = runtimePlanner,
+        _runtimeExecutor = runtimeExecutor,
+        _connectPlanner = connectPlanner,
+        _connectExecutor = connectExecutor;
 
   final UdtSocketRuntimePlanner _runtimePlanner;
   final UdtSocketRuntimeExecutor _runtimeExecutor;
@@ -155,8 +155,8 @@ final class UdtRawDatagramRuntimeTarget
     this.remotePort = 0,
     this.supportsReceiveSendBufferSizing = false,
     this.supportsIpv6OnlyOption = true,
-  }) : ipv4BindAddress = ipv4BindAddress ?? InternetAddress.anyIPv4,
-       ipv6BindAddress = ipv6BindAddress ?? InternetAddress.anyIPv6;
+  })  : ipv4BindAddress = ipv4BindAddress ?? InternetAddress.anyIPv4,
+        ipv6BindAddress = ipv6BindAddress ?? InternetAddress.anyIPv6;
 
   final int localPort;
   final InternetAddress ipv4BindAddress;
@@ -215,9 +215,8 @@ final class UdtRawDatagramRuntimeTarget
 
   @override
   Future<void> bind(UdtBindFamily family, {required bool dualStack}) async {
-    final address = family == UdtBindFamily.ipv4
-        ? ipv4BindAddress
-        : ipv6BindAddress;
+    final address =
+        family == UdtBindFamily.ipv4 ? ipv4BindAddress : ipv6BindAddress;
     _socket = await RawDatagramSocket.bind(
       address,
       localPort,
