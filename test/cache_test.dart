@@ -140,7 +140,7 @@ void main() {
 
       expect(words, hasLength(4));
       expect(a.sameKey(b), isFalse);
-      expect(a.key, words.reduce((left, right) => left + right));
+      expect(a.key, words.reduce((int left, int right) => left + right));
     });
   });
 }
