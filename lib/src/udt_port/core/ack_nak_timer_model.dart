@@ -28,8 +28,8 @@ final class UdtAckNakTimerModel {
   UdtAckNakTimerModel({
     required UdtProtocolClock clock,
     required int retransmissionTimeoutMicros,
-  })  : _clock = clock,
-        _retransmissionTimeoutMicros = retransmissionTimeoutMicros {
+  }) : _clock = clock,
+       _retransmissionTimeoutMicros = retransmissionTimeoutMicros {
     if (retransmissionTimeoutMicros <= 0) {
       throw ArgumentError.value(
         retransmissionTimeoutMicros,

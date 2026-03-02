@@ -13,8 +13,8 @@ class UdtCongestionControl {
   UdtCongestionControl({
     int synIntervalMillis = 10,
     void Function(UdtControlPacket packet)? customMessageSender,
-  })  : _synIntervalMillis = synIntervalMillis,
-        _customMessageSender = customMessageSender {
+  }) : _synIntervalMillis = synIntervalMillis,
+       _customMessageSender = customMessageSender {
     if (synIntervalMillis <= 0) {
       throw ArgumentError.value(
         synIntervalMillis,
@@ -171,9 +171,9 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
     super.customMessageSender,
     int Function()? nowMicros,
     double Function(int seed)? seededRandomFraction,
-  })  : _nowMicros = nowMicros ?? _defaultNowMicros,
-        _seededRandomFraction =
-            seededRandomFraction ?? _defaultSeededRandomFraction;
+  }) : _nowMicros = nowMicros ?? _defaultNowMicros,
+       _seededRandomFraction =
+           seededRandomFraction ?? _defaultSeededRandomFraction;
 
   static const int _sequenceThreshold = 0x3FFFFFFF;
   static const int _maxSequenceNumber = 0x7FFFFFFF;
@@ -281,7 +281,8 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
     if (estimatedSpareBandwidth <= 0) {
       increase = _minimumAckIncrease;
     } else {
-      var computedIncrease = math.pow(
+      var computedIncrease =
+          math.pow(
             10.0,
             _log10(estimatedSpareBandwidth * effectiveMss * 8.0).ceil(),
           ) *
@@ -325,15 +326,16 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
         (packetSendPeriodMicros * 1.125).ceilToDouble(),
       );
 
-      _averageNakNumber =
-          (_averageNakNumber * 0.875 + _nakCount * 0.125).ceil();
+      _averageNakNumber = (_averageNakNumber * 0.875 + _nakCount * 0.125)
+          .ceil();
       _nakCount = 1;
       _decreaseCount = 1;
 
       _lastDecreaseSequenceNumber = sendCurrentSequenceNumber;
-      _decreaseRandom = (_averageNakNumber *
-              _seededRandomFraction(_lastDecreaseSequenceNumber))
-          .ceil();
+      _decreaseRandom =
+          (_averageNakNumber *
+                  _seededRandomFraction(_lastDecreaseSequenceNumber))
+              .ceil();
       if (_decreaseRandom < 1) {
         _decreaseRandom = 1;
       }

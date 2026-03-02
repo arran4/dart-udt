@@ -67,8 +67,8 @@ void main() {
 
       expect(releases, [10]);
       expect(cache.size, 2);
-      expect(cache.lookup(_FakeEntry(1, 0), (_) {}), -1);
-      expect(cache.lookup(_FakeEntry(2, 0), (_) {}), 0);
+      expect(cache.lookup(_FakeEntry(1, 0), (_FakeEntry _) {}), -1);
+      expect(cache.lookup(_FakeEntry(2, 0), (_FakeEntry _) {}), 0);
     });
 
     test('setSizeLimit trims storage and invalid key lookup fails', () {
@@ -79,7 +79,7 @@ void main() {
       cache.setSizeLimit(2);
 
       expect(cache.size, 2);
-      expect(cache.lookup(_FakeEntry(-1, 0), (_) {}), -1);
+      expect(cache.lookup(_FakeEntry(-1, 0), (_FakeEntry _) {}), -1);
       expect(() => cache.setSizeLimit(0), throwsA(isA<ArgumentError>()));
     });
   });
@@ -146,7 +146,7 @@ void main() {
 
       expect(words, hasLength(4));
       expect(a.sameKey(b), isFalse);
-      expect(a.key, words.reduce((left, right) => left + right));
+      expect(a.key, words.reduce((int left, int right) => left + right));
     });
   });
 }

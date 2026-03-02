@@ -36,7 +36,7 @@ final class UdtSocketOptionRecommendation {
 /// This intentionally avoids real socket I/O so tests can stay deterministic.
 final class UdtSocketOptionPlanner {
   const UdtSocketOptionPlanner({String? platformOverride})
-      : _platformOverride = platformOverride;
+    : _platformOverride = platformOverride;
 
   final String? _platformOverride;
 
@@ -159,9 +159,9 @@ List<UdtDualStackMatrixRow> buildUdtDualStackMatrix() {
             UdtIpMode.ipv4Only => {InternetAddressType.IPv4},
             UdtIpMode.ipv6Only => {InternetAddressType.IPv6},
             UdtIpMode.dualStack => {
-                InternetAddressType.IPv4,
-                InternetAddressType.IPv6,
-              },
+              InternetAddressType.IPv4,
+              InternetAddressType.IPv6,
+            },
           },
           notes: mode == UdtIpMode.dualStack && platform == 'windows'
               ? 'Validate dual-stack defaults per Windows version.'
