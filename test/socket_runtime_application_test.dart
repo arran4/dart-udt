@@ -37,6 +37,48 @@ final class _FakeConnectTarget implements UdtSocketConnectTarget {
   }
 }
 
+final class _ProfileFakeTarget
+    implements UdtSocketRuntimeTarget, UdtSocketConnectTarget, UdtSocketOptionTarget {
+  final List<String> appliedOptions = <String>[];
+  final List<UdtEndpointFamily> connectAttempts = <UdtEndpointFamily>[];
+
+  @override
+  Future<void> bind(UdtBindFamily family, {required bool dualStack}) async {}
+
+  @override
+  Future<void> close() async {}
+
+  @override
+  Future<void> connect(UdtEndpointFamily family) async {
+    connectAttempts.add(family);
+  }
+
+  @override
+  Future<void> setIpv6Only(bool enabled) async {
+    appliedOptions.add('ipv6Only:$enabled');
+  }
+
+  @override
+  Future<void> setReceiveBufferBytes(int bytes) async {
+    appliedOptions.add('rcv:$bytes');
+  }
+
+  @override
+  Future<void> setReuseAddress(bool enabled) async {
+    appliedOptions.add('reuseAddress:$enabled');
+  }
+
+  @override
+  Future<void> setReusePort(bool enabled) async {
+    appliedOptions.add('reusePort:$enabled');
+  }
+
+  @override
+  Future<void> setSendBufferBytes(int bytes) async {
+    appliedOptions.add('snd:$bytes');
+  }
+}
+
 void main() {
   const dualStackPlan = UdtSocketRuntimePlan(
     bindPlans: [
@@ -65,6 +107,7 @@ void main() {
       runtimeTarget: target,
     );
 
+    expect(report.runtimePlan, same(dualStackPlan));
     expect(report.execution.isBound, isTrue);
     expect(report.execution.selectedPlan!.family, UdtBindFamily.ipv4);
     expect(report.logs.any((line) => line.contains('bind fallback')), isTrue);
@@ -99,5 +142,35 @@ void main() {
 
     expect(report.execution.isBound, isFalse);
     expect(report.logs.any((line) => line.contains('bind failed')), isTrue);
+  });
+
+  test('applier can build runtime plan from profile and apply in one call', () async {
+    const builder = UdtCompatibilityProfileBuilder();
+    final profile = builder.build(
+      platform: 'linux',
+      ipMode: UdtIpMode.dualStack,
+      ipv6: true,
+      mobileInput: const UdtMobilePolicyInput(
+        appState: UdtMobileAppState.foreground,
+        networkType: UdtMobileNetworkType.wifi,
+        allowBackgroundNetwork: true,
+        batterySaverEnabled: false,
+      ),
+    );
+
+    const applier = UdtSocketRuntimeApplier();
+    final target = _ProfileFakeTarget();
+
+    final report = await applier.applyProfile(
+      profile: profile,
+      optionTarget: target,
+      runtimeTarget: target,
+      connectTarget: target,
+    );
+
+    expect(report.runtimePlan.bindPlans, isNotEmpty);
+    expect(report.runtimePlan.applyReport.results, isNotEmpty);
+    expect(target.appliedOptions, isNotEmpty);
+    expect(target.connectAttempts, isNotEmpty);
   });
 }

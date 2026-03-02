@@ -77,3 +77,13 @@
 - Recovery-policy note: keep section-4 retry/reset/escalation behavior deterministic (`UdtConnectivityRecoveryPolicy`) so failure handling can be validated before live sockets.
 
 - Circuit-breaker note: keep section-4 failure gating deterministic (`UdtCircuitBreaker`) with explicit open/half-open/closed transitions before live socket runtime hooks.
+
+- Queue-structure porting note: keep upstream `CRcvUList` and `CHash` behavior in typed pure-Dart wrappers (`UdtReceiveUserList`, `UdtSocketHash`) with deterministic collision/order tests before worker-thread/socket queue integration.
+
+- Live-runtime adapter note: keep `UdtSocketRuntimeApplier.applyProfile` orchestrating option-plan build + bind/connect execution through a shared typed target (`UdtRawDatagramRuntimeTarget`) so connect fallback parity remains testable with deterministic fakes.
+
+- Trace-fixture governance note: keep deterministic impairment corpus provenance/version details updated in `docs/upstream_trace_fixture_corpus.md` whenever seeded network parity fixtures change.
+
+- Live socket-option bridge note: keep `UdtRawDatagramRuntimeTarget` option setters aligned with `UdtSocketOptionRecommendation` mapping and maintain deterministic runtime-target tests for optional-skip vs required-failure branches.
+
+- Pub-readiness docs note: keep `README.md` centered on a runnable quickstart (`example/pub_quickstart.dart`) and clearly separate currently-shipping deterministic features from pending full UDT parity work.
