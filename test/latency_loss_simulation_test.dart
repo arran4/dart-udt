@@ -55,7 +55,7 @@ void main() {
     expect(
       () => simulator.simulate(
         config: const UdtImpairmentConfig(lossRate: -0.1),
-        packets: const [],
+        packets: const <UdtImpairmentInput>[],
       ),
       throwsA(isA<ArgumentError>()),
     );
@@ -63,7 +63,7 @@ void main() {
     expect(
       () => simulator.simulate(
         config: const UdtImpairmentConfig(reorderRate: 1.1),
-        packets: const [],
+        packets: const <UdtImpairmentInput>[],
       ),
       throwsA(isA<ArgumentError>()),
     );
@@ -71,7 +71,7 @@ void main() {
     expect(
       () => simulator.simulate(
         config: const UdtImpairmentConfig(maxJitterMillis: -1),
-        packets: const [],
+        packets: const <UdtImpairmentInput>[],
       ),
       throwsA(isA<ArgumentError>()),
     );
