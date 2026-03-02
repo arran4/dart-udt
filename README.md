@@ -6,6 +6,9 @@
 
 Pure-Dart-first, incremental port of UDT (UDP-based Data Transfer).
 
+> [!WARNING]
+> **Heavily Untested:** This library is in the first phases of conversion and use.
+
 > Status: **pre-release** (`0.0.1-dev`). The package already provides deterministic protocol, planner, and runtime-adapter building blocks, while full end-to-end UDT socket/session parity is still in progress.
 
 ## Why this package
