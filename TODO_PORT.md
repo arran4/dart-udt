@@ -21,6 +21,7 @@
 - [x] Port upstream `CRcvBuffer` behavior from `buffer.h`/`buffer.cpp` into pure-Dart typed receive-message buffering models with deterministic no-network tests.
 - [x] Port upstream `CIPAddress` helpers from `common.h` into pure-Dart typed conversion/comparison helpers (`UdtIpAddress`) with deterministic IPv4/IPv6 tests.
 - [x] Port upstream `CTimer` event/tick/sleep fallback behavior from `common.h`/`common.cpp` into pure-Dart deterministic helpers (`UdtTimer`) with fake-clock tests.
+- [x] Port upstream `CRcvUList`/`CHash` behavior from `queue.h`/`queue.cpp` into pure-Dart typed models (`UdtReceiveUserList`, `UdtSocketHash`) with deterministic order/collision tests.
 
 ## 3. Concurrency and eventing
 - [x] Port threading/locking model to Dart isolates and async primitives.
@@ -39,7 +40,7 @@
   - [x] Add deterministic per-platform socket-option planner (`UdtSocketOptionPlanner`) for pre-bind compatibility policy.
   - [x] Add deterministic socket-option application engine (`UdtSocketOptionApplier`) with required/optional failure semantics tests.
   - [x] Add deterministic compatibility profile builder (`UdtCompatibilityProfileBuilder`) that composes option/MTU/mobile planners for socket-layer integration handoff.
-  - [ ] Apply runtime plan to live sockets (real bind/connect) with graceful fallback logging in production socket modules (current `UdtSocketRuntimeApplier` + `UdtRawDatagramRuntimeTarget` cover bind-path adapter scaffolding only; connect/socket-option plumbing is still partial).
+  - [x] Apply runtime plan to live sockets (real bind/connect) with graceful fallback logging in production socket modules (`UdtSocketRuntimeApplier.applyProfile` + `UdtRawDatagramRuntimeTarget` now cover option-plan build, bind, and connect-stage runtime wiring).
 - [x] Validate MTU/path-MTU assumptions across Linux/macOS/Windows with deterministic platform/IP-family matrix tests and bounded path-MTU hints.
   - [x] Add deterministic MTU/path-MTU planner (`UdtMtuPlanner`) with bounded hints and per-platform defaults.
 - [x] Define mobile constraints (backgrounding, power/network transitions) with deterministic policy + transition matrix coverage.
@@ -76,11 +77,14 @@
 
 - [x] Add explicit upstream-source removal guardrail + per-file translation status tracker (`docs/translation_status.md`) to ensure commented references are only retired after full pure-Dart replacement + deterministic tests.
 - [ ] Final cleanup pass: retire or relocate all temporary migration/reference files once corresponding modules reach stable parity.
+  - [x] Refresh README with practical quickstart, install, limitations, and docs index for pub.dev usability.
+  - [x] Add runnable network-free pub example (`example/pub_quickstart.dart`) covering codec + planning + simulation path.
+  - [ ] Retire remaining upstream commented scaffolds only after stable parity is reached per `docs/translation_status.md`.
 
 
 ## 8. Discrepancies / follow-ups discovered while comparing against original upstream scope
-- [ ] Reconcile runtime-plan status with README limitations: keep TODO state aligned with what is truly live-socket-ready versus deterministic scaffolding-only behavior.
-- [ ] Add explicit connect-stage live adapter parity (`RawDatagramSocket`-backed connect boundary) and wire it through `UdtSocketRuntimeApplier` so bind+connect are both exercised against real sockets.
-- [ ] Add live socket-option application bridge (mapping `UdtSocketOptionRecommendation` to concrete socket setters) and verify required-vs-optional handling against runtime sockets, not only fake targets.
-- [ ] Add upstream trace-fixture corpus versioning notes for network impairment parity tests (seed/config/expected output provenance) to keep long-term parity auditable.
-- [ ] Split deterministic completion vs live-runtime completion in TODO checkboxes for every section-4 item to avoid false-positive “done” status when only planners/simulators are complete.
+- [x] Reconcile runtime-plan status with README limitations: keep TODO state aligned with what is truly live-socket-ready versus deterministic scaffolding-only behavior.
+- [x] Add explicit connect-stage live adapter parity (`RawDatagramSocket`-backed connect boundary) and wire it through `UdtSocketRuntimeApplier` so bind+connect are both exercised against real sockets.
+- [x] Add live socket-option application bridge (mapping `UdtSocketOptionRecommendation` to concrete socket setters) and verify required-vs-optional handling against runtime sockets, not only fake targets (`UdtRawDatagramRuntimeTarget` + `test/socket_runtime_live_option_bridge_test.dart`).
+- [x] Add upstream trace-fixture corpus versioning notes for network impairment parity tests (seed/config/expected output provenance) to keep long-term parity auditable (`docs/upstream_trace_fixture_corpus.md`).
+- [x] Split deterministic completion vs live-runtime completion in TODO checkboxes for every section-4 item to avoid false-positive “done” status when only planners/simulators are complete.

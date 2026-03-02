@@ -24,7 +24,7 @@ functionality is fully translated/replaced in pure Dart.
 | `common_h.dart` / `common_cpp.dart` | `lib/src/udt_port/common/sequence_numbers.dart`, `ip_address.dart`, `timer.dart`, `core/threading.dart` | In progress | Yes (partial) |
 | `epoll_h.dart` / `epoll_cpp.dart` | `lib/src/udt_port/epoll/poll.dart` | In progress | Yes |
 | `ccc_h.dart` / `ccc_cpp.dart` | `lib/src/udt_port/ccc/congestion_control.dart` | In progress | Yes |
-| `queue_h.dart` / `queue_cpp.dart` | `lib/src/udt_port/core/threading.dart` + future queue modules | In progress | Yes (threading primitives) |
+| `queue_h.dart` / `queue_cpp.dart` | `lib/src/udt_port/core/threading.dart`, `lib/src/udt_port/queue/queue_structures.dart` + future queue worker/socket modules | In progress | Yes (threading primitives + deterministic list/hash tests) |
 | `api_h.dart` / `api_cpp.dart` | Planned socket/API modules + `network/platform_compatibility.dart`, `network/socket_option_application.dart`, `network/mobile_constraints.dart`, `network/mtu_planning.dart`, `network/transition_simulation.dart`, `network/compatibility_profile.dart`, `network/socket_runtime_plan.dart`, `network/socket_lifecycle.dart`, `network/socket_runtime_execution.dart`, `network/connectivity_recovery.dart`, `network/circuit_breaker.dart` | In progress | Partial |
 | `core_h.dart` / `core_cpp.dart` | Planned connection/socket state modules | In progress | Partial |
 | `channel_h.dart` / `channel_cpp.dart` | Planned channel/socket transport modules | In progress | No |

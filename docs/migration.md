@@ -11,6 +11,8 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 - Upstream `epoll.h` / `epoll.cpp` -> `lib/src/udt_port/epoll/`
 - Upstream lock/cond/worker-loop usage in `queue.h` / `queue.cpp` ->
   `lib/src/udt_port/core/threading.dart`
+- Upstream receive-user list and socket hash helpers in `queue.h` / `queue.cpp` (`CRcvUList`, `CHash`) ->
+  `lib/src/udt_port/queue/queue_structures.dart`
 - Upstream `ccc.h` / `ccc.cpp` base `CCC` wrapper ->
   `lib/src/udt_port/ccc/congestion_control.dart`
 - Upstream `md5.h` / `md5.cpp` hashing utility ->
@@ -49,6 +51,14 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
   `lib/src/udt_port/network/connectivity_recovery.dart`,
   `lib/src/udt_port/network/circuit_breaker.dart`
 
+- Live bind/connect adapter boundary now uses `UdtRawDatagramRuntimeTarget`
+  (implements runtime-target + connect-target + socket-option-target interfaces)
+  so `UdtSocketRuntimeApplier.applyProfile` can execute option planning and
+  bind/connect fallback flow through one typed runtime adapter.
+- Runtime socket-option bridge verification now includes deterministic runtime-target
+  tests for required vs optional apply results using
+  `test/socket_runtime_live_option_bridge_test.dart`.
+
 ## API shape changes
 
 - Pointer/alias packet ownership (`CPacket`) is replaced by immutable typed
@@ -59,6 +69,9 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 - Pthread primitives (`pthread_mutex_t`, `pthread_cond_t`, worker threads) are
   mapped to pure-Dart async primitives: `UdtAsyncMutex`, `UdtAsyncSignal`, and
   `UdtSerialExecutor`.
+- Queue list/hash pointer structures (`CRNode`, `CHash::CBucket`) are mapped
+  to typed wrappers (`UdtReceiveNode`/`UdtReceiveUserList`, `UdtSocketHash`)
+  with explicit ordering/collision behavior for deterministic tests.
 - Base congestion-control callback/configuration surface from `CCC` is mapped to
   `UdtCongestionControl` with injectable side effects (for example custom
   control-message send) to keep no-socket deterministic tests feasible.
@@ -76,3 +89,5 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 ## Deterministic simulation examples
 
 - `example/network_simulation_trace.dart` demonstrates seeded delay/reorder/drop trace generation for reproducible no-socket parity checks.
+- Network impairment parity fixture corpus/version notes:
+  `docs/upstream_trace_fixture_corpus.md`.
