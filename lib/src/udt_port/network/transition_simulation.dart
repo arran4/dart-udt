@@ -2,10 +2,7 @@ import 'mobile_constraints.dart';
 
 /// Deterministic transition event used for section-4 network/mobile simulation.
 final class UdtTransitionEvent {
-  const UdtTransitionEvent({
-    required this.input,
-    required this.elapsedMillis,
-  });
+  const UdtTransitionEvent({required this.input, required this.elapsedMillis});
 
   final UdtMobilePolicyInput input;
   final int elapsedMillis;
@@ -60,8 +57,8 @@ final class UdtNetworkTransitionSimulator {
       timeMillis += event.elapsedMillis;
       final decision = _policy.evaluate(event.input);
 
-      final ackMillis = (_baseAckIntervalMillis * decision.ackIntervalMultiplier)
-          .round();
+      final ackMillis =
+          (_baseAckIntervalMillis * decision.ackIntervalMultiplier).round();
 
       final rtoScale = decision.shouldPauseSending
           ? 1.5

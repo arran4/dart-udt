@@ -54,32 +54,35 @@ void main() {
     expect(runtime.bindPlans.first.requireIpv6OnlyFalse, isTrue);
   });
 
-  test('runtime planner reports blocking failure for required option failure', () async {
-    const builder = UdtCompatibilityProfileBuilder();
-    final profile = builder.build(
-      platform: 'linux',
-      ipMode: UdtIpMode.ipv6Only,
-      ipv6: true,
-      mobileInput: const UdtMobilePolicyInput(
-        appState: UdtMobileAppState.foreground,
-        networkType: UdtMobileNetworkType.wifi,
-        allowBackgroundNetwork: true,
-        batterySaverEnabled: false,
-      ),
-    );
+  test(
+    'runtime planner reports blocking failure for required option failure',
+    () async {
+      const builder = UdtCompatibilityProfileBuilder();
+      final profile = builder.build(
+        platform: 'linux',
+        ipMode: UdtIpMode.ipv6Only,
+        ipv6: true,
+        mobileInput: const UdtMobilePolicyInput(
+          appState: UdtMobileAppState.foreground,
+          networkType: UdtMobileNetworkType.wifi,
+          allowBackgroundNetwork: true,
+          batterySaverEnabled: false,
+        ),
+      );
 
-    const planner = UdtSocketRuntimePlanner();
-    final runtime = await planner.buildPlan(
-      profile: profile,
-      optionTarget: _RuntimeFakeTarget(failRequiredIpv6Only: true),
-    );
+      const planner = UdtSocketRuntimePlanner();
+      final runtime = await planner.buildPlan(
+        profile: profile,
+        optionTarget: _RuntimeFakeTarget(failRequiredIpv6Only: true),
+      );
 
-    expect(runtime.hasBlockingFailure, isTrue);
-    expect(
-      runtime.applyReport.results.any(
-        (r) => r.status == UdtSocketOptionApplyStatus.failedRequired,
-      ),
-      isTrue,
-    );
-  });
+      expect(runtime.hasBlockingFailure, isTrue);
+      expect(
+        runtime.applyReport.results.any(
+          (r) => r.status == UdtSocketOptionApplyStatus.failedRequired,
+        ),
+        isTrue,
+      );
+    },
+  );
 }

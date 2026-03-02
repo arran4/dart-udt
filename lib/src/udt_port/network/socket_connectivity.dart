@@ -6,10 +6,7 @@ import 'socket_runtime_plan.dart';
 enum UdtEndpointFamily { ipv4, ipv6 }
 
 final class UdtConnectPlan {
-  const UdtConnectPlan({
-    required this.family,
-    required this.reason,
-  });
+  const UdtConnectPlan({required this.family, required this.reason});
 
   final UdtEndpointFamily family;
   final String reason;

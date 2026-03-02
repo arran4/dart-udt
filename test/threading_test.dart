@@ -44,7 +44,10 @@ void main() {
     final signal = UdtAsyncSignal();
     final observed = signal.sequence;
 
-    await signal.waitForNext(observed, timeout: const Duration(milliseconds: 1));
+    await signal.waitForNext(
+      observed,
+      timeout: const Duration(milliseconds: 1),
+    );
     expect(signal.sequence, equals(observed));
   });
 

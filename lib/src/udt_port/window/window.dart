@@ -190,12 +190,12 @@ final class UdtPacketTimeWindow {
 
   void probe2Arrival() {
     final currentArrivalMicros = _clock.nowMicros;
-    _probeIntervalsMicros[_probeWindowPtr] = currentArrivalMicros - _probeTimeMicros;
+    _probeIntervalsMicros[_probeWindowPtr] =
+        currentArrivalMicros - _probeTimeMicros;
 
     _probeWindowPtr++;
     if (_probeWindowPtr == _probeWindowSize) {
       _probeWindowPtr = 0;
     }
   }
-
 }

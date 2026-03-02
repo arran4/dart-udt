@@ -2,7 +2,8 @@ import 'package:dart_udt/dart_udt.dart';
 import 'package:test/test.dart';
 
 final class _FakeOptionTarget implements UdtSocketOptionTarget {
-  final Map<UdtSocketOptionKey, Object> applied = <UdtSocketOptionKey, Object>{};
+  final Map<UdtSocketOptionKey, Object> applied =
+      <UdtSocketOptionKey, Object>{};
   final Set<UdtSocketOptionKey> failKeys;
 
   _FakeOptionTarget({this.failKeys = const <UdtSocketOptionKey>{}});
@@ -57,9 +58,7 @@ void main() {
   test('optional failures become skippedUnsupported', () async {
     const planner = UdtSocketOptionPlanner(platformOverride: 'linux');
     final options = planner.plan(mode: UdtIpMode.dualStack);
-    final target = _FakeOptionTarget(
-      failKeys: {UdtSocketOptionKey.reusePort},
-    );
+    final target = _FakeOptionTarget(failKeys: {UdtSocketOptionKey.reusePort});
 
     const applier = UdtSocketOptionApplier();
     final report = await applier.apply(target, options);
@@ -74,9 +73,7 @@ void main() {
   test('required failures become failedRequired', () async {
     const planner = UdtSocketOptionPlanner(platformOverride: 'linux');
     final options = planner.plan(mode: UdtIpMode.ipv6Only);
-    final target = _FakeOptionTarget(
-      failKeys: {UdtSocketOptionKey.ipv6Only},
-    );
+    final target = _FakeOptionTarget(failKeys: {UdtSocketOptionKey.ipv6Only});
 
     const applier = UdtSocketOptionApplier();
     final report = await applier.apply(target, options);

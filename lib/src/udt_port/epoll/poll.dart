@@ -2,11 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 /// Mirrors UDT epoll bitmask flags (`UDT_EPOLL_IN|OUT|ERR`) with typed Dart.
-enum UdtPollEvent {
-  inEvent,
-  outEvent,
-  errEvent,
-}
+enum UdtPollEvent { inEvent, outEvent, errEvent }
 
 /// Normalized socket event emitted by poll event sources.
 final class UdtSocketIoEvent {
@@ -73,36 +69,32 @@ final class UdtEpoll {
     }
   }
 
-  void addUdtSocket(
-    int pollId,
-    int socketId, {
-    Set<UdtPollEvent>? events,
-  }) {
+  void addUdtSocket(int pollId, int socketId, {Set<UdtPollEvent>? events}) {
     final descriptor = _lookup(pollId);
     final watchedEvents = events ?? UdtPollEvent.values.toSet();
     descriptor.watchedEventsBySocket[socketId] = watchedEvents;
-    descriptor.subscriptions[socketId] ??= _eventSource.eventsFor(socketId).listen(
-      (UdtSocketIoEvent event) {
-        final watch = descriptor.watchedEventsBySocket[event.socketId];
-        if (watch == null || !watch.contains(event.event)) {
-          return;
-        }
+    descriptor.subscriptions[socketId] ??= _eventSource
+        .eventsFor(socketId)
+        .listen((UdtSocketIoEvent event) {
+          final watch = descriptor.watchedEventsBySocket[event.socketId];
+          if (watch == null || !watch.contains(event.event)) {
+            return;
+          }
 
-        switch (event.event) {
-          case UdtPollEvent.inEvent:
-            descriptor.readyReads.add(event.socketId);
-          case UdtPollEvent.outEvent:
-            descriptor.readyWrites.add(event.socketId);
-          case UdtPollEvent.errEvent:
-            descriptor.readyErrors.add(event.socketId);
-        }
+          switch (event.event) {
+            case UdtPollEvent.inEvent:
+              descriptor.readyReads.add(event.socketId);
+            case UdtPollEvent.outEvent:
+              descriptor.readyWrites.add(event.socketId);
+            case UdtPollEvent.errEvent:
+              descriptor.readyErrors.add(event.socketId);
+          }
 
-        final waiter = descriptor.waiter;
-        if (waiter != null && !waiter.isCompleted) {
-          waiter.complete();
-        }
-      },
-    );
+          final waiter = descriptor.waiter;
+          if (waiter != null && !waiter.isCompleted) {
+            waiter.complete();
+          }
+        });
   }
 
   Future<void> removeUdtSocket(int pollId, int socketId) async {
@@ -200,11 +192,16 @@ final class UdtRawDatagramEventSource implements UdtSocketEventSource {
     return socket
         .map<UdtSocketIoEvent?>(
           (RawSocketEvent event) => switch (event) {
-            RawSocketEvent.read =>
-              UdtSocketIoEvent(socketId: socketId, event: UdtPollEvent.inEvent),
-            RawSocketEvent.write =>
-              UdtSocketIoEvent(socketId: socketId, event: UdtPollEvent.outEvent),
-            RawSocketEvent.closed || RawSocketEvent.readClosed => UdtSocketIoEvent(
+            RawSocketEvent.read => UdtSocketIoEvent(
+              socketId: socketId,
+              event: UdtPollEvent.inEvent,
+            ),
+            RawSocketEvent.write => UdtSocketIoEvent(
+              socketId: socketId,
+              event: UdtPollEvent.outEvent,
+            ),
+            RawSocketEvent.closed ||
+            RawSocketEvent.readClosed => UdtSocketIoEvent(
               socketId: socketId,
               event: UdtPollEvent.errEvent,
             ),

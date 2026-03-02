@@ -21,7 +21,10 @@ void main() {
     expect(profile.platform, 'linux');
     expect(profile.ipMode, UdtIpMode.dualStack);
     expect(profile.socketOptions, isNotEmpty);
-    expect(profile.socketOptions.any((o) => o.key == UdtSocketOptionKey.ipv6Only), isTrue);
+    expect(
+      profile.socketOptions.any((o) => o.key == UdtSocketOptionKey.ipv6Only),
+      isTrue,
+    );
     expect(profile.mtu.recommendedMtu, 1300);
     expect(profile.mobileDecision.ackIntervalMultiplier, 1.25);
   });

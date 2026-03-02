@@ -43,16 +43,9 @@ void main() {
 
   test('readDataAtOffset returns expired result for TTL timeout', () {
     final clock = UdtFakeClock();
-    final buffer = UdtSendBuffer(
-      size: 4,
-      maximumSegmentSize: 3,
-      clock: clock,
-    );
+    final buffer = UdtSendBuffer(size: 4, maximumSegmentSize: 3, clock: clock);
 
-    buffer.addBuffer(
-      Uint8List.fromList([1, 2, 3, 4, 5, 6]),
-      ttlMillis: 2,
-    );
+    buffer.addBuffer(Uint8List.fromList([1, 2, 3, 4, 5, 6]), ttlMillis: 2);
 
     clock.advanceMicros(3001);
     final result = buffer.readDataAtOffset(0);
@@ -66,11 +59,7 @@ void main() {
 
   test('readDataAtOffset returns payload for non-expired packet', () {
     final clock = UdtFakeClock();
-    final buffer = UdtSendBuffer(
-      size: 4,
-      maximumSegmentSize: 4,
-      clock: clock,
-    );
+    final buffer = UdtSendBuffer(size: 4, maximumSegmentSize: 4, clock: clock);
 
     buffer.addBuffer(Uint8List.fromList([10, 11, 12]), ttlMillis: 10);
     clock.advanceMicros(1000);

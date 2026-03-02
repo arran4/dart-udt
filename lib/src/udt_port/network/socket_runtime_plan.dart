@@ -74,7 +74,8 @@ final class UdtSocketRuntimePlanner {
           family: UdtBindFamily.ipv4,
           dualStack: false,
           requireIpv6OnlyFalse: false,
-          reason: 'Fallback IPv4 bind for platforms lacking dual-stack behavior.',
+          reason:
+              'Fallback IPv4 bind for platforms lacking dual-stack behavior.',
         ),
       ],
     };

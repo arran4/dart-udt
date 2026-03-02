@@ -38,7 +38,10 @@ final class _FakeConnectTarget implements UdtSocketConnectTarget {
 }
 
 final class _ProfileFakeTarget
-    implements UdtSocketRuntimeTarget, UdtSocketConnectTarget, UdtSocketOptionTarget {
+    implements
+        UdtSocketRuntimeTarget,
+        UdtSocketConnectTarget,
+        UdtSocketOptionTarget {
   final List<String> appliedOptions = <String>[];
   final List<UdtEndpointFamily> connectAttempts = <UdtEndpointFamily>[];
 
@@ -128,7 +131,10 @@ void main() {
     expect(report.connect, isNotNull);
     expect(report.connect!.isConnected, isTrue);
     expect(report.connect!.selectedPlan!.family, UdtEndpointFamily.ipv4);
-    expect(report.logs.any((line) => line.contains('connect fallback')), isTrue);
+    expect(
+      report.logs.any((line) => line.contains('connect fallback')),
+      isTrue,
+    );
   });
 
   test('applier logs hard bind failure', () async {
@@ -144,33 +150,36 @@ void main() {
     expect(report.logs.any((line) => line.contains('bind failed')), isTrue);
   });
 
-  test('applier can build runtime plan from profile and apply in one call', () async {
-    const builder = UdtCompatibilityProfileBuilder();
-    final profile = builder.build(
-      platform: 'linux',
-      ipMode: UdtIpMode.dualStack,
-      ipv6: true,
-      mobileInput: const UdtMobilePolicyInput(
-        appState: UdtMobileAppState.foreground,
-        networkType: UdtMobileNetworkType.wifi,
-        allowBackgroundNetwork: true,
-        batterySaverEnabled: false,
-      ),
-    );
+  test(
+    'applier can build runtime plan from profile and apply in one call',
+    () async {
+      const builder = UdtCompatibilityProfileBuilder();
+      final profile = builder.build(
+        platform: 'linux',
+        ipMode: UdtIpMode.dualStack,
+        ipv6: true,
+        mobileInput: const UdtMobilePolicyInput(
+          appState: UdtMobileAppState.foreground,
+          networkType: UdtMobileNetworkType.wifi,
+          allowBackgroundNetwork: true,
+          batterySaverEnabled: false,
+        ),
+      );
 
-    const applier = UdtSocketRuntimeApplier();
-    final target = _ProfileFakeTarget();
+      const applier = UdtSocketRuntimeApplier();
+      final target = _ProfileFakeTarget();
 
-    final report = await applier.applyProfile(
-      profile: profile,
-      optionTarget: target,
-      runtimeTarget: target,
-      connectTarget: target,
-    );
+      final report = await applier.applyProfile(
+        profile: profile,
+        optionTarget: target,
+        runtimeTarget: target,
+        connectTarget: target,
+      );
 
-    expect(report.runtimePlan.bindPlans, isNotEmpty);
-    expect(report.runtimePlan.applyReport.results, isNotEmpty);
-    expect(target.appliedOptions, isNotEmpty);
-    expect(target.connectAttempts, isNotEmpty);
-  });
+      expect(report.runtimePlan.bindPlans, isNotEmpty);
+      expect(report.runtimePlan.applyReport.results, isNotEmpty);
+      expect(target.appliedOptions, isNotEmpty);
+      expect(target.connectAttempts, isNotEmpty);
+    },
+  );
 }

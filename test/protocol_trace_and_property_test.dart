@@ -11,32 +11,74 @@ void main() {
         (
           name: 'keepalive-empty',
           datagram: Uint8List.fromList([
-            0x80, 0x01, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x64,
-            0x00, 0x00, 0x00, 0x2A,
+            0x80,
+            0x01,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x64,
+            0x00,
+            0x00,
+            0x00,
+            0x2A,
           ]),
           type: UdtControlType.keepAlive,
         ),
         (
           name: 'ack2-empty',
           datagram: Uint8List.fromList([
-            0x80, 0x06, 0x00, 0x00,
-            0x00, 0x00, 0x01, 0x23,
-            0x00, 0x00, 0x00, 0xC8,
-            0x00, 0x00, 0x00, 0x2A,
+            0x80,
+            0x06,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x01,
+            0x23,
+            0x00,
+            0x00,
+            0x00,
+            0xC8,
+            0x00,
+            0x00,
+            0x00,
+            0x2A,
           ]),
           type: UdtControlType.ack2,
         ),
         (
           name: 'message-drop',
           datagram: Uint8List.fromList([
-            0x80, 0x07, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x11,
-            0x00, 0x00, 0x00, 0xE1,
-            0x00, 0x00, 0x00, 0x2A,
-            0x00, 0x00, 0x00, 0x64,
-            0x00, 0x00, 0x00, 0x78,
+            0x80,
+            0x07,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x11,
+            0x00,
+            0x00,
+            0x00,
+            0xE1,
+            0x00,
+            0x00,
+            0x00,
+            0x2A,
+            0x00,
+            0x00,
+            0x00,
+            0x64,
+            0x00,
+            0x00,
+            0x00,
+            0x78,
           ]),
           type: UdtControlType.messageDropRequest,
         ),
@@ -47,7 +89,11 @@ void main() {
         final control = UdtControlPacket.parse(parsedPacket);
 
         expect(control.type, trace.type, reason: trace.name);
-        expect(control.toPacket().toBytes(), trace.datagram, reason: trace.name);
+        expect(
+          control.toPacket().toBytes(),
+          trace.datagram,
+          reason: trace.name,
+        );
       }
     });
   });
@@ -115,7 +161,8 @@ void main() {
                   ..sort();
             final dueNow = model.onNakReceived(losses);
             for (final sequence in expectedDueNow) {
-              referenceSentAt[sequence] = clock.nowMicros - retransmissionTimeoutMicros;
+              referenceSentAt[sequence] =
+                  clock.nowMicros - retransmissionTimeoutMicros;
             }
             expect(dueNow, expectedDueNow);
             break;
@@ -124,11 +171,12 @@ void main() {
             break;
           case 4:
             final deadline = clock.nowMicros - retransmissionTimeoutMicros;
-            final expectedTimedOut = referenceSentAt.entries
-                .where((entry) => entry.value <= deadline)
-                .map((entry) => entry.key)
-                .toList()
-              ..sort();
+            final expectedTimedOut =
+                referenceSentAt.entries
+                    .where((entry) => entry.value <= deadline)
+                    .map((entry) => entry.key)
+                    .toList()
+                  ..sort();
             expect(model.collectTimedOutSequences(), expectedTimedOut);
             break;
         }

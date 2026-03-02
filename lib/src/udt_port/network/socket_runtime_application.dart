@@ -142,7 +142,10 @@ final class UdtSocketRuntimeApplier {
 /// This target also implements [UdtSocketOptionTarget] so runtime plans can be
 /// built and then applied through one shared socket adapter boundary.
 final class UdtRawDatagramRuntimeTarget
-    implements UdtSocketRuntimeTarget, UdtSocketConnectTarget, UdtSocketOptionTarget {
+    implements
+        UdtSocketRuntimeTarget,
+        UdtSocketConnectTarget,
+        UdtSocketOptionTarget {
   UdtRawDatagramRuntimeTarget({
     this.localPort = 0,
     this.ipv4BindAddress = InternetAddress.anyIPv4,
@@ -214,8 +217,12 @@ final class UdtRawDatagramRuntimeTarget
 
   @override
   Future<void> bind(UdtBindFamily family, {required bool dualStack}) async {
-    final address = family == UdtBindFamily.ipv4 ? ipv4BindAddress : ipv6BindAddress;
-    final ipv6Only = family == UdtBindFamily.ipv6 ? (_ipv6Only ?? !dualStack) : false;
+    final address = family == UdtBindFamily.ipv4
+        ? ipv4BindAddress
+        : ipv6BindAddress;
+    final ipv6Only = family == UdtBindFamily.ipv6
+        ? (_ipv6Only ?? !dualStack)
+        : false;
 
     _socket = await RawDatagramSocket.bind(
       address,

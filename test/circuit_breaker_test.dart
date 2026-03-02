@@ -55,23 +55,26 @@ void main() {
     expect(open2.nextRetryAfterMillis, greaterThan(0));
   });
 
-  test('elapseTime validates input and moves open->halfOpen when delay clears', () {
-    final breaker = UdtCircuitBreaker(
-      recoveryPolicy: const UdtConnectivityRecoveryPolicy(),
-      baseRetryDelayMillis: 100,
-    );
+  test(
+    'elapseTime validates input and moves open->halfOpen when delay clears',
+    () {
+      final breaker = UdtCircuitBreaker(
+        recoveryPolicy: const UdtConnectivityRecoveryPolicy(),
+        baseRetryDelayMillis: 100,
+      );
 
-    for (var i = 0; i < 5; i++) {
-      breaker.onFailure(context: context());
-    }
+      for (var i = 0; i < 5; i++) {
+        breaker.onFailure(context: context());
+      }
 
-    final before = breaker.snapshot();
-    expect(before.state, UdtCircuitBreakerState.open);
+      final before = breaker.snapshot();
+      expect(before.state, UdtCircuitBreakerState.open);
 
-    expect(() => breaker.elapseTime(-1), throwsA(isA<ArgumentError>()));
+      expect(() => breaker.elapseTime(-1), throwsA(isA<ArgumentError>()));
 
-    final after = breaker.elapseTime(before.nextRetryAfterMillis);
-    expect(after.state, UdtCircuitBreakerState.halfOpen);
-    expect(after.nextRetryAfterMillis, 0);
-  });
+      final after = breaker.elapseTime(before.nextRetryAfterMillis);
+      expect(after.state, UdtCircuitBreakerState.halfOpen);
+      expect(after.nextRetryAfterMillis, 0);
+    },
+  );
 }

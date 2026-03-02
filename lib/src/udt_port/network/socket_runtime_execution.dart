@@ -60,6 +60,9 @@ final class UdtSocketRuntimeExecutor {
       }
     }
 
-    return UdtSocketRuntimeExecutionReport(attempts: attempts, selectedPlan: null);
+    return UdtSocketRuntimeExecutionReport(
+      attempts: attempts,
+      selectedPlan: null,
+    );
   }
 }

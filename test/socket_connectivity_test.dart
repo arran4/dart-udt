@@ -19,20 +19,23 @@ final class _FakeConnectTarget implements UdtSocketConnectTarget {
 }
 
 void main() {
-  test('connect planner emits dual-stack family order for ipv6 dual-stack bind', () {
-    const planner = UdtSocketConnectPlanner();
-    const bindPlan = UdtBindPlan(
-      family: UdtBindFamily.ipv6,
-      dualStack: true,
-      requireIpv6OnlyFalse: true,
-      reason: 'dual-stack bind',
-    );
+  test(
+    'connect planner emits dual-stack family order for ipv6 dual-stack bind',
+    () {
+      const planner = UdtSocketConnectPlanner();
+      const bindPlan = UdtBindPlan(
+        family: UdtBindFamily.ipv6,
+        dualStack: true,
+        requireIpv6OnlyFalse: true,
+        reason: 'dual-stack bind',
+      );
 
-    final plans = planner.planFromBind(bindPlan);
-    expect(plans, hasLength(2));
-    expect(plans.first.family, UdtEndpointFamily.ipv6);
-    expect(plans.last.family, UdtEndpointFamily.ipv4);
-  });
+      final plans = planner.planFromBind(bindPlan);
+      expect(plans, hasLength(2));
+      expect(plans.first.family, UdtEndpointFamily.ipv6);
+      expect(plans.last.family, UdtEndpointFamily.ipv4);
+    },
+  );
 
   test('connect planner emits ipv4-only strategy for ipv4 bind', () {
     const planner = UdtSocketConnectPlanner();

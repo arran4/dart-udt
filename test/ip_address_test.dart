@@ -13,7 +13,10 @@ void main() {
     expect(words[2], 0);
     expect(words[3], 0);
 
-    final restored = UdtIpAddress.fromWords(words, type: InternetAddressType.IPv4);
+    final restored = UdtIpAddress.fromWords(
+      words,
+      type: InternetAddressType.IPv4,
+    );
     expect(UdtIpAddress.compare(ip, restored), isTrue);
   });
 
@@ -23,7 +26,10 @@ void main() {
     final words = UdtIpAddress.toWords(ip);
     expect(words, hasLength(4));
 
-    final restored = UdtIpAddress.fromWords(words, type: InternetAddressType.IPv6);
+    final restored = UdtIpAddress.fromWords(
+      words,
+      type: InternetAddressType.IPv6,
+    );
     expect(UdtIpAddress.compare(ip, restored), isTrue);
   });
 

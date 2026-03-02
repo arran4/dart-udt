@@ -17,35 +17,35 @@ void main() {
     expect(linux.recommendedPayloadSize, 1500 - (20 + 8 + 16));
   });
 
-  test('planner validates platform and IP-family MTU assumptions via matrix', () {
-    const planner = UdtMtuPlanner();
+  test(
+    'planner validates platform and IP-family MTU assumptions via matrix',
+    () {
+      const planner = UdtMtuPlanner();
 
-    const scenarios = <({String platform, bool ipv6, int expectedMtu})>[
-      (platform: 'linux', ipv6: false, expectedMtu: 1500),
-      (platform: 'linux', ipv6: true, expectedMtu: 1500),
-      (platform: 'macos', ipv6: false, expectedMtu: 1500),
-      (platform: 'macos', ipv6: true, expectedMtu: 1500),
-      (platform: 'windows', ipv6: false, expectedMtu: 1400),
-      (platform: 'windows', ipv6: true, expectedMtu: 1400),
-    ];
+      const scenarios = <({String platform, bool ipv6, int expectedMtu})>[
+        (platform: 'linux', ipv6: false, expectedMtu: 1500),
+        (platform: 'linux', ipv6: true, expectedMtu: 1500),
+        (platform: 'macos', ipv6: false, expectedMtu: 1500),
+        (platform: 'macos', ipv6: true, expectedMtu: 1500),
+        (platform: 'windows', ipv6: false, expectedMtu: 1400),
+        (platform: 'windows', ipv6: true, expectedMtu: 1400),
+      ];
 
-    for (final scenario in scenarios) {
-      final decision = planner.plan(
-        UdtMtuPlanningInput(
-          platform: scenario.platform,
-          ipv6: scenario.ipv6,
-        ),
-      );
+      for (final scenario in scenarios) {
+        final decision = planner.plan(
+          UdtMtuPlanningInput(platform: scenario.platform, ipv6: scenario.ipv6),
+        );
 
-      final expectedOverhead = (scenario.ipv6 ? 40 : 20) + 8 + 16;
-      expect(decision.recommendedMtu, scenario.expectedMtu);
-      expect(decision.headerOverhead, expectedOverhead);
-      expect(
-        decision.recommendedPayloadSize,
-        scenario.expectedMtu - expectedOverhead,
-      );
-    }
-  });
+        final expectedOverhead = (scenario.ipv6 ? 40 : 20) + 8 + 16;
+        expect(decision.recommendedMtu, scenario.expectedMtu);
+        expect(decision.headerOverhead, expectedOverhead);
+        expect(
+          decision.recommendedPayloadSize,
+          scenario.expectedMtu - expectedOverhead,
+        );
+      }
+    },
+  );
 
   test('planner applies IPv6 overhead correctly', () {
     const planner = UdtMtuPlanner();
@@ -65,10 +65,18 @@ void main() {
     const planner = UdtMtuPlanner();
 
     final low = planner.plan(
-      const UdtMtuPlanningInput(platform: 'linux', ipv6: false, pathMtuHint: 100),
+      const UdtMtuPlanningInput(
+        platform: 'linux',
+        ipv6: false,
+        pathMtuHint: 100,
+      ),
     );
     final high = planner.plan(
-      const UdtMtuPlanningInput(platform: 'linux', ipv6: false, pathMtuHint: 20000),
+      const UdtMtuPlanningInput(
+        platform: 'linux',
+        ipv6: false,
+        pathMtuHint: 20000,
+      ),
     );
 
     expect(low.recommendedMtu, 576);
@@ -80,11 +88,7 @@ void main() {
 
     for (final platform in const ['linux', 'macos', 'windows']) {
       final decision = planner.plan(
-        UdtMtuPlanningInput(
-          platform: platform,
-          ipv6: true,
-          pathMtuHint: 1280,
-        ),
+        UdtMtuPlanningInput(platform: platform, ipv6: true, pathMtuHint: 1280),
       );
 
       expect(decision.recommendedMtu, 1280);

@@ -103,7 +103,11 @@ final class UdtLatencyLossSimulator {
 
   void _validateConfig(UdtImpairmentConfig config) {
     if (config.lossRate < 0 || config.lossRate > 1) {
-      throw ArgumentError.value(config.lossRate, 'lossRate', 'must be in [0, 1]');
+      throw ArgumentError.value(
+        config.lossRate,
+        'lossRate',
+        'must be in [0, 1]',
+      );
     }
     if (config.reorderRate < 0 || config.reorderRate > 1) {
       throw ArgumentError.value(

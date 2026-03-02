@@ -57,7 +57,8 @@ final class UdtAckNakTimerModel {
     final dueNow = <int>[];
     for (final sequence in lostSequenceNumbers) {
       if (_sentAtMicrosBySequence.containsKey(sequence)) {
-        _sentAtMicrosBySequence[sequence] = nowMicros - _retransmissionTimeoutMicros;
+        _sentAtMicrosBySequence[sequence] =
+            nowMicros - _retransmissionTimeoutMicros;
         dueNow.add(sequence);
       }
     }

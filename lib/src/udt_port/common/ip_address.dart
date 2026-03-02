@@ -6,10 +6,7 @@ final class UdtIpAddress {
   UdtIpAddress._();
 
   /// Equivalent to upstream `CIPAddress::ipcmp` over normalized word arrays.
-  static bool compare(
-    InternetAddress first,
-    InternetAddress second,
-  ) {
+  static bool compare(InternetAddress first, InternetAddress second) {
     if (first.type != second.type) {
       return false;
     }

@@ -62,10 +62,7 @@ final class UdtAsyncSignal {
   }
 
   /// Waits until the sequence has advanced beyond [observedSequence].
-  Future<void> waitForNext(
-    int observedSequence, {
-    Duration? timeout,
-  }) async {
+  Future<void> waitForNext(int observedSequence, {Duration? timeout}) async {
     if (_sequence > observedSequence) {
       return;
     }
