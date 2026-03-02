@@ -72,18 +72,13 @@ void main() async {
 }
 
 final class _NoopSocketOptionTarget implements UdtSocketOptionTarget {
-  @override
   Future<void> setIpv6Only(bool enabled) async {}
 
-  @override
   Future<void> setReceiveBufferBytes(int bytes) async {}
 
-  @override
   Future<void> setReuseAddress(bool enabled) async {}
 
-  @override
   Future<void> setReusePort(bool enabled) async {}
 
-  @override
   Future<void> setSendBufferBytes(int bytes) async {}
 }
