@@ -1,6 +1,6 @@
 name: dart_udt
 description: A work-in-progress pure Dart port scaffold of the UDT (UDP-based Data Transfer) library.
-version: 0.0.1-dev
+version: 0.0.2
 repository: https://github.com/arran4/dart-udt
 homepage: https://github.com/arran4/dart-udt
 issue_tracker: https://github.com/arran4/dart-udt/issues
