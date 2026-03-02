@@ -90,4 +90,4 @@ Use `UdtModule` + `dartTarget` for the canonical source-to-port map.
 
 - `example/network_simulation_trace.dart` demonstrates seeded delay/reorder/drop trace generation for reproducible no-socket parity checks.
 - Network impairment parity fixture corpus/version notes:
-  `docs/upstream_trace_fixture_corpus.md`.
+  `doc/upstream_trace_fixture_corpus.md`.

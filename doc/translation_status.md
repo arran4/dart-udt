@@ -35,5 +35,5 @@ Before replacing an upstream scaffold with a short retired-pointer file, confirm
 
 1. Public/observable behavior is represented by typed pure-Dart APIs.
 2. Deterministic tests cover normal + branch/error paths.
-3. `README.md`, `docs/migration.md`, and `TODO_PORT.md` are updated.
+3. `README.md`, `doc/migration.md`, and `TODO_PORT.md` are updated.
 4. Any remaining gaps are explicit TODO items.

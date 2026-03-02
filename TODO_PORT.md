@@ -75,16 +75,16 @@
 - [x] Validate pub score inputs: license, topics, screenshots/badges, example quality.
 - [ ] Publish as pre-release first (`-dev`), gather feedback, then stable release.
 
-- [x] Add explicit upstream-source removal guardrail + per-file translation status tracker (`docs/translation_status.md`) to ensure commented references are only retired after full pure-Dart replacement + deterministic tests.
+- [x] Add explicit upstream-source removal guardrail + per-file translation status tracker (`doc/translation_status.md`) to ensure commented references are only retired after full pure-Dart replacement + deterministic tests.
 - [ ] Final cleanup pass: retire or relocate all temporary migration/reference files once corresponding modules reach stable parity.
   - [x] Refresh README with practical quickstart, install, limitations, and docs index for pub.dev usability.
   - [x] Add runnable network-free pub example (`example/pub_quickstart.dart`) covering codec + planning + simulation path.
-  - [ ] Retire remaining upstream commented scaffolds only after stable parity is reached per `docs/translation_status.md`.
+  - [ ] Retire remaining upstream commented scaffolds only after stable parity is reached per `doc/translation_status.md`.
 
 
 ## 8. Discrepancies / follow-ups discovered while comparing against original upstream scope
 - [x] Reconcile runtime-plan status with README limitations: keep TODO state aligned with what is truly live-socket-ready versus deterministic scaffolding-only behavior.
 - [x] Add explicit connect-stage live adapter parity (`RawDatagramSocket`-backed connect boundary) and wire it through `UdtSocketRuntimeApplier` so bind+connect are both exercised against real sockets.
 - [x] Add live socket-option application bridge (mapping `UdtSocketOptionRecommendation` to concrete socket setters) and verify required-vs-optional handling against runtime sockets, not only fake targets (`UdtRawDatagramRuntimeTarget` + `test/socket_runtime_live_option_bridge_test.dart`).
-- [x] Add upstream trace-fixture corpus versioning notes for network impairment parity tests (seed/config/expected output provenance) to keep long-term parity auditable (`docs/upstream_trace_fixture_corpus.md`).
+- [x] Add upstream trace-fixture corpus versioning notes for network impairment parity tests (seed/config/expected output provenance) to keep long-term parity auditable (`doc/upstream_trace_fixture_corpus.md`).
 - [x] Split deterministic completion vs live-runtime completion in TODO checkboxes for every section-4 item to avoid false-positive “done” status when only planners/simulators are complete.
