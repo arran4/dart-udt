@@ -4,7 +4,7 @@ abstract interface class UdtRandomSource {
 }
 
 final class UdtSeededRandomSource implements UdtRandomSource {
-  const UdtSeededRandomSource(this._seed);
+  UdtSeededRandomSource(this._seed);
 
   final int _seed;
 
@@ -60,9 +60,9 @@ final class UdtImpairmentOutcome {
 
 /// Deterministic latency/loss/reordering simulator for reproducible tests.
 final class UdtLatencyLossSimulator {
-  const UdtLatencyLossSimulator({
-    this.random = const UdtSeededRandomSource(1337),
-  });
+  UdtLatencyLossSimulator({
+    UdtRandomSource? random,
+  }) : random = random ?? UdtSeededRandomSource(1337);
 
   final UdtRandomSource random;
 

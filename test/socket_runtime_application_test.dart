@@ -21,18 +21,14 @@ final class _FakeRuntimeTarget implements UdtSocketRuntimeTarget {
 }
 
 final class _FakeConnectTarget implements UdtSocketConnectTarget {
-  _FakeConnectTarget({this.failIpv6 = false, this.failIpv4 = false});
+  _FakeConnectTarget({this.failIpv6 = false});
 
   final bool failIpv6;
-  final bool failIpv4;
 
   @override
   Future<void> connect(UdtEndpointFamily family) async {
     if (family == UdtEndpointFamily.ipv6 && failIpv6) {
       throw StateError('ipv6 connect failed');
-    }
-    if (family == UdtEndpointFamily.ipv4 && failIpv4) {
-      throw StateError('ipv4 connect failed');
     }
   }
 }

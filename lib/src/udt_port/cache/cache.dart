@@ -18,7 +18,9 @@ abstract interface class UdtCacheEntry<T extends UdtCacheEntry<T>> {
 
 /// Pure-Dart LRU cache port for upstream `CCache<T>` in `cache.h`.
 final class UdtLruCache<T extends UdtCacheEntry<T>> {
-  UdtLruCache({int size = 1024}) : _maxSize = size, _hashSize = size * 3 {
+  UdtLruCache({int size = 1024})
+      : _maxSize = size,
+        _hashSize = size * 3 {
     if (size <= 0) {
       throw ArgumentError.value(size, 'size', 'must be positive');
     }
@@ -161,16 +163,16 @@ final class UdtInfoBlock implements UdtCacheEntry<UdtInfoBlock> {
 
   @override
   UdtInfoBlock clone() => UdtInfoBlock(
-    ipWords: List<int>.from(ipWords),
-    ipVersion: ipVersion,
-    timestampMicros: timestampMicros,
-    rtt: rtt,
-    bandwidth: bandwidth,
-    lossRate: lossRate,
-    reorderDistance: reorderDistance,
-    packetSendInterval: packetSendInterval,
-    congestionWindow: congestionWindow,
-  );
+        ipWords: List<int>.from(ipWords),
+        ipVersion: ipVersion,
+        timestampMicros: timestampMicros,
+        rtt: rtt,
+        bandwidth: bandwidth,
+        lossRate: lossRate,
+        reorderDistance: reorderDistance,
+        packetSendInterval: packetSendInterval,
+        congestionWindow: congestionWindow,
+      );
 
   @override
   void release() {}

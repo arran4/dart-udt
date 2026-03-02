@@ -47,7 +47,7 @@ void main() async {
     'blockingFailure=${runtimePlan.hasBlockingFailure}',
   );
 
-  const simulator = UdtLatencyLossSimulator(
+  final simulator = UdtLatencyLossSimulator(
     random: UdtSeededRandomSource(2024),
   );
   const config = UdtImpairmentConfig(

@@ -34,8 +34,8 @@ final class UdtSocketOptionApplicationReport {
   final List<UdtSocketOptionApplyResult> results;
 
   bool get hasRequiredFailure => results.any(
-    (result) => result.status == UdtSocketOptionApplyStatus.failedRequired,
-  );
+        (result) => result.status == UdtSocketOptionApplyStatus.failedRequired,
+      );
 }
 
 /// Applies planned options with graceful-degradation semantics.
@@ -86,14 +86,14 @@ final class UdtSocketOptionApplier {
   ) {
     return switch (option.key) {
       UdtSocketOptionKey.receiveBufferBytes => target.setReceiveBufferBytes(
-        option.value as int,
-      ),
+          option.value as int,
+        ),
       UdtSocketOptionKey.sendBufferBytes => target.setSendBufferBytes(
-        option.value as int,
-      ),
+          option.value as int,
+        ),
       UdtSocketOptionKey.reuseAddress => target.setReuseAddress(
-        option.value as bool,
-      ),
+          option.value as bool,
+        ),
       UdtSocketOptionKey.reusePort => target.setReusePort(option.value as bool),
       UdtSocketOptionKey.ipv6Only => target.setIpv6Only(option.value as bool),
     };

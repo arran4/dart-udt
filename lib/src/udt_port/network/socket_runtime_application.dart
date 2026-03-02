@@ -31,10 +31,10 @@ final class UdtSocketRuntimeApplier {
     UdtSocketRuntimeExecutor runtimeExecutor = const UdtSocketRuntimeExecutor(),
     UdtSocketConnectPlanner connectPlanner = const UdtSocketConnectPlanner(),
     UdtSocketConnectExecutor connectExecutor = const UdtSocketConnectExecutor(),
-  }) : _runtimePlanner = runtimePlanner,
-       _runtimeExecutor = runtimeExecutor,
-       _connectPlanner = connectPlanner,
-       _connectExecutor = connectExecutor;
+  })  : _runtimePlanner = runtimePlanner,
+        _runtimeExecutor = runtimeExecutor,
+        _connectPlanner = connectPlanner,
+        _connectExecutor = connectExecutor;
 
   final UdtSocketRuntimePlanner _runtimePlanner;
   final UdtSocketRuntimeExecutor _runtimeExecutor;
@@ -148,14 +148,15 @@ final class UdtRawDatagramRuntimeTarget
         UdtSocketOptionTarget {
   UdtRawDatagramRuntimeTarget({
     this.localPort = 0,
-    this.ipv4BindAddress = InternetAddress.anyIPv4,
-    this.ipv6BindAddress = InternetAddress.anyIPv6,
+    InternetAddress? ipv4BindAddress,
+    InternetAddress? ipv6BindAddress,
     this.ipv4RemoteAddress,
     this.ipv6RemoteAddress,
     this.remotePort = 0,
     this.supportsReceiveSendBufferSizing = false,
     this.supportsIpv6OnlyOption = true,
-  });
+  })  : ipv4BindAddress = ipv4BindAddress ?? InternetAddress.anyIPv4,
+        ipv6BindAddress = ipv6BindAddress ?? InternetAddress.anyIPv6;
 
   final int localPort;
   final InternetAddress ipv4BindAddress;
@@ -170,7 +171,6 @@ final class UdtRawDatagramRuntimeTarget
 
   bool _reuseAddress = true;
   bool _reusePort = false;
-  bool? _ipv6Only;
 
   RawDatagramSocket? _socket;
 
@@ -211,25 +211,17 @@ final class UdtRawDatagramRuntimeTarget
         'RawDatagramSocket IPv6-only option is unavailable on this target.',
       );
     }
-
-    _ipv6Only = enabled;
   }
 
   @override
   Future<void> bind(UdtBindFamily family, {required bool dualStack}) async {
-    final address = family == UdtBindFamily.ipv4
-        ? ipv4BindAddress
-        : ipv6BindAddress;
-    final ipv6Only = family == UdtBindFamily.ipv6
-        ? (_ipv6Only ?? !dualStack)
-        : false;
-
+    final address =
+        family == UdtBindFamily.ipv4 ? ipv4BindAddress : ipv6BindAddress;
     _socket = await RawDatagramSocket.bind(
       address,
       localPort,
       reuseAddress: _reuseAddress,
       reusePort: _reusePort,
-      v6Only: ipv6Only,
     );
   }
 
@@ -252,7 +244,7 @@ final class UdtRawDatagramRuntimeTarget
       );
     }
 
-    activeSocket.connect(remoteAddress, remotePort);
+    throw UnsupportedError('RawDatagramSocket does not support connect');
   }
 
   @override
