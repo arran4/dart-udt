@@ -14,8 +14,8 @@ void main() {
       (index) => UdtImpairmentInput(sequence: index + 1, baseDelayMillis: 10),
     );
 
-    const simA = UdtLatencyLossSimulator(random: UdtSeededRandomSource(42));
-    const simB = UdtLatencyLossSimulator(random: UdtSeededRandomSource(42));
+    final simA = UdtLatencyLossSimulator(random: UdtSeededRandomSource(42));
+    final simB = UdtLatencyLossSimulator(random: UdtSeededRandomSource(42));
 
     final outcomesA = simA.simulate(config: config, packets: packets);
     final outcomesB = simB.simulate(config: config, packets: packets);
@@ -30,7 +30,7 @@ void main() {
   });
 
   test('simulator bounds jitter and preserves minimum base delay', () {
-    const simulator = UdtLatencyLossSimulator(
+    final simulator = UdtLatencyLossSimulator(
       random: UdtSeededRandomSource(99),
     );
     const config = UdtImpairmentConfig(
@@ -50,7 +50,7 @@ void main() {
   });
 
   test('simulator validates config and packet delay inputs', () {
-    const simulator = UdtLatencyLossSimulator();
+    final simulator = UdtLatencyLossSimulator();
 
     expect(
       () => simulator.simulate(

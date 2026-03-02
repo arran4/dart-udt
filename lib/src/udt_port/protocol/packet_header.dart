@@ -101,10 +101,9 @@ final class UdtPacketHeader {
 
     final word0 = switch (isControl) {
       false => sequenceNumber!,
-      true =>
-        0x80000000 |
-            ((controlType! & 0x7FFF) << 16) |
-            (controlReserved! & 0xFFFF),
+      true => 0x80000000 |
+          ((controlType! & 0x7FFF) << 16) |
+          (controlReserved! & 0xFFFF),
     };
 
     data.setUint32(0, word0, Endian.big);

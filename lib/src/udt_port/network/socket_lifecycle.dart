@@ -93,8 +93,8 @@ final class UdtSocketLifecycleCoordinator {
       state: transition.decision.shouldPauseSending
           ? UdtLifecycleState.paused
           : (previous.state == UdtLifecycleState.closed
-                ? UdtLifecycleState.closed
-                : UdtLifecycleState.bound),
+              ? UdtLifecycleState.closed
+              : UdtLifecycleState.bound),
       boundFamily: previous.boundFamily,
       ackIntervalMillis: transition.recommendedAckIntervalMillis,
       rtoScale: transition.recommendedRtoScale,

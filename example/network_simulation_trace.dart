@@ -1,7 +1,7 @@
 import 'package:dart_udt/dart_udt.dart';
 
 void main() {
-  const simulator = UdtLatencyLossSimulator(
+  final simulator = UdtLatencyLossSimulator(
     random: UdtSeededRandomSource(2024),
   );
 

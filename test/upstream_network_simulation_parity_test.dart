@@ -5,7 +5,7 @@ void main() {
   test(
     'upstream-style network simulation trace matches deterministic fixture',
     () {
-      const simulator = UdtLatencyLossSimulator(
+      final simulator = UdtLatencyLossSimulator(
         random: UdtSeededRandomSource(2024),
       );
 
@@ -24,15 +24,15 @@ void main() {
 
       const expected =
           <(int sequence, bool dropped, bool reordered, int delay)>[
-            (1, true, false, 19),
-            (2, false, true, 17),
-            (3, false, false, 20),
-            (4, false, false, 13),
-            (5, false, false, 19),
-            (6, false, false, 15),
-            (7, true, false, 15),
-            (8, false, false, 15),
-          ];
+        (1, true, false, 19),
+        (2, false, true, 17),
+        (3, false, false, 20),
+        (4, false, false, 13),
+        (5, false, false, 19),
+        (6, false, false, 15),
+        (7, true, false, 15),
+        (8, false, false, 15),
+      ];
 
       expect(outcomes, hasLength(expected.length));
       for (var i = 0; i < expected.length; i++) {

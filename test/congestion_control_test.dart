@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('default congestion control init mirrors CUDTCC defaults', () {
-    var now = 0;
+    final now = 0;
     final cc = UdtDefaultCongestionControl(nowMicros: () => now);
 
     cc.setSendCurrentSequenceNumber(1000);
@@ -32,7 +32,7 @@ void main() {
   test(
     'onLoss leaves slow start and applies deterministic decrease branches',
     () {
-      var now = 0;
+      final now = 0;
       final cc = UdtDefaultCongestionControl(
         nowMicros: () => now,
         seededRandomFraction: (_) => 0.0,
@@ -57,7 +57,7 @@ void main() {
   );
 
   test('onTimeout in slow start sets period from receive rate', () {
-    var now = 0;
+    final now = 0;
     final cc = UdtDefaultCongestionControl(nowMicros: () => now);
 
     cc
@@ -138,7 +138,7 @@ void main() {
   );
 
   test('trace fixture: timeout branch exits slow start using RTT fallback', () {
-    var now = 0;
+    final now = 0;
     final cc = UdtDefaultCongestionControl(nowMicros: () => now);
 
     cc

@@ -7,7 +7,7 @@ void main() {
 
   const planner = UdtSocketOptionPlanner(platformOverride: 'linux');
   const mtuPlanner = UdtMtuPlanner();
-  const simulator = UdtLatencyLossSimulator(random: UdtSeededRandomSource(7));
+  final simulator = UdtLatencyLossSimulator(random: UdtSeededRandomSource(7));
 
   var payloadSum = 0;
   for (var i = 0; i < 20000; i++) {
