@@ -7,7 +7,7 @@ void main() {
     expect(UdtSequenceNumber.decrement(0), equals(UdtSequenceNumber.maxValue));
     expect(
       UdtSequenceNumber.lengthInclusive(UdtSequenceNumber.maxValue, 2),
-      equals(3),
+      equals(4),
     );
     expect(UdtSequenceNumber.offset(UdtSequenceNumber.maxValue, 1), equals(2));
   });
@@ -17,7 +17,7 @@ void main() {
     expect(UdtMessageNumber.increment(UdtMessageNumber.maxValue), equals(0));
     expect(
       UdtMessageNumber.lengthInclusive(UdtMessageNumber.maxValue, 1),
-      equals(2),
+      equals(3),
     );
   });
 
