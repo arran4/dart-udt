@@ -37,7 +37,7 @@
 - Epoll porting milestone: keep the API centered on a pure-Dart `UdtEpoll` readiness model over typed socket IDs, with `UdtRawDatagramEventSource` as the adapter boundary; defer mixed local/system descriptor parity as explicit TODO until socket-layer modules are ported.
 
 - Threading/locking parity note: when porting upstream `pthread_mutex_t`/`pthread_cond_t` sections (for example in `queue.h`/`queue.cpp`), prefer pure-Dart async wrappers (`UdtAsyncMutex`, `UdtAsyncSignal`, `UdtSerialExecutor`) and cover ordering/wakeup behavior with deterministic tests.
-- Documentation note: keep `docs/migration.md` updated when public API wrappers are added so `dart doc` output has explicit C++ migration breadcrumbs.
+- Documentation note: keep `doc/migration.md` updated when public API wrappers are added so `dart doc` output has explicit C++ migration breadcrumbs.
 - Epoll robustness note: guard `UdtEpoll.wait` to a single concurrent waiter per poll ID and only complete waiters once, then cover both paths with deterministic fake event-source tests.
 - CCC base porting note: keep upstream `CCC` side effects injectable (for example custom control-message sending) so base callback/configuration parity can be tested deterministically without socket I/O.
 - CUDTCC porting note: keep `UdtDefaultCongestionControl` clock and randomization hooks injectable so `init`/`onACK`/`onLoss`/`onTimeout` parity tests stay deterministic without network resources.
@@ -58,7 +58,7 @@
 
 - Networking compatibility note: for section-4 parity, keep socket-option and dual-stack behavior first modeled as deterministic planners/matrices (`UdtSocketOptionPlanner`, `buildUdtDualStackMatrix`) before wiring live socket I/O.
 
-- Source-retirement guardrail: only replace `lib/src/upstream_udt_comment/*` scaffolds after full behavior translation + deterministic tests are in place; track file-level status in `docs/translation_status.md`.
+- Source-retirement guardrail: only replace `lib/src/upstream_udt_comment/*` scaffolds after full behavior translation + deterministic tests are in place; track file-level status in `doc/translation_status.md`.
 
 - Socket-option application note: keep required-vs-optional apply semantics explicit via a deterministic adapter (`UdtSocketOptionApplier`) before binding to live socket APIs.
 
@@ -82,7 +82,7 @@
 
 - Live-runtime adapter note: keep `UdtSocketRuntimeApplier.applyProfile` orchestrating option-plan build + bind/connect execution through a shared typed target (`UdtRawDatagramRuntimeTarget`) so connect fallback parity remains testable with deterministic fakes.
 
-- Trace-fixture governance note: keep deterministic impairment corpus provenance/version details updated in `docs/upstream_trace_fixture_corpus.md` whenever seeded network parity fixtures change.
+- Trace-fixture governance note: keep deterministic impairment corpus provenance/version details updated in `doc/upstream_trace_fixture_corpus.md` whenever seeded network parity fixtures change.
 
 - Live socket-option bridge note: keep `UdtRawDatagramRuntimeTarget` option setters aligned with `UdtSocketOptionRecommendation` mapping and maintain deterministic runtime-target tests for optional-skip vs required-failure branches.
 

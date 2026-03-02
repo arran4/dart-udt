@@ -6,7 +6,9 @@
 
 Pure-Dart-first, incremental port of UDT (UDP-based Data Transfer).
 
-> Status: **pre-release** (`0.0.1-dev`). The package already provides deterministic protocol, planner, and runtime-adapter building blocks, while full end-to-end UDT socket/session parity is still in progress.
+> Status: **pre-release** (`0.0.3`). The package already provides deterministic protocol, planner, and runtime-adapter building blocks, while full end-to-end UDT socket/session parity is still in progress.
+>
+> *Note: This project hasn't been tested. It is in proof of concept status right now and further work and testing is necessary. Help is appreciated.*
 
 ## Why this package
 
@@ -22,13 +24,13 @@ Pure-Dart-first, incremental port of UDT (UDP-based Data Transfer).
 - Networking compatibility planners/simulators (socket options, dual-stack, MTU, mobile constraints, transition simulation).
 - Runtime planning/execution adapters including `UdtSocketRuntimeApplier.applyProfile` and `UdtRawDatagramRuntimeTarget`.
 
-See detailed mapping in `docs/migration.md` and port status in `TODO_PORT.md` + `docs/translation_status.md`.
+See detailed mapping in `doc/migration.md` and port status in `TODO_PORT.md` + `doc/translation_status.md`.
 
 ## Install
 
 ```yaml
 dependencies:
-  dart_udt: ^0.0.1-dev
+  dart_udt: ^0.0.3
 ```
 
 ## Quickstart (pub-suitable, no real network I/O required)
@@ -68,7 +70,7 @@ dart test
 
 ## Documentation
 
-- Migration guide: `docs/migration.md`
-- Translation guardrail/status: `docs/translation_status.md`
-- Trace-fixture corpus governance: `docs/upstream_trace_fixture_corpus.md`
+- Migration guide: `doc/migration.md`
+- Translation guardrail/status: `doc/translation_status.md`
+- Trace-fixture corpus governance: `doc/upstream_trace_fixture_corpus.md`
 - Port backlog and completion tracking: `TODO_PORT.md`
