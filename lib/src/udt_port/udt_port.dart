@@ -10,6 +10,6 @@ class UdtPortScaffold {
 
   /// Canonical upstream-to-Dart module mapping targets.
   Map<UdtModule, String> moduleTargets() => {
-        for (final module in UdtModule.values) module: module.dartTarget,
-      };
+    for (final module in UdtModule.values) module: module.dartTarget,
+  };
 }

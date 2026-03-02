@@ -27,24 +27,24 @@ final class UdtSocketMatrixIntegrationResult {
   final UdtSocketConnectReport connectReport;
 
   Set<InternetAddressType> get plannedBindFamilies => {
-        for (final plan in runtimePlan.bindPlans)
-          switch (plan.family) {
-            UdtBindFamily.ipv4 => InternetAddressType.IPv4,
-            UdtBindFamily.ipv6 => InternetAddressType.IPv6,
-          },
-      };
+    for (final plan in runtimePlan.bindPlans)
+      switch (plan.family) {
+        UdtBindFamily.ipv4 => InternetAddressType.IPv4,
+        UdtBindFamily.ipv6 => InternetAddressType.IPv6,
+      },
+  };
 
   Set<InternetAddressType> get plannedConnectFamilies => {
-        for (final plan in connectPlans) plan.addressType,
-      };
+    for (final plan in connectPlans) plan.addressType,
+  };
 
   Set<InternetAddressType> get attemptedFamilies => {
-        for (final attempt in executionReport.attempts)
-          switch (attempt.plan.family) {
-            UdtBindFamily.ipv4 => InternetAddressType.IPv4,
-            UdtBindFamily.ipv6 => InternetAddressType.IPv6,
-          },
-      };
+    for (final attempt in executionReport.attempts)
+      switch (attempt.plan.family) {
+        UdtBindFamily.ipv4 => InternetAddressType.IPv4,
+        UdtBindFamily.ipv6 => InternetAddressType.IPv6,
+      },
+  };
 
   InternetAddressType? get selectedFamily {
     final selected = executionReport.selectedPlan;
@@ -68,11 +68,11 @@ final class UdtSocketMatrixIntegrationHarness {
     UdtSocketRuntimeExecutor runtimeExecutor = const UdtSocketRuntimeExecutor(),
     UdtSocketConnectPlanner connectPlanner = const UdtSocketConnectPlanner(),
     UdtSocketConnectExecutor connectExecutor = const UdtSocketConnectExecutor(),
-  })  : _profileBuilder = profileBuilder,
-        _runtimePlanner = runtimePlanner,
-        _runtimeExecutor = runtimeExecutor,
-        _connectPlanner = connectPlanner,
-        _connectExecutor = connectExecutor;
+  }) : _profileBuilder = profileBuilder,
+       _runtimePlanner = runtimePlanner,
+       _runtimeExecutor = runtimeExecutor,
+       _connectPlanner = connectPlanner,
+       _connectExecutor = connectExecutor;
 
   final UdtCompatibilityProfileBuilder _profileBuilder;
   final UdtSocketRuntimePlanner _runtimePlanner;

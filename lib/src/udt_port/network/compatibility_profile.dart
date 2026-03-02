@@ -26,9 +26,9 @@ final class UdtCompatibilityProfileBuilder {
     UdtMtuPlanner mtuPlanner = const UdtMtuPlanner(),
     UdtMobileConstraintsPolicy mobilePolicy =
         const UdtMobileConstraintsPolicy(),
-  })  : _socketOptionPlanner = socketOptionPlanner,
-        _mtuPlanner = mtuPlanner,
-        _mobilePolicy = mobilePolicy;
+  }) : _socketOptionPlanner = socketOptionPlanner,
+       _mtuPlanner = mtuPlanner,
+       _mobilePolicy = mobilePolicy;
 
   final UdtSocketOptionPlanner? _socketOptionPlanner;
   final UdtMtuPlanner _mtuPlanner;
@@ -41,7 +41,8 @@ final class UdtCompatibilityProfileBuilder {
     int? pathMtuHint,
     required UdtMobilePolicyInput mobileInput,
   }) {
-    final planner = _socketOptionPlanner ??
+    final planner =
+        _socketOptionPlanner ??
         UdtSocketOptionPlanner(platformOverride: platform);
 
     final socketOptions = planner.plan(mode: ipMode);

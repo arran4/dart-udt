@@ -23,8 +23,8 @@ final class UdtCircuitBreaker {
   UdtCircuitBreaker({
     required UdtConnectivityRecoveryPolicy recoveryPolicy,
     required int baseRetryDelayMillis,
-  })  : _recoveryPolicy = recoveryPolicy,
-        _baseRetryDelayMillis = baseRetryDelayMillis {
+  }) : _recoveryPolicy = recoveryPolicy,
+       _baseRetryDelayMillis = baseRetryDelayMillis {
     if (baseRetryDelayMillis <= 0) {
       throw ArgumentError.value(
         baseRetryDelayMillis,
@@ -42,15 +42,15 @@ final class UdtCircuitBreaker {
   int _nextRetryAfterMillis = 0;
 
   UdtCircuitBreakerSnapshot snapshot() => UdtCircuitBreakerSnapshot(
-        state: _state,
-        failureCount: _failureCount,
-        nextRetryAfterMillis: _nextRetryAfterMillis,
-        reason: _state == UdtCircuitBreakerState.closed
-            ? 'Healthy closed state.'
-            : (_state == UdtCircuitBreakerState.open
-                ? 'Open due to repeated failures.'
-                : 'Half-open probe state.'),
-      );
+    state: _state,
+    failureCount: _failureCount,
+    nextRetryAfterMillis: _nextRetryAfterMillis,
+    reason: _state == UdtCircuitBreakerState.closed
+        ? 'Healthy closed state.'
+        : (_state == UdtCircuitBreakerState.open
+              ? 'Open due to repeated failures.'
+              : 'Half-open probe state.'),
+  );
 
   UdtCircuitBreakerSnapshot onSuccess() {
     _failureCount = 0;
@@ -78,8 +78,8 @@ final class UdtCircuitBreaker {
     _state = decision.shouldEscalateToOperator
         ? UdtCircuitBreakerState.open
         : (decision.shouldResetSession
-            ? UdtCircuitBreakerState.halfOpen
-            : UdtCircuitBreakerState.closed);
+              ? UdtCircuitBreakerState.halfOpen
+              : UdtCircuitBreakerState.closed);
 
     return snapshot();
   }

@@ -8,11 +8,10 @@ final class UdtSndLossList {
   final List<_SeqInterval> _intervals = <_SeqInterval>[];
 
   int get lossLength => _intervals.fold<int>(
-        0,
-        (int sum, _SeqInterval interval) =>
-            sum +
-            UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
-      );
+    0,
+    (int sum, _SeqInterval interval) =>
+        sum + UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
+  );
 
   /// Inserts [seqno1, seqno2] and returns number of newly-added sequence IDs.
   int insert(int seqno1, int seqno2) {
@@ -80,7 +79,8 @@ final class UdtSndLossList {
 
   void _coalesce() {
     var i = 0;
-    while (i < _intervals.length - 1) {
+    var len = _intervals.length;
+    while (i < len - 1) {
       final current = _intervals[i];
       final next = _intervals[i + 1];
       final adjacent = UdtSequenceNumber.increment(current.end) == next.start;
@@ -90,6 +90,7 @@ final class UdtSndLossList {
           current.end = next.end;
         }
         _intervals.removeAt(i + 1);
+        len--;
       } else {
         i++;
       }
@@ -102,11 +103,10 @@ final class UdtRcvLossList {
   final List<_SeqInterval> _intervals = <_SeqInterval>[];
 
   int get lossLength => _intervals.fold<int>(
-        0,
-        (int sum, _SeqInterval interval) =>
-            sum +
-            UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
-      );
+    0,
+    (int sum, _SeqInterval interval) =>
+        sum + UdtSequenceNumber.lengthInclusive(interval.start, interval.end),
+  );
 
   int get firstLostSeq => _intervals.isEmpty ? -1 : _intervals.first.start;
 
@@ -202,7 +202,8 @@ final class UdtRcvLossList {
 
   void _coalesce() {
     var i = 0;
-    while (i < _intervals.length - 1) {
+    var len = _intervals.length;
+    while (i < len - 1) {
       final current = _intervals[i];
       final next = _intervals[i + 1];
       final adjacent = UdtSequenceNumber.increment(current.end) == next.start;
@@ -212,6 +213,7 @@ final class UdtRcvLossList {
           current.end = next.end;
         }
         _intervals.removeAt(i + 1);
+        len--;
       } else {
         i++;
       }

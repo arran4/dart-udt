@@ -59,13 +59,13 @@ final class UdtReceiveBuffer {
   UdtReceiveBuffer({
     required UdtReceiveUnitQueueCounter queueCounter,
     int bufferSize = 65536,
-  })  : _queueCounter = queueCounter,
-        _size = bufferSize,
-        _units = List<_UdtReceiveSlot?>.filled(
-          bufferSize,
-          null,
-          growable: false,
-        ) {
+  }) : _queueCounter = queueCounter,
+       _size = bufferSize,
+       _units = List<_UdtReceiveSlot?>.filled(
+         bufferSize,
+         null,
+         growable: false,
+       ) {
     if (bufferSize <= 1) {
       throw ArgumentError.value(bufferSize, 'bufferSize', 'must be > 1');
     }
@@ -154,9 +154,11 @@ final class UdtReceiveBuffer {
 
   void dropMessage(int messageNumber) {
     final target = messageNumber & 0x1FFFFFFF;
-    for (var i = _startPos, n = (_lastAckPos + _maxPos) % _size;
-        i != n;
-        i = (i + 1) % _size) {
+    for (
+      var i = _startPos, n = (_lastAckPos + _maxPos) % _size;
+      i != n;
+      i = (i + 1) % _size
+    ) {
       final slot = _units[i];
       if (slot != null && slot.unit.baseMessageNumber == target) {
         slot.state = _UdtReceiveUnitState.dropped;

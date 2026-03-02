@@ -45,7 +45,7 @@ final class UdtPollReadySet {
 /// adapting to async stream event sources in Dart.
 final class UdtEpoll {
   UdtEpoll({required UdtSocketEventSource eventSource})
-      : _eventSource = eventSource;
+    : _eventSource = eventSource;
 
   final UdtSocketEventSource _eventSource;
 
@@ -73,27 +73,28 @@ final class UdtEpoll {
     final descriptor = _lookup(pollId);
     final watchedEvents = events ?? UdtPollEvent.values.toSet();
     descriptor.watchedEventsBySocket[socketId] = watchedEvents;
-    descriptor.subscriptions[socketId] ??=
-        _eventSource.eventsFor(socketId).listen((UdtSocketIoEvent event) {
-      final watch = descriptor.watchedEventsBySocket[event.socketId];
-      if (watch == null || !watch.contains(event.event)) {
-        return;
-      }
+    descriptor.subscriptions[socketId] ??= _eventSource
+        .eventsFor(socketId)
+        .listen((UdtSocketIoEvent event) {
+          final watch = descriptor.watchedEventsBySocket[event.socketId];
+          if (watch == null || !watch.contains(event.event)) {
+            return;
+          }
 
-      switch (event.event) {
-        case UdtPollEvent.inEvent:
-          descriptor.readyReads.add(event.socketId);
-        case UdtPollEvent.outEvent:
-          descriptor.readyWrites.add(event.socketId);
-        case UdtPollEvent.errEvent:
-          descriptor.readyErrors.add(event.socketId);
-      }
+          switch (event.event) {
+            case UdtPollEvent.inEvent:
+              descriptor.readyReads.add(event.socketId);
+            case UdtPollEvent.outEvent:
+              descriptor.readyWrites.add(event.socketId);
+            case UdtPollEvent.errEvent:
+              descriptor.readyErrors.add(event.socketId);
+          }
 
-      final waiter = descriptor.waiter;
-      if (waiter != null && !waiter.isCompleted) {
-        waiter.complete();
-      }
-    });
+          final waiter = descriptor.waiter;
+          if (waiter != null && !waiter.isCompleted) {
+            waiter.complete();
+          }
+        });
   }
 
   Future<void> removeUdtSocket(int pollId, int socketId) async {
@@ -177,7 +178,7 @@ final class _PollDescriptor {
 /// Adapts [RawDatagramSocket] event streams into [UdtSocketEventSource].
 final class UdtRawDatagramEventSource implements UdtSocketEventSource {
   UdtRawDatagramEventSource({required Map<int, RawDatagramSocket> socketsById})
-      : _socketsById = socketsById;
+    : _socketsById = socketsById;
 
   final Map<int, RawDatagramSocket> _socketsById;
 
@@ -192,19 +193,18 @@ final class UdtRawDatagramEventSource implements UdtSocketEventSource {
         .map<UdtSocketIoEvent?>(
           (RawSocketEvent event) => switch (event) {
             RawSocketEvent.read => UdtSocketIoEvent(
-                socketId: socketId,
-                event: UdtPollEvent.inEvent,
-              ),
+              socketId: socketId,
+              event: UdtPollEvent.inEvent,
+            ),
             RawSocketEvent.write => UdtSocketIoEvent(
-                socketId: socketId,
-                event: UdtPollEvent.outEvent,
-              ),
+              socketId: socketId,
+              event: UdtPollEvent.outEvent,
+            ),
             RawSocketEvent.closed ||
-            RawSocketEvent.readClosed =>
-              UdtSocketIoEvent(
-                socketId: socketId,
-                event: UdtPollEvent.errEvent,
-              ),
+            RawSocketEvent.readClosed => UdtSocketIoEvent(
+              socketId: socketId,
+              event: UdtPollEvent.errEvent,
+            ),
             _ => null,
           },
         )

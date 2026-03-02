@@ -6,12 +6,11 @@ void main() {
     UdtMobileAppState appState = UdtMobileAppState.foreground,
     UdtMobileNetworkType networkType = UdtMobileNetworkType.wifi,
     bool batterySaverEnabled = false,
-  }) =>
-      UdtCircuitBreakerRecoveryContext(
-        appState: appState,
-        networkType: networkType,
-        batterySaverEnabled: batterySaverEnabled,
-      );
+  }) => UdtCircuitBreakerRecoveryContext(
+    appState: appState,
+    networkType: networkType,
+    batterySaverEnabled: batterySaverEnabled,
+  );
 
   test('constructor validates base retry delay', () {
     expect(
