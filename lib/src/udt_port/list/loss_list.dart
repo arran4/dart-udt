@@ -79,7 +79,8 @@ final class UdtSndLossList {
 
   void _coalesce() {
     var i = 0;
-    while (i < _intervals.length - 1) {
+    var len = _intervals.length;
+    while (i < len - 1) {
       final current = _intervals[i];
       final next = _intervals[i + 1];
       final adjacent = UdtSequenceNumber.increment(current.end) == next.start;
@@ -89,6 +90,7 @@ final class UdtSndLossList {
           current.end = next.end;
         }
         _intervals.removeAt(i + 1);
+        len--;
       } else {
         i++;
       }
@@ -200,7 +202,8 @@ final class UdtRcvLossList {
 
   void _coalesce() {
     var i = 0;
-    while (i < _intervals.length - 1) {
+    var len = _intervals.length;
+    while (i < len - 1) {
       final current = _intervals[i];
       final next = _intervals[i + 1];
       final adjacent = UdtSequenceNumber.increment(current.end) == next.start;
@@ -210,6 +213,7 @@ final class UdtRcvLossList {
           current.end = next.end;
         }
         _intervals.removeAt(i + 1);
+        len--;
       } else {
         i++;
       }
