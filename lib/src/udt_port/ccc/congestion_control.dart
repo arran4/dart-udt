@@ -223,7 +223,8 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
   @override
   void onAck(int acknowledgedSequenceNumber) {
     final currentTimeMicros = _nowMicros();
-    if (currentTimeMicros - _lastRateControlTimeMicros < _rateControlIntervalMicros) {
+    if (currentTimeMicros - _lastRateControlTimeMicros <
+        _rateControlIntervalMicros) {
       return;
     }
 
@@ -242,13 +243,15 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
           setPacketSendPeriodMicros(1000000.0 / receiveRatePacketsPerSec);
         } else {
           setPacketSendPeriodMicros(
-            (roundTripTimeMicros + _rateControlIntervalMicros) / congestionWindowSize,
+            (roundTripTimeMicros + _rateControlIntervalMicros) /
+                congestionWindowSize,
           );
         }
       }
     } else {
       setCongestionWindowSize(
-        receiveRatePacketsPerSec / 1000000.0 *
+        receiveRatePacketsPerSec /
+                1000000.0 *
                 (roundTripTimeMicros + _rateControlIntervalMicros) +
             16,
       );
@@ -280,11 +283,11 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
     } else {
       var computedIncrease =
           math.pow(
-                10.0,
-                _log10(estimatedSpareBandwidth * effectiveMss * 8.0).ceil(),
-              ) *
-              0.0000015 /
-              effectiveMss;
+            10.0,
+            _log10(estimatedSpareBandwidth * effectiveMss * 8.0).ceil(),
+          ) *
+          0.0000015 /
+          effectiveMss;
       if (computedIncrease < _minimumAckIncrease) {
         computedIncrease = _minimumAckIncrease;
       }
@@ -319,15 +322,20 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
     final normalizedLoss = lossList.first & 0x7FFFFFFF;
     if (_compareSequence(normalizedLoss, _lastDecreaseSequenceNumber) > 0) {
       _lastDecreasePeriodMicros = packetSendPeriodMicros;
-      setPacketSendPeriodMicros((packetSendPeriodMicros * 1.125).ceilToDouble());
+      setPacketSendPeriodMicros(
+        (packetSendPeriodMicros * 1.125).ceilToDouble(),
+      );
 
-      _averageNakNumber = (_averageNakNumber * 0.875 + _nakCount * 0.125).ceil();
+      _averageNakNumber = (_averageNakNumber * 0.875 + _nakCount * 0.125)
+          .ceil();
       _nakCount = 1;
       _decreaseCount = 1;
 
       _lastDecreaseSequenceNumber = sendCurrentSequenceNumber;
       _decreaseRandom =
-          (_averageNakNumber * _seededRandomFraction(_lastDecreaseSequenceNumber)).ceil();
+          (_averageNakNumber *
+                  _seededRandomFraction(_lastDecreaseSequenceNumber))
+              .ceil();
       if (_decreaseRandom < 1) {
         _decreaseRandom = 1;
       }
@@ -339,7 +347,9 @@ class UdtDefaultCongestionControl extends UdtCongestionControl {
     if (previousDecreaseCount < 5) {
       _nakCount += 1;
       if (_nakCount % _decreaseRandom == 0) {
-        setPacketSendPeriodMicros((packetSendPeriodMicros * 1.125).ceilToDouble());
+        setPacketSendPeriodMicros(
+          (packetSendPeriodMicros * 1.125).ceilToDouble(),
+        );
         _lastDecreaseSequenceNumber = sendCurrentSequenceNumber;
       }
     }

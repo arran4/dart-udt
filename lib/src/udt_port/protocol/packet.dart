@@ -28,8 +28,15 @@ final class UdtPacket {
       );
     }
 
-    final headerBytes = Uint8List.sublistView(bytes, 0, UdtPacketHeader.byteLength);
+    final headerBytes = Uint8List.sublistView(
+      bytes,
+      0,
+      UdtPacketHeader.byteLength,
+    );
     final payload = Uint8List.sublistView(bytes, UdtPacketHeader.byteLength);
-    return UdtPacket(header: UdtPacketHeader.parse(headerBytes), payload: payload);
+    return UdtPacket(
+      header: UdtPacketHeader.parse(headerBytes),
+      payload: payload,
+    );
   }
 }

@@ -19,38 +19,41 @@ final class _FakeRuntimeTarget implements UdtSocketRuntimeTarget {
 }
 
 void main() {
-  test('start binds first plan and returns bound state when sending allowed', () async {
-    final target = _FakeRuntimeTarget();
-    const coordinator = UdtSocketLifecycleCoordinator();
+  test(
+    'start binds first plan and returns bound state when sending allowed',
+    () async {
+      final target = _FakeRuntimeTarget();
+      const coordinator = UdtSocketLifecycleCoordinator();
 
-    const runtimePlan = UdtSocketRuntimePlan(
-      bindPlans: [
-        UdtBindPlan(
-          family: UdtBindFamily.ipv6,
-          dualStack: true,
-          requireIpv6OnlyFalse: true,
-          reason: 'test-plan',
+      const runtimePlan = UdtSocketRuntimePlan(
+        bindPlans: [
+          UdtBindPlan(
+            family: UdtBindFamily.ipv6,
+            dualStack: true,
+            requireIpv6OnlyFalse: true,
+            reason: 'test-plan',
+          ),
+        ],
+        applyReport: UdtSocketOptionApplicationReport([]),
+      );
+
+      final snapshot = await coordinator.start(
+        target: target,
+        runtimePlan: runtimePlan,
+        initialMobileInput: const UdtMobilePolicyInput(
+          appState: UdtMobileAppState.foreground,
+          networkType: UdtMobileNetworkType.wifi,
+          allowBackgroundNetwork: true,
+          batterySaverEnabled: false,
         ),
-      ],
-      applyReport: UdtSocketOptionApplicationReport([]),
-    );
+      );
 
-    final snapshot = await coordinator.start(
-      target: target,
-      runtimePlan: runtimePlan,
-      initialMobileInput: const UdtMobilePolicyInput(
-        appState: UdtMobileAppState.foreground,
-        networkType: UdtMobileNetworkType.wifi,
-        allowBackgroundNetwork: true,
-        batterySaverEnabled: false,
-      ),
-    );
-
-    expect(target.boundFamily, UdtBindFamily.ipv6);
-    expect(target.dualStack, isTrue);
-    expect(snapshot.state, UdtLifecycleState.bound);
-    expect(snapshot.ackIntervalMillis, 10);
-  });
+      expect(target.boundFamily, UdtBindFamily.ipv6);
+      expect(target.dualStack, isTrue);
+      expect(snapshot.state, UdtLifecycleState.bound);
+      expect(snapshot.ackIntervalMillis, 10);
+    },
+  );
 
   test('start returns closed state when runtime plan is blocking', () async {
     final target = _FakeRuntimeTarget();
@@ -129,7 +132,10 @@ void main() {
       reason: 'running',
     );
 
-    final closed = await coordinator.shutdown(target: target, previous: previous);
+    final closed = await coordinator.shutdown(
+      target: target,
+      previous: previous,
+    );
 
     expect(target.closed, isTrue);
     expect(closed.state, UdtLifecycleState.closed);

@@ -34,8 +34,11 @@ void main() {
   });
 
   test('packet header parse/serialize survives deterministic corpus', () {
-    final corpus = generateDeterministicUdtValues(seed: 99, count: 64, max: 0x7FFFFFFF)
-        .toList();
+    final corpus = generateDeterministicUdtValues(
+      seed: 99,
+      count: 64,
+      max: 0x7FFFFFFF,
+    ).toList();
 
     for (var i = 0; i + 4 < corpus.length; i += 5) {
       final dataHeader = UdtPacketHeader.data(

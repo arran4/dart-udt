@@ -4,25 +4,25 @@
 // /*****************************************************************************
 // Copyright (c) 2001 - 2011, The Board of Trustees of the University of Illinois.
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
-// 
+//
 // * Redistributions of source code must retain the above
 //   copyright notice, this list of conditions and the
 //   following disclaimer.
-// 
+//
 // * Redistributions in binary form must reproduce the
 //   above copyright notice, this list of conditions
 //   and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// 
+//
 // * Neither the name of the University of Illinois
 //   nor the names of its contributors may be used to
 //   endorse or promote products derived from this
 //   software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 // IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -35,13 +35,13 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // *****************************************************************************/
-// 
+//
 // /*****************************************************************************
 // written by
 //    Yunhong Gu, last updated 02/12/2011
 // *****************************************************************************/
-// 
-// 
+//
+//
 // //////////////////////////////////////////////////////////////////////////////
 // //    0                   1                   2                   3
 // //    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -123,9 +123,9 @@
 // //              Add. Info:    Error code
 // //              Control Info: None
 // //      0x7FFF: Explained by bits 16 - 31
-// //              
+// //
 // //   bit 16 - 31:
-// //      This space is used for future expansion or user defined control packets. 
+// //      This space is used for future expansion or user defined control packets.
 // //
 // //    0                   1                   2                   3
 // //    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -144,16 +144,16 @@
 // //      the first bit of a to 1.
 // //      For any single loss or consectutive loss less than 2 packets, use
 // //      the original sequence numbers in the field.
-// 
-// 
+//
+//
 // #include <cstring>
 // #include "packet.h"
-// 
-// 
+//
+//
 // const int CPacket::m_iPktHdrSize = 16;
 // const int CHandShake::m_iContentSize = 48;
-// 
-// 
+//
+//
 // // Set up the aliases in the constructure
 // CPacket::CPacket():
 // m_iSeqNo((int32_t&)(m_nHeader[0])),
@@ -170,26 +170,26 @@
 //    m_PacketVector[1].iov_base = NULL;
 //    m_PacketVector[1].iov_len = 0;
 // }
-// 
+//
 // CPacket::~CPacket()
 // {
 // }
-// 
+//
 // int CPacket::getLength() const
 // {
 //    return m_PacketVector[1].iov_len;
 // }
-// 
+//
 // void CPacket::setLength(int len)
 // {
 //    m_PacketVector[1].iov_len = len;
 // }
-// 
+//
 // void CPacket::pack(int pkttype, void* lparam, void* rparam, int size)
 // {
 //    // Set (bit-0 = 1) and (bit-1~15 = type)
 //    m_nHeader[0] = 0x80000000 | (pkttype << 16);
-// 
+//
 //    // Set additional information and control information field
 //    switch (pkttype)
 //    {
@@ -197,90 +197,90 @@
 //       // ACK packet seq. no.
 //       if (NULL != lparam)
 //          m_nHeader[1] = *(int32_t *)lparam;
-// 
-//       // data ACK seq. no. 
+//
+//       // data ACK seq. no.
 //       // optional: RTT (microsends), RTT variance (microseconds) advertised flow window size (packets), and estimated link capacity (packets per second)
 //       m_PacketVector[1].iov_base = (char *)rparam;
 //       m_PacketVector[1].iov_len = size;
-// 
+//
 //       break;
-// 
+//
 //    case 6: //0110 - Acknowledgement of Acknowledgement (ACK-2)
 //       // ACK packet seq. no.
 //       m_nHeader[1] = *(int32_t *)lparam;
-// 
+//
 //       // control info field should be none
 //       // but "writev" does not allow this
 //       m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
 //       m_PacketVector[1].iov_len = 4; //0;
-// 
+//
 //       break;
-// 
+//
 //    case 3: //0011 - Loss Report (NAK)
 //       // loss list
 //       m_PacketVector[1].iov_base = (char *)rparam;
 //       m_PacketVector[1].iov_len = size;
-// 
+//
 //       break;
-// 
+//
 //    case 4: //0100 - Congestion Warning
 //       // control info field should be none
 //       // but "writev" does not allow this
 //       m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
 //       m_PacketVector[1].iov_len = 4; //0;
-//   
+//
 //       break;
-// 
+//
 //    case 1: //0001 - Keep-alive
 //       // control info field should be none
 //       // but "writev" does not allow this
 //       m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
 //       m_PacketVector[1].iov_len = 4; //0;
-// 
+//
 //       break;
-// 
+//
 //    case 0: //0000 - Handshake
 //       // control info filed is handshake info
 //       m_PacketVector[1].iov_base = (char *)rparam;
 //       m_PacketVector[1].iov_len = size; //sizeof(CHandShake);
-// 
+//
 //       break;
-// 
+//
 //    case 5: //0101 - Shutdown
 //       // control info field should be none
 //       // but "writev" does not allow this
 //       m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
 //       m_PacketVector[1].iov_len = 4; //0;
-// 
+//
 //       break;
-// 
+//
 //    case 7: //0111 - Message Drop Request
-//       // msg id 
+//       // msg id
 //       m_nHeader[1] = *(int32_t *)lparam;
-// 
+//
 //       //first seq no, last seq no
 //       m_PacketVector[1].iov_base = (char *)rparam;
 //       m_PacketVector[1].iov_len = size;
-// 
+//
 //       break;
-// 
+//
 //    case 8: //1000 - Error Signal from the Peer Side
 //       // Error type
 //       m_nHeader[1] = *(int32_t *)lparam;
-// 
+//
 //       // control info field should be none
 //       // but "writev" does not allow this
 //       m_PacketVector[1].iov_base = (char *)&__pad; //NULL;
 //       m_PacketVector[1].iov_len = 4; //0;
-// 
+//
 //       break;
-// 
+//
 //    case 32767: //0x7FFF - Reserved for user defined control packets
 //       // for extended control packet
 //       // "lparam" contains the extended type information for bit 16 - 31
 //       // "rparam" is the control information
 //       m_nHeader[0] |= *(int32_t *)lparam;
-// 
+//
 //       if (NULL != rparam)
 //       {
 //          m_PacketVector[1].iov_base = (char *)rparam;
@@ -291,61 +291,61 @@
 //          m_PacketVector[1].iov_base = (char *)&__pad;
 //          m_PacketVector[1].iov_len = 4;
 //       }
-// 
+//
 //       break;
-// 
+//
 //    default:
 //       break;
 //    }
 // }
-// 
+//
 // iovec* CPacket::getPacketVector()
 // {
 //    return m_PacketVector;
 // }
-// 
+//
 // int CPacket::getFlag() const
 // {
 //    // read bit 0
 //    return m_nHeader[0] >> 31;
 // }
-// 
+//
 // int CPacket::getType() const
 // {
 //    // read bit 1~15
 //    return (m_nHeader[0] >> 16) & 0x00007FFF;
 // }
-// 
+//
 // int CPacket::getExtendedType() const
 // {
 //    // read bit 16~31
 //    return m_nHeader[0] & 0x0000FFFF;
 // }
-// 
+//
 // int32_t CPacket::getAckSeqNo() const
 // {
 //    // read additional information field
 //    return m_nHeader[1];
 // }
-// 
+//
 // int CPacket::getMsgBoundary() const
 // {
 //    // read [1] bit 0~1
 //    return m_nHeader[1] >> 30;
 // }
-// 
+//
 // bool CPacket::getMsgOrderFlag() const
 // {
 //    // read [1] bit 2
 //    return (1 == ((m_nHeader[1] >> 29) & 1));
 // }
-// 
+//
 // int32_t CPacket::getMsgSeq() const
 // {
 //    // read [1] bit 3~31
 //    return m_nHeader[1] & 0x1FFFFFFF;
 // }
-// 
+//
 // CPacket* CPacket::clone() const
 // {
 //    CPacket* pkt = new CPacket;
@@ -353,10 +353,10 @@
 //    pkt->m_pcData = new char[m_PacketVector[1].iov_len];
 //    memcpy(pkt->m_pcData, m_pcData, m_PacketVector[1].iov_len);
 //    pkt->m_PacketVector[1].iov_len = m_PacketVector[1].iov_len;
-// 
+//
 //    return pkt;
 // }
-// 
+//
 // CHandShake::CHandShake():
 // m_iVersion(0),
 // m_iType(0),
@@ -370,12 +370,12 @@
 //    for (int i = 0; i < 4; ++ i)
 //       m_piPeerIP[i] = 0;
 // }
-// 
+//
 // int CHandShake::serialize(char* buf, int& size)
 // {
 //    if (size < m_iContentSize)
 //       return -1;
-// 
+//
 //    int32_t* p = (int32_t*)buf;
 //    *p++ = m_iVersion;
 //    *p++ = m_iType;
@@ -387,17 +387,17 @@
 //    *p++ = m_iCookie;
 //    for (int i = 0; i < 4; ++ i)
 //       *p++ = m_piPeerIP[i];
-// 
+//
 //    size = m_iContentSize;
-// 
+//
 //    return 0;
 // }
-// 
+//
 // int CHandShake::deserialize(const char* buf, int size)
 // {
 //    if (size < m_iContentSize)
 //       return -1;
-// 
+//
 //    int32_t* p = (int32_t*)buf;
 //    m_iVersion = *p++;
 //    m_iType = *p++;
@@ -409,6 +409,6 @@
 //    m_iCookie = *p++;
 //    for (int i = 0; i < 4; ++ i)
 //       m_piPeerIP[i] = *p++;
-// 
+//
 //    return 0;
 // }

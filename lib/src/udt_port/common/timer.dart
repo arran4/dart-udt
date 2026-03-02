@@ -15,7 +15,11 @@ final class UdtTimer {
 
   Future<void> sleepMicros(int intervalMicros) {
     if (intervalMicros < 0) {
-      throw ArgumentError.value(intervalMicros, 'intervalMicros', 'must be >= 0');
+      throw ArgumentError.value(
+        intervalMicros,
+        'intervalMicros',
+        'must be >= 0',
+      );
     }
 
     return sleepToMicros(_clock.nowMicros + intervalMicros);

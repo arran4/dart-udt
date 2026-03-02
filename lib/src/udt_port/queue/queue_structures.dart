@@ -79,11 +79,7 @@ final class UdtReceiveUserList<T> {
 
 /// Bucket entry equivalent to upstream `CHash::CBucket`.
 final class UdtHashBucket<T> {
-  UdtHashBucket({
-    required this.socketId,
-    required this.value,
-    this.next,
-  });
+  UdtHashBucket({required this.socketId, required this.value, this.next});
 
   final int socketId;
   final T value;
@@ -130,11 +126,7 @@ final class UdtSocketHash<T> {
 
     final index = _index(socketId);
     final head = _buckets[index];
-    final node = UdtHashBucket<T>(
-      socketId: socketId,
-      value: value,
-      next: head,
-    );
+    final node = UdtHashBucket<T>(socketId: socketId, value: value, next: head);
     _buckets[index] = node;
   }
 

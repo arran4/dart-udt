@@ -43,7 +43,10 @@ void main() {
     const executor = UdtSocketRuntimeExecutor();
     final target = _ExecutionFakeTarget();
 
-    final report = await executor.executeBindPlan(target: target, runtimePlan: plan);
+    final report = await executor.executeBindPlan(
+      target: target,
+      runtimePlan: plan,
+    );
 
     expect(report.isBound, isTrue);
     expect(report.selectedPlan, isNotNull);
@@ -56,7 +59,10 @@ void main() {
     const executor = UdtSocketRuntimeExecutor();
     final target = _ExecutionFakeTarget(failFirst: true);
 
-    final report = await executor.executeBindPlan(target: target, runtimePlan: plan);
+    final report = await executor.executeBindPlan(
+      target: target,
+      runtimePlan: plan,
+    );
 
     expect(report.isBound, isTrue);
     expect(report.selectedPlan!.family, UdtBindFamily.ipv4);
@@ -69,36 +75,45 @@ void main() {
     const executor = UdtSocketRuntimeExecutor();
     final target = _ExecutionFakeTarget(alwaysFail: true);
 
-    final report = await executor.executeBindPlan(target: target, runtimePlan: plan);
+    final report = await executor.executeBindPlan(
+      target: target,
+      runtimePlan: plan,
+    );
 
     expect(report.isBound, isFalse);
     expect(report.selectedPlan, isNull);
     expect(report.attempts, hasLength(2));
-    expect(report.attempts.every((attempt) => attempt.success == false), isTrue);
+    expect(
+      report.attempts.every((attempt) => attempt.success == false),
+      isTrue,
+    );
   });
 
-  test('executor short-circuits when runtime plan has blocking failure', () async {
-    final blockingPlan = UdtSocketRuntimePlan(
-      bindPlans: plan.bindPlans,
-      applyReport: UdtSocketOptionApplicationReport([
-        UdtSocketOptionApplyResult(
-          key: UdtSocketOptionKey.ipv6Only,
-          value: true,
-          status: UdtSocketOptionApplyStatus.failedRequired,
-          reason: 'required failure',
-        ),
-      ]),
-    );
+  test(
+    'executor short-circuits when runtime plan has blocking failure',
+    () async {
+      final blockingPlan = UdtSocketRuntimePlan(
+        bindPlans: plan.bindPlans,
+        applyReport: UdtSocketOptionApplicationReport([
+          UdtSocketOptionApplyResult(
+            key: UdtSocketOptionKey.ipv6Only,
+            value: true,
+            status: UdtSocketOptionApplyStatus.failedRequired,
+            reason: 'required failure',
+          ),
+        ]),
+      );
 
-    const executor = UdtSocketRuntimeExecutor();
-    final target = _ExecutionFakeTarget();
+      const executor = UdtSocketRuntimeExecutor();
+      final target = _ExecutionFakeTarget();
 
-    final report = await executor.executeBindPlan(
-      target: target,
-      runtimePlan: blockingPlan,
-    );
+      final report = await executor.executeBindPlan(
+        target: target,
+        runtimePlan: blockingPlan,
+      );
 
-    expect(report.isBound, isFalse);
-    expect(report.attempts, isEmpty);
-  });
+      expect(report.isBound, isFalse);
+      expect(report.attempts, isEmpty);
+    },
+  );
 }

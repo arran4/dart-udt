@@ -115,7 +115,10 @@ final class UdtSocketMatrixIntegrationHarness {
 
     final connectReport = connectPlans.isEmpty
         ? const UdtSocketConnectReport(attempts: [], selectedPlan: null)
-        : await _connectExecutor.execute(target: connectTarget, plans: connectPlans);
+        : await _connectExecutor.execute(
+            target: connectTarget,
+            plans: connectPlans,
+          );
 
     return UdtSocketMatrixIntegrationResult(
       row: row,

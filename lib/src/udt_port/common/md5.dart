@@ -46,7 +46,12 @@ final class UdtMd5 {
       final toCopy = remaining < (_blockSize - _bufferLength)
           ? remaining
           : (_blockSize - _bufferLength);
-      _buffer.setRange(_bufferLength, _bufferLength + toCopy, data, inputOffset);
+      _buffer.setRange(
+        _bufferLength,
+        _bufferLength + toCopy,
+        data,
+        inputOffset,
+      );
       _bufferLength += toCopy;
       inputOffset += toCopy;
       remaining -= toCopy;
@@ -73,7 +78,9 @@ final class UdtMd5 {
     final savedLow = _bitCountLow;
     final savedHigh = _bitCountHigh;
 
-    final padLength = _bufferLength < 56 ? 56 - _bufferLength : 120 - _bufferLength;
+    final padLength = _bufferLength < 56
+        ? 56 - _bufferLength
+        : 120 - _bufferLength;
     final padding = Uint8List(padLength);
     padding[0] = 0x80;
     append(padding);

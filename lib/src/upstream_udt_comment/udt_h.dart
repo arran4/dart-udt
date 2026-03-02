@@ -4,25 +4,25 @@
 // /*****************************************************************************
 // Copyright (c) 2001 - 2011, The Board of Trustees of the University of Illinois.
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
-// 
+//
 // * Redistributions of source code must retain the above
 //   copyright notice, this list of conditions and the
 //   following disclaimer.
-// 
+//
 // * Redistributions in binary form must reproduce the
 //   above copyright notice, this list of conditions
 //   and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// 
+//
 // * Neither the name of the University of Illinois
 //   nor the names of its contributors may be used to
 //   endorse or promote products derived from this
 //   software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 // IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -35,16 +35,16 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // *****************************************************************************/
-// 
+//
 // /*****************************************************************************
 // written by
 //    Yunhong Gu, last updated 01/18/2011
 // *****************************************************************************/
-// 
+//
 // #ifndef __UDT_H__
 // #define __UDT_H__
-// 
-// 
+//
+//
 // #ifndef WIN32
 //    #include <sys/types.h>
 //    #include <sys/socket.h>
@@ -60,17 +60,17 @@
 // #include <set>
 // #include <string>
 // #include <vector>
-// 
-// 
+//
+//
 // ////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // //if compiling on VC6.0 or pre-WindowsXP systems
 // //use -DLEGACY_WIN32
-// 
+//
 // //if compiling with MinGW, it only works on XP or above
 // //use -D_WIN32_WINNT=0x0501
-// 
-// 
+//
+//
 // #ifdef WIN32
 //    #ifndef __MINGW__
 //       // Explicitly define 32-bit and 64-bit numbers
@@ -83,7 +83,7 @@
 //          // VC 6.0 does not support unsigned __int64: may cause potential problems.
 //          typedef __int64 uint64_t;
 //       #endif
-// 
+//
 //       #ifdef UDT_EXPORTS
 //          #define UDT_API __declspec(dllexport)
 //       #else
@@ -95,9 +95,9 @@
 // #else
 //    #define UDT_API __attribute__ ((visibility("default")))
 // #endif
-// 
+//
 // #define NO_BUSY_WAITING
-// 
+//
 // #ifdef WIN32
 //    #ifndef __MINGW__
 //       typedef SOCKET SYSSOCKET;
@@ -107,18 +107,18 @@
 // #else
 //    typedef int SYSSOCKET;
 // #endif
-// 
+//
 // typedef SYSSOCKET UDPSOCKET;
 // typedef int UDTSOCKET;
-// 
+//
 // ////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // typedef std::set<UDTSOCKET> ud_set;
 // #define UD_CLR(u, uset) ((uset)->erase(u))
 // #define UD_ISSET(u, uset) ((uset)->find(u) != (uset)->end())
 // #define UD_SET(u, uset) ((uset)->insert(u))
 // #define UD_ZERO(uset) ((uset)->clear())
-// 
+//
 // enum EPOLLOpt
 // {
 //    // this values are defined same as linux epoll.h
@@ -127,11 +127,11 @@
 //    UDT_EPOLL_OUT = 0x4,
 //    UDT_EPOLL_ERR = 0x8
 // };
-// 
+//
 // enum UDTSTATUS {INIT = 1, OPENED, LISTENING, CONNECTING, CONNECTED, BROKEN, CLOSING, CLOSED, NONEXIST};
-// 
+//
 // ////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // enum UDTOpt
 // {
 //    UDT_MSS,             // the Maximum Transfer Unit
@@ -156,9 +156,9 @@
 //    UDT_SNDDATA,		// size of data in the sending buffer
 //    UDT_RCVDATA		// size of data available for recv
 // };
-// 
+//
 // ////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // struct CPerfMon
 // {
 //    // global measurements
@@ -173,7 +173,7 @@
 //    int pktSentNAKTotal;                 // total number of sent NAK packets
 //    int pktRecvNAKTotal;                 // total number of received NAK packets
 //    int64_t usSndDurationTotal;		// total time duration when UDT is sending data (idle time exclusive)
-// 
+//
 //    // local measurements
 //    int64_t pktSent;                     // number of sent data packets, including retransmissions
 //    int64_t pktRecv;                     // number of received packets
@@ -187,7 +187,7 @@
 //    double mbpsSendRate;                 // sending rate in Mb/s
 //    double mbpsRecvRate;                 // receiving rate in Mb/s
 //    int64_t usSndDuration;		// busy sending time (i.e., idle time exclusive)
-// 
+//
 //    // instant measurements
 //    double usPktSndPeriod;               // packet sending period, in microseconds
 //    int pktFlowWindow;                   // flow window size, in number of packets
@@ -198,46 +198,46 @@
 //    int byteAvailSndBuf;                 // available UDT sender buffer size
 //    int byteAvailRcvBuf;                 // available UDT receiver buffer size
 // };
-// 
+//
 // ////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // class UDT_API CUDTException
 // {
 // public:
 //    CUDTException(int major = 0, int minor = 0, int err = -1);
 //    CUDTException(const CUDTException& e);
 //    virtual ~CUDTException();
-// 
+//
 //       // Functionality:
 //       //    Get the description of the exception.
 //       // Parameters:
 //       //    None.
 //       // Returned value:
 //       //    Text message for the exception description.
-// 
+//
 //    virtual const char* getErrorMessage();
-// 
+//
 //       // Functionality:
 //       //    Get the system errno for the exception.
 //       // Parameters:
 //       //    None.
 //       // Returned value:
 //       //    errno.
-// 
+//
 //    virtual int getErrorCode() const;
-// 
+//
 //       // Functionality:
 //       //    Clear the error code.
 //       // Parameters:
 //       //    None.
 //       // Returned value:
 //       //    None.
-// 
+//
 //    virtual void clear();
-// 
+//
 // private:
 //    int m_iMajor;        // major exception categories
-// 
+//
 // // 0: correct condition
 // // 1: network setup exception
 // // 2: network connection broken
@@ -245,14 +245,14 @@
 // // 4: file exception
 // // 5: method not supported
 // // 6+: undefined error
-// 
+//
 //    int m_iMinor;		// for specific error reasons
 //    int m_iErrno;		// errno returned by the system if there is any
 //    std::string m_strMsg;	// text error message
-// 
+//
 //    std::string m_strAPI;	// the name of UDT function that returns the error
 //    std::string m_strDebug;	// debug information, set to the original place that causes the error
-// 
+//
 // public: // Error Code
 //    static const int SUCCESS;
 //    static const int ECONNSETUP;
@@ -292,26 +292,26 @@
 //    static const int EPEERERR;
 //    static const int EUNKNOWN;
 // };
-// 
+//
 // ////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // // If you need to export these APIs to be used by a different language,
 // // declare extern "C" for them, and add a "udt_" prefix to each API.
 // // The following APIs: sendfile(), recvfile(), epoll_wait(), geterrormsg(),
 // // include C++ specific feature, please use the corresponding sendfile2(), etc.
-// 
+//
 // namespace UDT
 // {
-// 
+//
 // typedef CUDTException ERRORINFO;
 // typedef UDTOpt SOCKOPT;
 // typedef CPerfMon TRACEINFO;
 // typedef ud_set UDSET;
-// 
+//
 // UDT_API extern const UDTSOCKET INVALID_SOCK;
 // #undef ERROR
 // UDT_API extern const int ERROR;
-// 
+//
 // UDT_API int startup();
 // UDT_API int cleanup();
 // UDT_API UDTSOCKET socket(int af, int type, int protocol);
@@ -333,12 +333,12 @@
 // UDT_API int64_t recvfile(UDTSOCKET u, std::fstream& ofs, int64_t& offset, int64_t size, int block = 7280000);
 // UDT_API int64_t sendfile2(UDTSOCKET u, const char* path, int64_t* offset, int64_t size, int block = 364000);
 // UDT_API int64_t recvfile2(UDTSOCKET u, const char* path, int64_t* offset, int64_t size, int block = 7280000);
-// 
-// // select and selectEX are DEPRECATED; please use epoll. 
+//
+// // select and selectEX are DEPRECATED; please use epoll.
 // UDT_API int select(int nfds, UDSET* readfds, UDSET* writefds, UDSET* exceptfds, const struct timeval* timeout);
 // UDT_API int selectEx(const std::vector<UDTSOCKET>& fds, std::vector<UDTSOCKET>* readfds,
 //                      std::vector<UDTSOCKET>* writefds, std::vector<UDTSOCKET>* exceptfds, int64_t msTimeOut);
-// 
+//
 // UDT_API int epoll_create();
 // UDT_API int epoll_add_usock(int eid, UDTSOCKET u, const int* events = NULL);
 // UDT_API int epoll_add_ssock(int eid, SYSSOCKET s, const int* events = NULL);
@@ -354,7 +354,7 @@
 // UDT_API const char* getlasterror_desc();
 // UDT_API int perfmon(UDTSOCKET u, TRACEINFO* perf, bool clear = true);
 // UDT_API UDTSTATUS getsockstate(UDTSOCKET u);
-// 
+//
 // }  // namespace UDT
-// 
+//
 // #endif

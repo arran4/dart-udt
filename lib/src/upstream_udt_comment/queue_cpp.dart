@@ -4,25 +4,25 @@
 // /*****************************************************************************
 // Copyright (c) 2001 - 2011, The Board of Trustees of the University of Illinois.
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
-// 
+//
 // * Redistributions of source code must retain the above
 //   copyright notice, this list of conditions and the
 //   following disclaimer.
-// 
+//
 // * Redistributions in binary form must reproduce the
 //   above copyright notice, this list of conditions
 //   and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// 
+//
 // * Neither the name of the University of Illinois
 //   nor the names of its contributors may be used to
 //   endorse or promote products derived from this
 //   software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 // IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -35,12 +35,12 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // *****************************************************************************/
-// 
+//
 // /*****************************************************************************
 // written by
 //    Yunhong Gu, last updated 05/05/2011
 // *****************************************************************************/
-// 
+//
 // #ifdef WIN32
 //    #include <winsock2.h>
 //    #include <ws2tcpip.h>
@@ -49,13 +49,13 @@
 //    #endif
 // #endif
 // #include <cstring>
-// 
+//
 // #include "common.h"
 // #include "core.h"
 // #include "queue.h"
-// 
+//
 // using namespace std;
-// 
+//
 // CUnitQueue::CUnitQueue():
 // m_pQEntry(NULL),
 // m_pCurrQueue(NULL),
@@ -66,16 +66,16 @@
 // m_iIPversion()
 // {
 // }
-// 
+//
 // CUnitQueue::~CUnitQueue()
 // {
 //    CQEntry* p = m_pQEntry;
-// 
+//
 //    while (p != NULL)
 //    {
 //       delete [] p->m_pUnit;
 //       delete [] p->m_pBuffer;
-// 
+//
 //       CQEntry* q = p;
 //       if (p == m_pLastQueue)
 //          p = NULL;
@@ -84,13 +84,13 @@
 //       delete q;
 //    }
 // }
-// 
+//
 // int CUnitQueue::init(int size, int mss, int version)
 // {
 //    CQEntry* tempq = NULL;
 //    CUnit* tempu = NULL;
 //    char* tempb = NULL;
-// 
+//
 //    try
 //    {
 //       tempq = new CQEntry;
@@ -102,10 +102,10 @@
 //       delete tempq;
 //       delete [] tempu;
 //       delete [] tempb;
-// 
+//
 //       return -1;
 //    }
-// 
+//
 //    for (int i = 0; i < size; ++ i)
 //    {
 //       tempu[i].m_iFlag = 0;
@@ -114,19 +114,19 @@
 //    tempq->m_pUnit = tempu;
 //    tempq->m_pBuffer = tempb;
 //    tempq->m_iSize = size;
-// 
+//
 //    m_pQEntry = m_pCurrQueue = m_pLastQueue = tempq;
 //    m_pQEntry->m_pNext = m_pQEntry;
-// 
+//
 //    m_pAvailUnit = m_pCurrQueue->m_pUnit;
-// 
+//
 //    m_iSize = size;
 //    m_iMSS = mss;
 //    m_iIPversion = version;
-// 
+//
 //    return 0;
 // }
-// 
+//
 // int CUnitQueue::increase()
 // {
 //    // adjust/correct m_iCount
@@ -138,7 +138,7 @@
 //       for (CUnit* end = u + p->m_iSize; u != end; ++ u)
 //          if (u->m_iFlag != 0)
 //             ++ real_count;
-// 
+//
 //       if (p == m_pLastQueue)
 //          p = NULL;
 //       else
@@ -147,14 +147,14 @@
 //    m_iCount = real_count;
 //    if (double(m_iCount) / m_iSize < 0.9)
 //       return -1;
-// 
+//
 //    CQEntry* tempq = NULL;
 //    CUnit* tempu = NULL;
 //    char* tempb = NULL;
-// 
+//
 //    // all queues have the same size
 //    int size = m_pQEntry->m_iSize;
-// 
+//
 //    try
 //    {
 //       tempq = new CQEntry;
@@ -166,10 +166,10 @@
 //       delete tempq;
 //       delete [] tempu;
 //       delete [] tempb;
-// 
+//
 //       return -1;
 //    }
-// 
+//
 //    for (int i = 0; i < size; ++ i)
 //    {
 //       tempu[i].m_iFlag = 0;
@@ -178,54 +178,54 @@
 //    tempq->m_pUnit = tempu;
 //    tempq->m_pBuffer = tempb;
 //    tempq->m_iSize = size;
-// 
+//
 //    m_pLastQueue->m_pNext = tempq;
 //    m_pLastQueue = tempq;
 //    m_pLastQueue->m_pNext = m_pQEntry;
-// 
+//
 //    m_iSize += size;
-// 
+//
 //    return 0;
 // }
-// 
+//
 // int CUnitQueue::shrink()
 // {
 //    // currently queue cannot be shrunk.
 //    return -1;
 // }
-// 
+//
 // CUnit* CUnitQueue::getNextAvailUnit()
 // {
 //    if (m_iCount * 10 > m_iSize * 9)
 //       increase();
-// 
+//
 //    if (m_iCount >= m_iSize)
 //       return NULL;
-// 
+//
 //    CQEntry* entrance = m_pCurrQueue;
-// 
+//
 //    do
 //    {
 //       for (CUnit* sentinel = m_pCurrQueue->m_pUnit + m_pCurrQueue->m_iSize - 1; m_pAvailUnit != sentinel; ++ m_pAvailUnit)
 //          if (m_pAvailUnit->m_iFlag == 0)
 //             return m_pAvailUnit;
-// 
+//
 //       if (m_pCurrQueue->m_pUnit->m_iFlag == 0)
 //       {
 //          m_pAvailUnit = m_pCurrQueue->m_pUnit;
 //          return m_pAvailUnit;
 //       }
-// 
+//
 //       m_pCurrQueue = m_pCurrQueue->m_pNext;
 //       m_pAvailUnit = m_pCurrQueue->m_pUnit;
 //    } while (m_pCurrQueue != entrance);
-// 
+//
 //    increase();
-// 
+//
 //    return NULL;
 // }
-// 
-// 
+//
+//
 // CSndUList::CSndUList():
 // m_pHeap(NULL),
 // m_iArrayLength(4096),
@@ -236,34 +236,34 @@
 // m_pTimer(NULL)
 // {
 //    m_pHeap = new CSNode*[m_iArrayLength];
-// 
+//
 //    #ifndef WIN32
 //       pthread_mutex_init(&m_ListLock, NULL);
 //    #else
 //       m_ListLock = CreateMutex(NULL, false, NULL);
 //    #endif
 // }
-// 
+//
 // CSndUList::~CSndUList()
 // {
 //    delete [] m_pHeap;
-// 
+//
 //    #ifndef WIN32
 //       pthread_mutex_destroy(&m_ListLock);
 //    #else
 //       CloseHandle(m_ListLock);
 //    #endif
 // }
-// 
+//
 // void CSndUList::insert(int64_t ts, const CUDT* u)
 // {
 //    CGuard listguard(m_ListLock);
-// 
+//
 //    // increase the heap array size if necessary
 //    if (m_iLastEntry == m_iArrayLength - 1)
 //    {
 //       CSNode** temp = NULL;
-// 
+//
 //       try
 //       {
 //          temp = new CSNode*[m_iArrayLength * 2];
@@ -272,101 +272,101 @@
 //       {
 //          return;
 //       }
-// 
+//
 //       memcpy(temp, m_pHeap, sizeof(CSNode*) * m_iArrayLength);
 //       m_iArrayLength *= 2;
 //       delete [] m_pHeap;
 //       m_pHeap = temp;
 //    }
-// 
+//
 //    insert_(ts, u);
 // }
-// 
+//
 // void CSndUList::update(const CUDT* u, bool reschedule)
 // {
 //    CGuard listguard(m_ListLock);
-// 
+//
 //    CSNode* n = u->m_pSNode;
-// 
+//
 //    if (n->m_iHeapLoc >= 0)
 //    {
 //       if (!reschedule)
 //          return;
-// 
+//
 //       if (n->m_iHeapLoc == 0)
 //       {
 //          n->m_llTimeStamp = 1;
 //          m_pTimer->interrupt();
 //          return;
 //       }
-// 
+//
 //       remove_(u);
 //    }
-// 
+//
 //    insert_(1, u);
 // }
-// 
+//
 // int CSndUList::pop(sockaddr*& addr, CPacket& pkt)
 // {
 //    CGuard listguard(m_ListLock);
-// 
+//
 //    if (-1 == m_iLastEntry)
 //       return -1;
-// 
+//
 //    // no pop until the next schedulled time
 //    uint64_t ts;
 //    CTimer::rdtsc(ts);
 //    if (ts < m_pHeap[0]->m_llTimeStamp)
 //       return -1;
-// 
+//
 //    CUDT* u = m_pHeap[0]->m_pUDT;
 //    remove_(u);
-// 
+//
 //    if (!u->m_bConnected || u->m_bBroken)
 //       return -1;
-// 
+//
 //    // pack a packet from the socket
 //    if (u->packData(pkt, ts) <= 0)
 //       return -1;
-// 
+//
 //    addr = u->m_pPeerAddr;
-// 
+//
 //    // insert a new entry, ts is the next processing time
 //    if (ts > 0)
 //       insert_(ts, u);
-// 
+//
 //    return 1;
 // }
-// 
+//
 // void CSndUList::remove(const CUDT* u)
 // {
 //    CGuard listguard(m_ListLock);
-// 
+//
 //    remove_(u);
 // }
-// 
+//
 // uint64_t CSndUList::getNextProcTime()
 // {
 //    CGuard listguard(m_ListLock);
-// 
+//
 //    if (-1 == m_iLastEntry)
 //       return 0;
-// 
+//
 //    return m_pHeap[0]->m_llTimeStamp;
 // }
-// 
+//
 // void CSndUList::insert_(int64_t ts, const CUDT* u)
 // {
 //    CSNode* n = u->m_pSNode;
-// 
+//
 //    // do not insert repeated node
 //    if (n->m_iHeapLoc >= 0)
 //       return;
-// 
+//
 //    m_iLastEntry ++;
 //    m_pHeap[m_iLastEntry] = n;
 //    n->m_llTimeStamp = ts;
-// 
+//
 //    int q = m_iLastEntry;
 //    int p = q;
 //    while (p != 0)
@@ -383,13 +383,13 @@
 //       else
 //          break;
 //    }
-// 
+//
 //    n->m_iHeapLoc = q;
-// 
+//
 //    // an earlier event has been inserted, wake up sending worker
 //    if (n->m_iHeapLoc == 0)
 //       m_pTimer->interrupt();
-// 
+//
 //    // first entry, activate the sending queue
 //    if (0 == m_iLastEntry)
 //    {
@@ -402,25 +402,25 @@
 //       #endif
 //    }
 // }
-// 
+//
 // void CSndUList::remove_(const CUDT* u)
 // {
 //    CSNode* n = u->m_pSNode;
-// 
+//
 //    if (n->m_iHeapLoc >= 0)
 //    {
 //       // remove the node from heap
 //       m_pHeap[n->m_iHeapLoc] = m_pHeap[m_iLastEntry];
 //       m_iLastEntry --;
 //       m_pHeap[n->m_iHeapLoc]->m_iHeapLoc = n->m_iHeapLoc;
-// 
+//
 //       int q = n->m_iHeapLoc;
 //       int p = q * 2 + 1;
 //       while (p <= m_iLastEntry)
 //       {
 //          if ((p + 1 <= m_iLastEntry) && (m_pHeap[p]->m_llTimeStamp > m_pHeap[p + 1]->m_llTimeStamp))
 //             p ++;
-// 
+//
 //          if (m_pHeap[q]->m_llTimeStamp > m_pHeap[p]->m_llTimeStamp)
 //          {
 //             CSNode* t = m_pHeap[p];
@@ -428,22 +428,22 @@
 //             m_pHeap[p]->m_iHeapLoc = p;
 //             m_pHeap[q] = t;
 //             m_pHeap[q]->m_iHeapLoc = q;
-// 
+//
 //             q = p;
 //             p = q * 2 + 1;
 //          }
 //          else
 //             break;
 //       }
-// 
+//
 //       n->m_iHeapLoc = -1;
 //    }
-// 
+//
 //    // the only event has been deleted, wake up immediately
 //    if (0 == m_iLastEntry)
 //       m_pTimer->interrupt();
 // }
-// 
+//
 // //
 // CSndQueue::CSndQueue():
 // m_WorkerThread(),
@@ -464,11 +464,11 @@
 //       m_ExitCond = CreateEvent(NULL, false, false, NULL);
 //    #endif
 // }
-// 
+//
 // CSndQueue::~CSndQueue()
 // {
 //    m_bClosing = true;
-// 
+//
 //    #ifndef WIN32
 //       pthread_mutex_lock(&m_WindowLock);
 //       pthread_cond_signal(&m_WindowCond);
@@ -486,10 +486,10 @@
 //       CloseHandle(m_WindowCond);
 //       CloseHandle(m_ExitCond);
 //    #endif
-// 
+//
 //    delete m_pSndUList;
 // }
-// 
+//
 // void CSndQueue::init(CChannel* c, CTimer* t)
 // {
 //    m_pChannel = c;
@@ -498,7 +498,7 @@
 //    m_pSndUList->m_pWindowLock = &m_WindowLock;
 //    m_pSndUList->m_pWindowCond = &m_WindowCond;
 //    m_pSndUList->m_pTimer = m_pTimer;
-// 
+//
 //    #ifndef WIN32
 //       if (0 != pthread_create(&m_WorkerThread, NULL, CSndQueue::worker, this))
 //       {
@@ -512,7 +512,7 @@
 //          throw CUDTException(3, 1);
 //    #endif
 // }
-// 
+//
 // #ifndef WIN32
 //    void* CSndQueue::worker(void* param)
 // #else
@@ -520,11 +520,11 @@
 // #endif
 // {
 //    CSndQueue* self = (CSndQueue*)param;
-// 
+//
 //    while (!self->m_bClosing)
 //    {
 //       uint64_t ts = self->m_pSndUList->getNextProcTime();
-// 
+//
 //       if (ts > 0)
 //       {
 //          // wait until next processing time of the first socket on the list
@@ -532,13 +532,13 @@
 //          CTimer::rdtsc(currtime);
 //          if (currtime < ts)
 //             self->m_pTimer->sleepto(ts);
-// 
+//
 //          // it is time to send the next pkt
 //          sockaddr* addr;
 //          CPacket pkt;
 //          if (self->m_pSndUList->pop(addr, pkt) < 0)
 //             continue;
-// 
+//
 //          self->m_pChannel->sendto(addr, pkt);
 //       }
 //       else
@@ -554,7 +554,7 @@
 //          #endif
 //       }
 //    }
-// 
+//
 //    #ifndef WIN32
 //       return NULL;
 //    #else
@@ -562,54 +562,54 @@
 //       return 0;
 //    #endif
 // }
-// 
+//
 // int CSndQueue::sendto(const sockaddr* addr, CPacket& packet)
 // {
 //    // send out the packet immediately (high priority), this is a control packet
 //    m_pChannel->sendto(addr, packet);
 //    return packet.getLength();
 // }
-// 
-// 
+//
+//
 // //
 // CRcvUList::CRcvUList():
 // m_pUList(NULL),
 // m_pLast(NULL)
 // {
 // }
-// 
+//
 // CRcvUList::~CRcvUList()
 // {
 // }
-// 
+//
 // void CRcvUList::insert(const CUDT* u)
 // {
 //    CRNode* n = u->m_pRNode;
 //    CTimer::rdtsc(n->m_llTimeStamp);
-// 
+//
 //    if (NULL == m_pUList)
 //    {
 //       // empty list, insert as the single node
 //       n->m_pPrev = n->m_pNext = NULL;
 //       m_pLast = m_pUList = n;
-// 
+//
 //       return;
 //    }
-// 
+//
 //    // always insert at the end for RcvUList
 //    n->m_pPrev = m_pLast;
 //    n->m_pNext = NULL;
 //    m_pLast->m_pNext = n;
 //    m_pLast = n;
 // }
-// 
+//
 // void CRcvUList::remove(const CUDT* u)
 // {
 //    CRNode* n = u->m_pRNode;
-// 
+//
 //    if (!n->m_bOnList)
 //       return;
-// 
+//
 //    if (NULL == n->m_pPrev)
 //    {
 //       // n is the first node
@@ -630,23 +630,23 @@
 //       else
 //          n->m_pNext->m_pPrev = n->m_pPrev;
 //    }
-// 
+//
 //    n->m_pNext = n->m_pPrev = NULL;
 // }
-// 
+//
 // void CRcvUList::update(const CUDT* u)
 // {
 //    CRNode* n = u->m_pRNode;
-// 
+//
 //    if (!n->m_bOnList)
 //       return;
-// 
+//
 //    CTimer::rdtsc(n->m_llTimeStamp);
-// 
+//
 //    // if n is the last node, do not need to change
 //    if (NULL == n->m_pNext)
 //       return;
-// 
+//
 //    if (NULL == n->m_pPrev)
 //    {
 //       m_pUList = n->m_pNext;
@@ -657,20 +657,20 @@
 //       n->m_pPrev->m_pNext = n->m_pNext;
 //       n->m_pNext->m_pPrev = n->m_pPrev;
 //    }
-// 
+//
 //    n->m_pPrev = m_pLast;
 //    n->m_pNext = NULL;
 //    m_pLast->m_pNext = n;
 //    m_pLast = n;
 // }
-// 
+//
 // //
 // CHash::CHash():
 // m_pBucket(NULL),
 // m_iHashSize(0)
 // {
 // }
-// 
+//
 // CHash::~CHash()
 // {
 //    for (int i = 0; i < m_iHashSize; ++ i)
@@ -683,52 +683,52 @@
 //          b = n;
 //       }
 //    }
-// 
+//
 //    delete [] m_pBucket;
 // }
-// 
+//
 // void CHash::init(int size)
 // {
 //    m_pBucket = new CBucket* [size];
-// 
+//
 //    for (int i = 0; i < size; ++ i)
 //       m_pBucket[i] = NULL;
-// 
+//
 //    m_iHashSize = size;
 // }
-// 
+//
 // CUDT* CHash::lookup(int32_t id)
 // {
 //    // simple hash function (% hash table size); suitable for socket descriptors
 //    CBucket* b = m_pBucket[id % m_iHashSize];
-// 
+//
 //    while (NULL != b)
 //    {
 //       if (id == b->m_iID)
 //          return b->m_pUDT;
 //       b = b->m_pNext;
 //    }
-// 
+//
 //    return NULL;
 // }
-// 
+//
 // void CHash::insert(int32_t id, CUDT* u)
 // {
 //    CBucket* b = m_pBucket[id % m_iHashSize];
-// 
+//
 //    CBucket* n = new CBucket;
 //    n->m_iID = id;
 //    n->m_pUDT = u;
 //    n->m_pNext = b;
-// 
+//
 //    m_pBucket[id % m_iHashSize] = n;
 // }
-// 
+//
 // void CHash::remove(int32_t id)
 // {
 //    CBucket* b = m_pBucket[id % m_iHashSize];
 //    CBucket* p = NULL;
-// 
+//
 //    while (NULL != b)
 //    {
 //       if (id == b->m_iID)
@@ -737,18 +737,18 @@
 //             m_pBucket[id % m_iHashSize] = b->m_pNext;
 //          else
 //             p->m_pNext = b->m_pNext;
-// 
+//
 //          delete b;
-// 
+//
 //          return;
 //       }
-// 
+//
 //       p = b;
 //       b = b->m_pNext;
 //    }
 // }
-// 
-// 
+//
+//
 // //
 // CRendezvousQueue::CRendezvousQueue():
 // m_lRendezvousID(),
@@ -760,7 +760,7 @@
 //       m_RIDVectorLock = CreateMutex(NULL, false, NULL);
 //    #endif
 // }
-// 
+//
 // CRendezvousQueue::~CRendezvousQueue()
 // {
 //    #ifndef WIN32
@@ -768,7 +768,7 @@
 //    #else
 //       CloseHandle(m_RIDVectorLock);
 //    #endif
-// 
+//
 //    for (list<CRL>::iterator i = m_lRendezvousID.begin(); i != m_lRendezvousID.end(); ++ i)
 //    {
 //       if (AF_INET == i->m_iIPversion)
@@ -776,14 +776,14 @@
 //       else
 //          delete (sockaddr_in6*)i->m_pPeerAddr;
 //    }
-// 
+//
 //    m_lRendezvousID.clear();
 // }
-// 
+//
 // void CRendezvousQueue::insert(const UDTSOCKET& id, CUDT* u, int ipv, const sockaddr* addr, uint64_t ttl)
 // {
 //    CGuard vg(m_RIDVectorLock);
-// 
+//
 //    CRL r;
 //    r.m_iID = id;
 //    r.m_pUDT = u;
@@ -791,14 +791,14 @@
 //    r.m_pPeerAddr = (AF_INET == ipv) ? (sockaddr*)new sockaddr_in : (sockaddr*)new sockaddr_in6;
 //    memcpy(r.m_pPeerAddr, addr, (AF_INET == ipv) ? sizeof(sockaddr_in) : sizeof(sockaddr_in6));
 //    r.m_ullTTL = ttl;
-// 
+//
 //    m_lRendezvousID.push_back(r);
 // }
-// 
+//
 // void CRendezvousQueue::remove(const UDTSOCKET& id)
 // {
 //    CGuard vg(m_RIDVectorLock);
-// 
+//
 //    for (list<CRL>::iterator i = m_lRendezvousID.begin(); i != m_lRendezvousID.end(); ++ i)
 //    {
 //       if (i->m_iID == id)
@@ -807,18 +807,18 @@
 //             delete (sockaddr_in*)i->m_pPeerAddr;
 //          else
 //             delete (sockaddr_in6*)i->m_pPeerAddr;
-// 
+//
 //          m_lRendezvousID.erase(i);
-// 
+//
 //          return;
 //       }
 //    }
 // }
-// 
+//
 // CUDT* CRendezvousQueue::retrieve(const sockaddr* addr, UDTSOCKET& id)
 // {
 //    CGuard vg(m_RIDVectorLock);
-// 
+//
 //    // TODO: optimize search
 //    for (list<CRL>::iterator i = m_lRendezvousID.begin(); i != m_lRendezvousID.end(); ++ i)
 //    {
@@ -828,17 +828,17 @@
 //          return i->m_pUDT;
 //       }
 //    }
-// 
+//
 //    return NULL;
 // }
-// 
+//
 // void CRendezvousQueue::updateConnStatus()
 // {
 //    if (m_lRendezvousID.empty())
 //       return;
-// 
+//
 //    CGuard vg(m_RIDVectorLock);
-// 
+//
 //    for (list<CRL>::iterator i = m_lRendezvousID.begin(); i != m_lRendezvousID.end(); ++ i)
 //    {
 //       // avoid sending too many requests, at most 1 request per 250ms
@@ -851,7 +851,7 @@
 //             CUDT::s_UDTUnited.m_EPoll.update_events(i->m_iID, i->m_pUDT->m_sPollID, UDT_EPOLL_ERR, true);
 //             continue;
 //          }
-// 
+//
 //          CPacket request;
 //          char* reqdata = new char [i->m_pUDT->m_iPayloadSize];
 //          request.pack(0, NULL, reqdata, i->m_pUDT->m_iPayloadSize);
@@ -866,7 +866,7 @@
 //       }
 //    }
 // }
-// 
+//
 // //
 // CRcvQueue::CRcvQueue():
 // m_WorkerThread(),
@@ -900,11 +900,11 @@
 //       m_ExitCond = CreateEvent(NULL, false, false, NULL);
 //    #endif
 // }
-// 
+//
 // CRcvQueue::~CRcvQueue()
 // {
 //    m_bClosing = true;
-// 
+//
 //    #ifndef WIN32
 //       if (0 != m_WorkerThread)
 //          pthread_join(m_WorkerThread, NULL);
@@ -922,11 +922,11 @@
 //       CloseHandle(m_IDLock);
 //       CloseHandle(m_ExitCond);
 //    #endif
-// 
+//
 //    delete m_pRcvUList;
 //    delete m_pHash;
 //    delete m_pRendezvousQueue;
-// 
+//
 //    // remove all queued messages
 //    for (map<int32_t, std::queue<CPacket*> >::iterator i = m_mBuffer.begin(); i != m_mBuffer.end(); ++ i)
 //    {
@@ -939,22 +939,22 @@
 //       }
 //    }
 // }
-// 
+//
 // void CRcvQueue::init(int qsize, int payload, int version, int hsize, CChannel* cc, CTimer* t)
 // {
 //    m_iPayloadSize = payload;
-// 
+//
 //    m_UnitQueue.init(qsize, payload, version);
-// 
+//
 //    m_pHash = new CHash;
 //    m_pHash->init(hsize);
-// 
+//
 //    m_pChannel = cc;
 //    m_pTimer = t;
-// 
+//
 //    m_pRcvUList = new CRcvUList;
 //    m_pRendezvousQueue = new CRendezvousQueue;
-// 
+//
 //    #ifndef WIN32
 //       if (0 != pthread_create(&m_WorkerThread, NULL, CRcvQueue::worker, this))
 //       {
@@ -968,7 +968,7 @@
 //          throw CUDTException(3, 1);
 //    #endif
 // }
-// 
+//
 // #ifndef WIN32
 //    void* CRcvQueue::worker(void* param)
 // #else
@@ -976,17 +976,17 @@
 // #endif
 // {
 //    CRcvQueue* self = (CRcvQueue*)param;
-// 
+//
 //    sockaddr* addr = (AF_INET == self->m_UnitQueue.m_iIPversion) ? (sockaddr*) new sockaddr_in : (sockaddr*) new sockaddr_in6;
 //    CUDT* u = NULL;
 //    int32_t id;
-// 
+//
 //    while (!self->m_bClosing)
 //    {
 //       #ifdef NO_BUSY_WAITING
 //          self->m_pTimer->tick();
 //       #endif
-// 
+//
 //       // check waiting list, if new socket, insert it to the list
 //       while (self->ifNewEntry())
 //       {
@@ -997,7 +997,7 @@
 //             self->m_pHash->insert(ne->m_SocketID, ne);
 //          }
 //       }
-// 
+//
 //       // find next available slot for incoming packet
 //       CUnit* unit = self->m_UnitQueue.getNextAvailUnit();
 //       if (NULL == unit)
@@ -1010,15 +1010,15 @@
 //          delete [] temp.m_pcData;
 //          goto TIMER_CHECK;
 //       }
-// 
+//
 //       unit->m_Packet.setLength(self->m_iPayloadSize);
-// 
+//
 //       // reading next incoming packet, recvfrom returns -1 is nothing has been received
 //       if (self->m_pChannel->recvfrom(addr, unit->m_Packet) < 0)
 //          goto TIMER_CHECK;
-// 
+//
 //       id = unit->m_Packet.m_iID;
-// 
+//
 //       // ID 0 is for connection request, which should be passed to the listening socket or rendezvous sockets
 //       if (0 == id)
 //       {
@@ -1046,7 +1046,7 @@
 //                      u->processData(unit);
 //                   else
 //                      u->processCtrl(unit->m_Packet);
-// 
+//
 //                   u->checkTimers();
 //                   self->m_pRcvUList->update(u);
 //                }
@@ -1060,19 +1060,19 @@
 //                self->storePkt(id, unit->m_Packet.clone());
 //          }
 //       }
-// 
+//
 // TIMER_CHECK:
 //       // take care of the timing event for all UDT sockets
-// 
+//
 //       uint64_t currtime;
 //       CTimer::rdtsc(currtime);
-// 
+//
 //       CRNode* ul = self->m_pRcvUList->m_pUList;
 //       uint64_t ctime = currtime - 100000 * CTimer::getCPUFrequency();
 //       while ((NULL != ul) && (ul->m_llTimeStamp < ctime))
 //       {
 //          CUDT* u = ul->m_pUDT;
-// 
+//
 //          if (u->m_bConnected && !u->m_bBroken && !u->m_bClosing)
 //          {
 //             u->checkTimers();
@@ -1085,19 +1085,19 @@
 //             self->m_pRcvUList->remove(u);
 //             u->m_pRNode->m_bOnList = false;
 //          }
-// 
+//
 //          ul = self->m_pRcvUList->m_pUList;
 //       }
-// 
+//
 //       // Check connection requests status for all sockets in the RendezvousQueue.
 //       self->m_pRendezvousQueue->updateConnStatus();
 //    }
-// 
+//
 //    if (AF_INET == self->m_UnitQueue.m_iIPversion)
 //       delete (sockaddr_in*)addr;
 //    else
 //       delete (sockaddr_in6*)addr;
-// 
+//
 //    #ifndef WIN32
 //       return NULL;
 //    #else
@@ -1105,29 +1105,29 @@
 //       return 0;
 //    #endif
 // }
-// 
+//
 // int CRcvQueue::recvfrom(int32_t id, CPacket& packet)
 // {
 //    CGuard bufferlock(m_PassLock);
-// 
+//
 //    map<int32_t, std::queue<CPacket*> >::iterator i = m_mBuffer.find(id);
-// 
+//
 //    if (i == m_mBuffer.end())
 //    {
 //       #ifndef WIN32
 //          uint64_t now = CTimer::getTime();
 //          timespec timeout;
-// 
+//
 //          timeout.tv_sec = now / 1000000 + 1;
 //          timeout.tv_nsec = (now % 1000000) * 1000;
-// 
+//
 //          pthread_cond_timedwait(&m_PassCond, &m_PassLock, &timeout);
 //       #else
 //          ReleaseMutex(m_PassLock);
 //          WaitForSingleObject(m_PassCond, 1000);
 //          WaitForSingleObject(m_PassLock, INFINITE);
 //       #endif
-// 
+//
 //       i = m_mBuffer.find(id);
 //       if (i == m_mBuffer.end())
 //       {
@@ -1135,63 +1135,63 @@
 //          return -1;
 //       }
 //    }
-// 
+//
 //    // retrieve the earliest packet
 //    CPacket* newpkt = i->second.front();
-// 
+//
 //    if (packet.getLength() < newpkt->getLength())
 //    {
 //       packet.setLength(-1);
 //       return -1;
 //    }
-// 
+//
 //    // copy packet content
 //    memcpy(packet.m_nHeader, newpkt->m_nHeader, CPacket::m_iPktHdrSize);
 //    memcpy(packet.m_pcData, newpkt->m_pcData, newpkt->getLength());
 //    packet.setLength(newpkt->getLength());
-// 
+//
 //    delete [] newpkt->m_pcData;
 //    delete newpkt;
-// 
-//    // remove this message from queue, 
+//
+//    // remove this message from queue,
 //    // if no more messages left for this socket, release its data structure
 //    i->second.pop();
 //    if (i->second.empty())
 //       m_mBuffer.erase(i);
-// 
+//
 //    return packet.getLength();
 // }
-// 
+//
 // int CRcvQueue::setListener(CUDT* u)
 // {
 //    CGuard lslock(m_LSLock);
-// 
+//
 //    if (NULL != m_pListener)
 //       return -1;
-// 
+//
 //    m_pListener = u;
 //    return 0;
 // }
-// 
+//
 // void CRcvQueue::removeListener(const CUDT* u)
 // {
 //    CGuard lslock(m_LSLock);
-// 
+//
 //    if (u == m_pListener)
 //       m_pListener = NULL;
 // }
-// 
+//
 // void CRcvQueue::registerConnector(const UDTSOCKET& id, CUDT* u, int ipv, const sockaddr* addr, uint64_t ttl)
 // {
 //    m_pRendezvousQueue->insert(id, u, ipv, addr, ttl);
 // }
-// 
+//
 // void CRcvQueue::removeConnector(const UDTSOCKET& id)
 // {
 //    m_pRendezvousQueue->remove(id);
-// 
+//
 //    CGuard bufferlock(m_PassLock);
-// 
+//
 //    map<int32_t, std::queue<CPacket*> >::iterator i = m_mBuffer.find(id);
 //    if (i != m_mBuffer.end())
 //    {
@@ -1204,41 +1204,41 @@
 //       m_mBuffer.erase(i);
 //    }
 // }
-// 
+//
 // void CRcvQueue::setNewEntry(CUDT* u)
 // {
 //    CGuard listguard(m_IDLock);
 //    m_vNewEntry.push_back(u);
 // }
-// 
+//
 // bool CRcvQueue::ifNewEntry()
 // {
 //    return !(m_vNewEntry.empty());
 // }
-// 
+//
 // CUDT* CRcvQueue::getNewEntry()
 // {
 //    CGuard listguard(m_IDLock);
-// 
+//
 //    if (m_vNewEntry.empty())
 //       return NULL;
-// 
+//
 //    CUDT* u = (CUDT*)*(m_vNewEntry.begin());
 //    m_vNewEntry.erase(m_vNewEntry.begin());
-// 
+//
 //    return u;
 // }
-// 
+//
 // void CRcvQueue::storePkt(int32_t id, CPacket* pkt)
 // {
-//    CGuard bufferlock(m_PassLock);   
-// 
+//    CGuard bufferlock(m_PassLock);
+//
 //    map<int32_t, std::queue<CPacket*> >::iterator i = m_mBuffer.find(id);
-// 
+//
 //    if (i == m_mBuffer.end())
 //    {
 //       m_mBuffer[id].push(pkt);
-// 
+//
 //       #ifndef WIN32
 //          pthread_cond_signal(&m_PassCond);
 //       #else
@@ -1250,7 +1250,7 @@
 //       //avoid storing too many packets, in case of malfunction or attack
 //       if (i->second.size() > 16)
 //          return;
-// 
+//
 //       i->second.push(pkt);
 //    }
 // }

@@ -4,25 +4,25 @@
 // /*****************************************************************************
 // Copyright (c) 2001 - 2010, The Board of Trustees of the University of Illinois.
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
-// 
+//
 // * Redistributions of source code must retain the above
 //   copyright notice, this list of conditions and the
 //   following disclaimer.
-// 
+//
 // * Redistributions in binary form must reproduce the
 //   above copyright notice, this list of conditions
 //   and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// 
+//
 // * Neither the name of the University of Illinois
 //   nor the names of its contributors may be used to
 //   endorse or promote products derived from this
 //   software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 // IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -35,13 +35,13 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // *****************************************************************************/
-// 
+//
 // /*****************************************************************************
 // written by
 //    Yunhong Gu, last updated 07/25/2010
 // *****************************************************************************/
-// 
-// 
+//
+//
 // #ifndef WIN32
 //    #include <cstring>
 //    #include <cerrno>
@@ -56,11 +56,11 @@
 //       #include <wspiapi.h>
 //    #endif
 // #endif
-// 
+//
 // #include <cmath>
 // #include "md5.h"
 // #include "common.h"
-// 
+//
 // bool CTimer::m_bUseMicroSecond = false;
 // uint64_t CTimer::s_ullCPUFrequency = CTimer::readCPUFrequency();
 // #ifndef WIN32
@@ -70,7 +70,7 @@
 //    pthread_mutex_t CTimer::m_EventLock = CreateMutex(NULL, false, NULL);
 //    pthread_cond_t CTimer::m_EventCond = CreateEvent(NULL, false, false, NULL);
 // #endif
-// 
+//
 // CTimer::CTimer():
 // m_ullSchedTime(),
 // m_TickCond(),
@@ -84,7 +84,7 @@
 //       m_TickCond = CreateEvent(NULL, false, false, NULL);
 //    #endif
 // }
-// 
+//
 // CTimer::~CTimer()
 // {
 //    #ifndef WIN32
@@ -95,7 +95,7 @@
 //       CloseHandle(m_TickCond);
 //    #endif
 // }
-// 
+//
 // void CTimer::rdtsc(uint64_t &x)
 // {
 //    if (m_bUseMicroSecond)
@@ -103,7 +103,7 @@
 //       x = getTime();
 //       return;
 //    }
-// 
+//
 //    #ifdef IA32
 //       uint32_t lval, hval;
 //       //asm volatile ("push %eax; push %ebx; push %ecx; push %edx");
@@ -120,8 +120,8 @@
 //       x = hval;
 //       x = (x << 32) | lval;
 //    #elif defined(WIN32)
-//       //HANDLE hCurThread = ::GetCurrentThread(); 
-//       //DWORD_PTR dwOldMask = ::SetThreadAffinityMask(hCurThread, 1); 
+//       //HANDLE hCurThread = ::GetCurrentThread();
+//       //DWORD_PTR dwOldMask = ::SetThreadAffinityMask(hCurThread, 1);
 //       BOOL ret = QueryPerformanceCounter((LARGE_INTEGER *)&x);
 //       //SetThreadAffinityMask(hCurThread, dwOldMask);
 //       if (!ret)
@@ -133,21 +133,21 @@
 //       x = getTime();
 //    #endif
 // }
-// 
+//
 // uint64_t CTimer::readCPUFrequency()
 // {
 //    uint64_t frequency = 1;  // 1 tick per microsecond.
-// 
+//
 //    #if defined(IA32) || defined(IA64) || defined(AMD64)
 //       uint64_t t1, t2;
-// 
+//
 //       rdtsc(t1);
 //       timespec ts;
 //       ts.tv_sec = 0;
 //       ts.tv_nsec = 100000000;
 //       nanosleep(&ts, NULL);
 //       rdtsc(t2);
-// 
+//
 //       // CPU clocks per microsecond
 //       frequency = (t2 - t1) / 100000;
 //    #elif defined(WIN32)
@@ -159,7 +159,7 @@
 //       mach_timebase_info(&info);
 //       frequency = info.denom * 1000ULL / info.numer;
 //    #endif
-// 
+//
 //    // Fall back to microsecond if the resolution is not high enough.
 //    if (frequency < 10)
 //    {
@@ -168,29 +168,29 @@
 //    }
 //    return frequency;
 // }
-// 
+//
 // uint64_t CTimer::getCPUFrequency()
 // {
 //    return s_ullCPUFrequency;
 // }
-// 
+//
 // void CTimer::sleep(uint64_t interval)
 // {
 //    uint64_t t;
 //    rdtsc(t);
-// 
+//
 //    // sleep next "interval" time
 //    sleepto(t + interval);
 // }
-// 
+//
 // void CTimer::sleepto(uint64_t nexttime)
 // {
 //    // Use class member such that the method can be interrupted by others
 //    m_ullSchedTime = nexttime;
-// 
+//
 //    uint64_t t;
 //    rdtsc(t);
-// 
+//
 //    while (t < m_ullSchedTime)
 //    {
 //       #ifndef NO_BUSY_WAITING
@@ -223,18 +223,18 @@
 //             WaitForSingleObject(m_TickCond, 1);
 //          #endif
 //       #endif
-// 
+//
 //       rdtsc(t);
 //    }
 // }
-// 
+//
 // void CTimer::interrupt()
 // {
 //    // schedule the sleepto time to the current CCs, so that it will stop
 //    rdtsc(m_ullSchedTime);
 //    tick();
 // }
-// 
+//
 // void CTimer::tick()
 // {
 //    #ifndef WIN32
@@ -243,7 +243,7 @@
 //       SetEvent(m_TickCond);
 //    #endif
 // }
-// 
+//
 // uint64_t CTimer::getTime()
 // {
 //    //For Cygwin and other systems without microsecond level resolution, uncomment the following three lines
@@ -251,30 +251,30 @@
 //    //rdtsc(x);
 //    //return x / s_ullCPUFrequency;
 //    //Specific fix may be necessary if rdtsc is not available either.
-// 
+//
 //    #ifndef WIN32
 //       timeval t;
 //       gettimeofday(&t, 0);
 //       return t.tv_sec * 1000000ULL + t.tv_usec;
 //    #else
 //       LARGE_INTEGER ccf;
-//       HANDLE hCurThread = ::GetCurrentThread(); 
+//       HANDLE hCurThread = ::GetCurrentThread();
 //       DWORD_PTR dwOldMask = ::SetThreadAffinityMask(hCurThread, 1);
 //       if (QueryPerformanceFrequency(&ccf))
 //       {
 //          LARGE_INTEGER cc;
 //          if (QueryPerformanceCounter(&cc))
 //          {
-//             SetThreadAffinityMask(hCurThread, dwOldMask); 
+//             SetThreadAffinityMask(hCurThread, dwOldMask);
 //             return (cc.QuadPart * 1000000ULL / ccf.QuadPart);
 //          }
 //       }
-// 
-//       SetThreadAffinityMask(hCurThread, dwOldMask); 
+//
+//       SetThreadAffinityMask(hCurThread, dwOldMask);
 //       return GetTickCount() * 1000ULL;
 //    #endif
 // }
-// 
+//
 // void CTimer::triggerEvent()
 // {
 //    #ifndef WIN32
@@ -283,7 +283,7 @@
 //       SetEvent(m_EventCond);
 //    #endif
 // }
-// 
+//
 // void CTimer::waitForEvent()
 // {
 //    #ifndef WIN32
@@ -307,7 +307,7 @@
 //       WaitForSingleObject(m_EventCond, 1);
 //    #endif
 // }
-// 
+//
 // void CTimer::sleep()
 // {
 //    #ifndef WIN32
@@ -316,8 +316,8 @@
 //       Sleep(1);
 //    #endif
 // }
-// 
-// 
+//
+//
 // //
 // // Automatically lock in constructor
 // CGuard::CGuard(pthread_mutex_t& lock):
@@ -330,7 +330,7 @@
 //       m_iLocked = WaitForSingleObject(m_Mutex, INFINITE);
 //    #endif
 // }
-// 
+//
 // // Automatically unlock in destructor
 // CGuard::~CGuard()
 // {
@@ -342,7 +342,7 @@
 //          ReleaseMutex(m_Mutex);
 //    #endif
 // }
-// 
+//
 // void CGuard::enterCS(pthread_mutex_t& lock)
 // {
 //    #ifndef WIN32
@@ -351,7 +351,7 @@
 //       WaitForSingleObject(lock, INFINITE);
 //    #endif
 // }
-// 
+//
 // void CGuard::leaveCS(pthread_mutex_t& lock)
 // {
 //    #ifndef WIN32
@@ -360,7 +360,7 @@
 //       ReleaseMutex(lock);
 //    #endif
 // }
-// 
+//
 // void CGuard::createMutex(pthread_mutex_t& lock)
 // {
 //    #ifndef WIN32
@@ -369,7 +369,7 @@
 //       lock = CreateMutex(NULL, false, NULL);
 //    #endif
 // }
-// 
+//
 // void CGuard::releaseMutex(pthread_mutex_t& lock)
 // {
 //    #ifndef WIN32
@@ -378,7 +378,7 @@
 //       CloseHandle(lock);
 //    #endif
 // }
-// 
+//
 // void CGuard::createCond(pthread_cond_t& cond)
 // {
 //    #ifndef WIN32
@@ -387,7 +387,7 @@
 //       cond = CreateEvent(NULL, false, false, NULL);
 //    #endif
 // }
-// 
+//
 // void CGuard::releaseCond(pthread_cond_t& cond)
 // {
 //    #ifndef WIN32
@@ -395,9 +395,9 @@
 //    #else
 //       CloseHandle(cond);
 //    #endif
-// 
+//
 // }
-// 
+//
 // //
 // CUDTException::CUDTException(int major, int minor, int err):
 // m_iMajor(major),
@@ -412,7 +412,7 @@
 //    else
 //       m_iErrno = err;
 // }
-// 
+//
 // CUDTException::CUDTException(const CUDTException& e):
 // m_iMajor(e.m_iMajor),
 // m_iMinor(e.m_iMinor),
@@ -420,202 +420,202 @@
 // m_strMsg()
 // {
 // }
-// 
+//
 // CUDTException::~CUDTException()
 // {
 // }
-// 
+//
 // const char* CUDTException::getErrorMessage()
 // {
 //    // translate "Major:Minor" code into text message.
-// 
+//
 //    switch (m_iMajor)
 //    {
 //       case 0:
 //         m_strMsg = "Success";
 //         break;
-// 
+//
 //       case 1:
 //         m_strMsg = "Connection setup failure";
-// 
+//
 //         switch (m_iMinor)
 //         {
 //         case 1:
 //            m_strMsg += ": connection time out";
 //            break;
-// 
+//
 //         case 2:
 //            m_strMsg += ": connection rejected";
 //            break;
-// 
+//
 //         case 3:
 //            m_strMsg += ": unable to create/configure UDP socket";
 //            break;
-// 
+//
 //         case 4:
 //            m_strMsg += ": abort for security reasons";
 //            break;
-// 
+//
 //         default:
 //            break;
 //         }
-// 
+//
 //         break;
-// 
+//
 //       case 2:
 //         switch (m_iMinor)
 //         {
 //         case 1:
 //            m_strMsg = "Connection was broken";
 //            break;
-// 
+//
 //         case 2:
 //            m_strMsg = "Connection does not exist";
 //            break;
-// 
+//
 //         default:
 //            break;
 //         }
-// 
+//
 //         break;
-// 
+//
 //       case 3:
 //         m_strMsg = "System resource failure";
-// 
+//
 //         switch (m_iMinor)
 //         {
 //         case 1:
 //            m_strMsg += ": unable to create new threads";
 //            break;
-// 
+//
 //         case 2:
 //            m_strMsg += ": unable to allocate buffers";
 //            break;
-// 
+//
 //         default:
 //            break;
 //         }
-// 
+//
 //         break;
-// 
+//
 //       case 4:
 //         m_strMsg = "File system failure";
-// 
+//
 //         switch (m_iMinor)
 //         {
 //         case 1:
 //            m_strMsg += ": cannot seek read position";
 //            break;
-// 
+//
 //         case 2:
 //            m_strMsg += ": failure in read";
 //            break;
-// 
+//
 //         case 3:
 //            m_strMsg += ": cannot seek write position";
 //            break;
-// 
+//
 //         case 4:
 //            m_strMsg += ": failure in write";
 //            break;
-// 
+//
 //         default:
 //            break;
 //         }
-// 
+//
 //         break;
-// 
+//
 //       case 5:
 //         m_strMsg = "Operation not supported";
-//  
+//
 //         switch (m_iMinor)
 //         {
 //         case 1:
 //            m_strMsg += ": Cannot do this operation on a BOUND socket";
 //            break;
-// 
+//
 //         case 2:
 //            m_strMsg += ": Cannot do this operation on a CONNECTED socket";
 //            break;
-// 
+//
 //         case 3:
 //            m_strMsg += ": Bad parameters";
 //            break;
-// 
+//
 //         case 4:
 //            m_strMsg += ": Invalid socket ID";
 //            break;
-// 
+//
 //         case 5:
 //            m_strMsg += ": Cannot do this operation on an UNBOUND socket";
 //            break;
-// 
+//
 //         case 6:
 //            m_strMsg += ": Socket is not in listening state";
 //            break;
-// 
+//
 //         case 7:
 //            m_strMsg += ": Listen/accept is not supported in rendezous connection setup";
 //            break;
-// 
+//
 //         case 8:
 //            m_strMsg += ": Cannot call connect on UNBOUND socket in rendezvous connection setup";
 //            break;
-// 
+//
 //         case 9:
 //            m_strMsg += ": This operation is not supported in SOCK_STREAM mode";
 //            break;
-// 
+//
 //         case 10:
 //            m_strMsg += ": This operation is not supported in SOCK_DGRAM mode";
 //            break;
-// 
+//
 //         case 11:
 //            m_strMsg += ": Another socket is already listening on the same port";
 //            break;
-// 
+//
 //         case 12:
 //            m_strMsg += ": Message is too large to send (it must be less than the UDT send buffer size)";
 //            break;
-// 
+//
 //         case 13:
 //            m_strMsg += ": Invalid epoll ID";
 //            break;
-// 
+//
 //         default:
 //            break;
 //         }
-// 
+//
 //         break;
-// 
+//
 //      case 6:
 //         m_strMsg = "Non-blocking call failure";
-// 
+//
 //         switch (m_iMinor)
 //         {
 //         case 1:
 //            m_strMsg += ": no buffer available for sending";
 //            break;
-// 
+//
 //         case 2:
 //            m_strMsg += ": no data available for reading";
 //            break;
-// 
+//
 //         default:
 //            break;
 //         }
-// 
+//
 //         break;
-// 
+//
 //      case 7:
 //         m_strMsg = "The peer side has signalled an error";
-// 
+//
 //         break;
-// 
+//
 //       default:
 //         m_strMsg = "Unknown error";
 //    }
-// 
+//
 //    // Adding "errno" information
 //    if ((0 != m_iMajor) && (0 < m_iErrno))
 //    {
@@ -631,27 +631,27 @@
 //          LocalFree(lpMsgBuf);
 //       #endif
 //    }
-// 
+//
 //    // period
 //    #ifndef WIN32
 //       m_strMsg += ".";
 //    #endif
-// 
+//
 //    return m_strMsg.c_str();
 // }
-// 
+//
 // int CUDTException::getErrorCode() const
 // {
 //    return m_iMajor * 1000 + m_iMinor;
 // }
-// 
+//
 // void CUDTException::clear()
 // {
 //    m_iMajor = 0;
 //    m_iMinor = 0;
 //    m_iErrno = 0;
 // }
-// 
+//
 // const int CUDTException::SUCCESS = 0;
 // const int CUDTException::ECONNSETUP = 1000;
 // const int CUDTException::ENOSERVER = 1001;
@@ -689,8 +689,8 @@
 // const int CUDTException::ETIMEOUT = 6003;
 // const int CUDTException::EPEERERR = 7000;
 // const int CUDTException::EUNKNOWN = -1;
-// 
-// 
+//
+//
 // //
 // bool CIPAddress::ipcmp(const sockaddr* addr1, const sockaddr* addr2, int ver)
 // {
@@ -698,7 +698,7 @@
 //    {
 //       sockaddr_in* a1 = (sockaddr_in*)addr1;
 //       sockaddr_in* a2 = (sockaddr_in*)addr2;
-// 
+//
 //       if ((a1->sin_port == a2->sin_port) && (a1->sin_addr.s_addr == a2->sin_addr.s_addr))
 //          return true;
 //    }
@@ -706,20 +706,20 @@
 //    {
 //       sockaddr_in6* a1 = (sockaddr_in6*)addr1;
 //       sockaddr_in6* a2 = (sockaddr_in6*)addr2;
-// 
+//
 //       if (a1->sin6_port == a2->sin6_port)
 //       {
 //          for (int i = 0; i < 16; ++ i)
 //             if (*((char*)&(a1->sin6_addr) + i) != *((char*)&(a2->sin6_addr) + i))
 //                return false;
-// 
+//
 //          return true;
 //       }
 //    }
-// 
+//
 //    return false;
 // }
-// 
+//
 // void CIPAddress::ntop(const sockaddr* addr, uint32_t ip[4], int ver)
 // {
 //    if (AF_INET == ver)
@@ -736,7 +736,7 @@
 //       ip[0] = (a->sin6_addr.s6_addr[3] << 24) + (a->sin6_addr.s6_addr[2] << 16) + (a->sin6_addr.s6_addr[1] << 8) + a->sin6_addr.s6_addr[0];
 //    }
 // }
-// 
+//
 // void CIPAddress::pton(sockaddr* addr, const uint32_t ip[4], int ver)
 // {
 //    if (AF_INET == ver)
@@ -756,12 +756,12 @@
 //       }
 //    }
 // }
-// 
+//
 // //
 // void CMD5::compute(const char* input, unsigned char result[16])
 // {
 //    md5_state_t state;
-// 
+//
 //    md5_init(&state);
 //    md5_append(&state, (const md5_byte_t *)input, strlen(input));
 //    md5_finish(&state, result);

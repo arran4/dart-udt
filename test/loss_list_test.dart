@@ -49,10 +49,13 @@ void main() {
 
       expect(list.removeRange(52, 53), isTrue);
       expect(list.lossLength, 5);
-      expect(
-        list.getLossArray(limit: 8),
-        <int>[50 | 0x80000000, 51, 54 | 0x80000000, 55, 60],
-      );
+      expect(list.getLossArray(limit: 8), <int>[
+        50 | 0x80000000,
+        51,
+        54 | 0x80000000,
+        55,
+        60,
+      ]);
     });
   });
 }

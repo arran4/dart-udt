@@ -20,7 +20,9 @@ void main() async {
   ).toPacket();
 
   final reparsed = UdtControlPacket.parse(UdtPacket.parse(packet.toBytes()));
-  print('control=${reparsed.type} socketId=${reparsed.parseHandshake().socketId}');
+  print(
+    'control=${reparsed.type} socketId=${reparsed.parseHandshake().socketId}',
+  );
 
   const profileBuilder = UdtCompatibilityProfileBuilder();
   final profile = profileBuilder.build(
@@ -45,7 +47,9 @@ void main() async {
     'blockingFailure=${runtimePlan.hasBlockingFailure}',
   );
 
-  const simulator = UdtLatencyLossSimulator(random: UdtSeededRandomSource(2024));
+  const simulator = UdtLatencyLossSimulator(
+    random: UdtSeededRandomSource(2024),
+  );
   const config = UdtImpairmentConfig(
     lossRate: 0.2,
     reorderRate: 0.35,

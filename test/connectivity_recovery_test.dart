@@ -32,31 +32,37 @@ void main() {
     );
   });
 
-  test('recovery backoff increases with failures and environment constraints', () {
-    const policy = UdtConnectivityRecoveryPolicy();
+  test(
+    'recovery backoff increases with failures and environment constraints',
+    () {
+      const policy = UdtConnectivityRecoveryPolicy();
 
-    final foreground = policy.evaluate(
-      const UdtRecoveryInput(
-        consecutiveFailures: 2,
-        appState: UdtMobileAppState.foreground,
-        networkType: UdtMobileNetworkType.wifi,
-        batterySaverEnabled: false,
-        baseRetryDelayMillis: 100,
-      ),
-    );
-    final backgroundCellular = policy.evaluate(
-      const UdtRecoveryInput(
-        consecutiveFailures: 2,
-        appState: UdtMobileAppState.background,
-        networkType: UdtMobileNetworkType.cellular,
-        batterySaverEnabled: true,
-        baseRetryDelayMillis: 100,
-      ),
-    );
+      final foreground = policy.evaluate(
+        const UdtRecoveryInput(
+          consecutiveFailures: 2,
+          appState: UdtMobileAppState.foreground,
+          networkType: UdtMobileNetworkType.wifi,
+          batterySaverEnabled: false,
+          baseRetryDelayMillis: 100,
+        ),
+      );
+      final backgroundCellular = policy.evaluate(
+        const UdtRecoveryInput(
+          consecutiveFailures: 2,
+          appState: UdtMobileAppState.background,
+          networkType: UdtMobileNetworkType.cellular,
+          batterySaverEnabled: true,
+          baseRetryDelayMillis: 100,
+        ),
+      );
 
-    expect(foreground.nextRetryDelayMillis, 400);
-    expect(backgroundCellular.nextRetryDelayMillis, greaterThan(foreground.nextRetryDelayMillis));
-  });
+      expect(foreground.nextRetryDelayMillis, 400);
+      expect(
+        backgroundCellular.nextRetryDelayMillis,
+        greaterThan(foreground.nextRetryDelayMillis),
+      );
+    },
+  );
 
   test('recovery decision toggles reset and escalation thresholds', () {
     const policy = UdtConnectivityRecoveryPolicy();

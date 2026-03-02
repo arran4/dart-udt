@@ -4,7 +4,12 @@ import 'package:dart_udt/dart_udt.dart';
 import 'package:test/test.dart';
 
 void main() {
-  int msgNo(int base, {bool first = false, bool last = false, bool ordered = false}) {
+  int msgNo(
+    int base, {
+    bool first = false,
+    bool last = false,
+    bool ordered = false,
+  }) {
     var value = base & 0x1FFFFFFF;
     if (first) {
       value |= 0x80000000;
@@ -24,14 +29,20 @@ void main() {
 
     expect(
       buffer.addData(
-        UdtReceiveBufferUnit(payload: Uint8List.fromList([1]), messageNumber: msgNo(10, first: true, last: true)),
+        UdtReceiveBufferUnit(
+          payload: Uint8List.fromList([1]),
+          messageNumber: msgNo(10, first: true, last: true),
+        ),
         1,
       ),
       0,
     );
     expect(
       buffer.addData(
-        UdtReceiveBufferUnit(payload: Uint8List.fromList([2]), messageNumber: msgNo(11, first: true, last: true)),
+        UdtReceiveBufferUnit(
+          payload: Uint8List.fromList([2]),
+          messageNumber: msgNo(11, first: true, last: true),
+        ),
         1,
       ),
       -1,
@@ -44,11 +55,17 @@ void main() {
     final buffer = UdtReceiveBuffer(queueCounter: queue, bufferSize: 8);
 
     buffer.addData(
-      UdtReceiveBufferUnit(payload: Uint8List.fromList([1, 2]), messageNumber: msgNo(1, first: true, last: true)),
+      UdtReceiveBufferUnit(
+        payload: Uint8List.fromList([1, 2]),
+        messageNumber: msgNo(1, first: true, last: true),
+      ),
       0,
     );
     buffer.addData(
-      UdtReceiveBufferUnit(payload: Uint8List.fromList([3, 4]), messageNumber: msgNo(2, first: true, last: true)),
+      UdtReceiveBufferUnit(
+        payload: Uint8List.fromList([3, 4]),
+        messageNumber: msgNo(2, first: true, last: true),
+      ),
       1,
     );
     buffer.ackData(2);
@@ -63,11 +80,17 @@ void main() {
     final buffer = UdtReceiveBuffer(queueCounter: queue, bufferSize: 16);
 
     buffer.addData(
-      UdtReceiveBufferUnit(payload: Uint8List.fromList([1, 2]), messageNumber: msgNo(77, first: true)),
+      UdtReceiveBufferUnit(
+        payload: Uint8List.fromList([1, 2]),
+        messageNumber: msgNo(77, first: true),
+      ),
       0,
     );
     buffer.addData(
-      UdtReceiveBufferUnit(payload: Uint8List.fromList([3, 4]), messageNumber: msgNo(77, last: true)),
+      UdtReceiveBufferUnit(
+        payload: Uint8List.fromList([3, 4]),
+        messageNumber: msgNo(77, last: true),
+      ),
       1,
     );
     buffer.ackData(2);
@@ -83,7 +106,10 @@ void main() {
     final buffer = UdtReceiveBuffer(queueCounter: queue, bufferSize: 16);
 
     buffer.addData(
-      UdtReceiveBufferUnit(payload: Uint8List.fromList([9]), messageNumber: msgNo(90, first: true, last: true)),
+      UdtReceiveBufferUnit(
+        payload: Uint8List.fromList([9]),
+        messageNumber: msgNo(90, first: true, last: true),
+      ),
       0,
     );
     buffer.ackData(1);
@@ -95,7 +121,10 @@ void main() {
 
   test('constructor validates minimum buffer size', () {
     expect(
-      () => UdtReceiveBuffer(queueCounter: UdtReceiveUnitQueueCounter(), bufferSize: 1),
+      () => UdtReceiveBuffer(
+        queueCounter: UdtReceiveUnitQueueCounter(),
+        bufferSize: 1,
+      ),
       throwsA(isA<ArgumentError>()),
     );
   });

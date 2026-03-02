@@ -131,18 +131,54 @@ void main() {
     expect(
       bytes,
       Uint8List.fromList([
-        0x00, 0x00, 0x00, 0x04,
-        0x00, 0x00, 0x00, 0x01,
-        0x12, 0x34, 0x56, 0x78,
-        0x00, 0x00, 0x05, 0xDC,
-        0x00, 0x00, 0x64, 0x00,
-        0xFF, 0xFF, 0xFF, 0xFF,
-        0x00, 0x00, 0x00, 0x2A,
-        0x10, 0x20, 0x30, 0x40,
-        0x0A, 0x00, 0x00, 0x01,
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x04,
+        0x00,
+        0x00,
+        0x00,
+        0x01,
+        0x12,
+        0x34,
+        0x56,
+        0x78,
+        0x00,
+        0x00,
+        0x05,
+        0xDC,
+        0x00,
+        0x00,
+        0x64,
+        0x00,
+        0xFF,
+        0xFF,
+        0xFF,
+        0xFF,
+        0x00,
+        0x00,
+        0x00,
+        0x2A,
+        0x10,
+        0x20,
+        0x30,
+        0x40,
+        0x0A,
+        0x00,
+        0x00,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
       ]),
     );
 
@@ -195,11 +231,16 @@ void main() {
       destinationSocketId: 11,
     );
 
-    final reparsed = UdtControlPacket.parse(UdtPacket.parse(packet.toPacket().toBytes()));
+    final reparsed = UdtControlPacket.parse(
+      UdtPacket.parse(packet.toPacket().toBytes()),
+    );
     expect(reparsed.type, equals(UdtControlType.ack));
     expect(reparsed.header.additionalInfo, equals(77));
     expect(reparsed.parseAckControlInfo().receivedSequenceNumber, equals(1200));
-    expect(reparsed.parseAckControlInfo().optionalMetrics, equals([50, 7, 4096, 64, 900]));
+    expect(
+      reparsed.parseAckControlInfo().optionalMetrics,
+      equals([50, 7, 4096, 64, 900]),
+    );
   });
 
   test('keep-alive and ACK2 control packets carry no payload bytes', () {
@@ -218,28 +259,31 @@ void main() {
     expect(ack2.header.additionalInfo, equals(99));
   });
 
-  test('congestion warning and shutdown packets are typed zero-payload controls', () {
-    final congestion = UdtControlPacket.congestionWarning(
-      timestamp: 31,
-      destinationSocketId: 32,
-    );
-    final shutdown = UdtControlPacket.shutdown(
-      timestamp: 33,
-      destinationSocketId: 34,
-    );
+  test(
+    'congestion warning and shutdown packets are typed zero-payload controls',
+    () {
+      final congestion = UdtControlPacket.congestionWarning(
+        timestamp: 31,
+        destinationSocketId: 32,
+      );
+      final shutdown = UdtControlPacket.shutdown(
+        timestamp: 33,
+        destinationSocketId: 34,
+      );
 
-    final reparsedCongestion = UdtControlPacket.parse(
-      UdtPacket.parse(congestion.toPacket().toBytes()),
-    );
-    final reparsedShutdown = UdtControlPacket.parse(
-      UdtPacket.parse(shutdown.toPacket().toBytes()),
-    );
+      final reparsedCongestion = UdtControlPacket.parse(
+        UdtPacket.parse(congestion.toPacket().toBytes()),
+      );
+      final reparsedShutdown = UdtControlPacket.parse(
+        UdtPacket.parse(shutdown.toPacket().toBytes()),
+      );
 
-    expect(reparsedCongestion.type, equals(UdtControlType.congestionWarning));
-    expect(reparsedCongestion.controlInformation, isEmpty);
-    expect(reparsedShutdown.type, equals(UdtControlType.shutdown));
-    expect(reparsedShutdown.controlInformation, isEmpty);
-  });
+      expect(reparsedCongestion.type, equals(UdtControlType.congestionWarning));
+      expect(reparsedCongestion.controlInformation, isEmpty);
+      expect(reparsedShutdown.type, equals(UdtControlType.shutdown));
+      expect(reparsedShutdown.controlInformation, isEmpty);
+    },
+  );
 
   test('NAK and message drop request control payloads are deterministic', () {
     final nak = UdtControlPacket.nak(
@@ -257,42 +301,58 @@ void main() {
       destinationSocketId: 24,
     );
 
-    final reparsedNak = UdtControlPacket.parse(UdtPacket.parse(nak.toPacket().toBytes()));
-    final reparsedDrop = UdtControlPacket.parse(UdtPacket.parse(drop.toPacket().toBytes()));
+    final reparsedNak = UdtControlPacket.parse(
+      UdtPacket.parse(nak.toPacket().toBytes()),
+    );
+    final reparsedDrop = UdtControlPacket.parse(
+      UdtPacket.parse(drop.toPacket().toBytes()),
+    );
 
     expect(reparsedNak.parseNakLossList(), equals([0x10000001, 0x00000042]));
     expect(reparsedDrop.header.additionalInfo, equals(123));
-    expect(reparsedDrop.parseMessageDropRequest().firstSequenceNumber, equals(500));
-    expect(reparsedDrop.parseMessageDropRequest().lastSequenceNumber, equals(700));
+    expect(
+      reparsedDrop.parseMessageDropRequest().firstSequenceNumber,
+      equals(500),
+    );
+    expect(
+      reparsedDrop.parseMessageDropRequest().lastSequenceNumber,
+      equals(700),
+    );
   });
 
-  test('error signal and user-defined control wrappers preserve header fields', () {
-    final errorSignal = UdtControlPacket.errorSignal(
-      errorType: 404,
-      timestamp: 41,
-      destinationSocketId: 42,
-    );
-    final userDefined = UdtControlPacket.userDefined(
-      extendedType: 0xBEEF,
-      timestamp: 43,
-      destinationSocketId: 44,
-      controlInformation: Uint8List.fromList([9, 8, 7, 6]),
-    );
+  test(
+    'error signal and user-defined control wrappers preserve header fields',
+    () {
+      final errorSignal = UdtControlPacket.errorSignal(
+        errorType: 404,
+        timestamp: 41,
+        destinationSocketId: 42,
+      );
+      final userDefined = UdtControlPacket.userDefined(
+        extendedType: 0xBEEF,
+        timestamp: 43,
+        destinationSocketId: 44,
+        controlInformation: Uint8List.fromList([9, 8, 7, 6]),
+      );
 
-    final reparsedErrorSignal = UdtControlPacket.parse(
-      UdtPacket.parse(errorSignal.toPacket().toBytes()),
-    );
-    final reparsedUserDefined = UdtControlPacket.parse(
-      UdtPacket.parse(userDefined.toPacket().toBytes()),
-    );
+      final reparsedErrorSignal = UdtControlPacket.parse(
+        UdtPacket.parse(errorSignal.toPacket().toBytes()),
+      );
+      final reparsedUserDefined = UdtControlPacket.parse(
+        UdtPacket.parse(userDefined.toPacket().toBytes()),
+      );
 
-    expect(reparsedErrorSignal.type, equals(UdtControlType.errorSignal));
-    expect(reparsedErrorSignal.parseErrorSignalType(), equals(404));
-    expect(reparsedErrorSignal.controlInformation, isEmpty);
-    expect(reparsedUserDefined.type, equals(UdtControlType.userDefined));
-    expect(reparsedUserDefined.parseUserDefinedExtendedType(), equals(0xBEEF));
-    expect(reparsedUserDefined.controlInformation, equals([9, 8, 7, 6]));
-  });
+      expect(reparsedErrorSignal.type, equals(UdtControlType.errorSignal));
+      expect(reparsedErrorSignal.parseErrorSignalType(), equals(404));
+      expect(reparsedErrorSignal.controlInformation, isEmpty);
+      expect(reparsedUserDefined.type, equals(UdtControlType.userDefined));
+      expect(
+        reparsedUserDefined.parseUserDefinedExtendedType(),
+        equals(0xBEEF),
+      );
+      expect(reparsedUserDefined.controlInformation, equals([9, 8, 7, 6]));
+    },
+  );
 
   test('invalid payload size throws', () {
     expect(
@@ -430,17 +490,18 @@ void main() {
   _epollTests();
 }
 
-
 final class _FakeSocketEventSource implements UdtSocketEventSource {
   final Map<int, StreamController<UdtSocketIoEvent>> _controllers =
       <int, StreamController<UdtSocketIoEvent>>{};
 
   @override
   Stream<UdtSocketIoEvent> eventsFor(int socketId) {
-    return _controllers.putIfAbsent(
-      socketId,
-      () => StreamController<UdtSocketIoEvent>.broadcast(sync: true),
-    ).stream;
+    return _controllers
+        .putIfAbsent(
+          socketId,
+          () => StreamController<UdtSocketIoEvent>.broadcast(sync: true),
+        )
+        .stream;
   }
 
   void emit(int socketId, UdtPollEvent event) {
@@ -459,31 +520,37 @@ final class _FakeSocketEventSource implements UdtSocketEventSource {
 }
 
 void _epollTests() {
-  test('epoll wait returns watched ready socket sets and drains snapshot', () async {
-    final source = _FakeSocketEventSource();
-    addTearDown(source.close);
+  test(
+    'epoll wait returns watched ready socket sets and drains snapshot',
+    () async {
+      final source = _FakeSocketEventSource();
+      addTearDown(source.close);
 
-    final epoll = UdtEpoll(eventSource: source);
-    final pollId = epoll.create();
+      final epoll = UdtEpoll(eventSource: source);
+      final pollId = epoll.create();
 
-    epoll.addUdtSocket(pollId, 10, events: {UdtPollEvent.inEvent});
-    epoll.addUdtSocket(pollId, 20, events: {UdtPollEvent.outEvent});
+      epoll.addUdtSocket(pollId, 10, events: {UdtPollEvent.inEvent});
+      epoll.addUdtSocket(pollId, 20, events: {UdtPollEvent.outEvent});
 
-    source.emit(10, UdtPollEvent.inEvent);
-    source.emit(20, UdtPollEvent.outEvent);
-    source.emit(10, UdtPollEvent.errEvent); // ignored (not watched)
+      source.emit(10, UdtPollEvent.inEvent);
+      source.emit(20, UdtPollEvent.outEvent);
+      source.emit(10, UdtPollEvent.errEvent); // ignored (not watched)
 
-    final ready = await epoll.wait(pollId, timeout: const Duration(milliseconds: 1));
-    expect(ready.readSockets, equals(<int>{10}));
-    expect(ready.writeSockets, equals(<int>{20}));
-    expect(ready.errorSockets, isEmpty);
+      final ready = await epoll.wait(
+        pollId,
+        timeout: const Duration(milliseconds: 1),
+      );
+      expect(ready.readSockets, equals(<int>{10}));
+      expect(ready.writeSockets, equals(<int>{20}));
+      expect(ready.errorSockets, isEmpty);
 
-    final drained = await epoll.wait(
-      pollId,
-      timeout: const Duration(milliseconds: 1),
-    );
-    expect(drained.isEmpty, isTrue);
-  });
+      final drained = await epoll.wait(
+        pollId,
+        timeout: const Duration(milliseconds: 1),
+      );
+      expect(drained.isEmpty, isTrue);
+    },
+  );
 
   test('epoll rejects concurrent wait calls on same poll id', () async {
     final source = _FakeSocketEventSource();
@@ -493,7 +560,10 @@ void _epollTests() {
     final pollId = epoll.create();
     epoll.addUdtSocket(pollId, 40);
 
-    final firstWait = epoll.wait(pollId, timeout: const Duration(milliseconds: 10));
+    final firstWait = epoll.wait(
+      pollId,
+      timeout: const Duration(milliseconds: 10),
+    );
     await Future<void>.delayed(Duration.zero);
 
     expect(
@@ -506,27 +576,33 @@ void _epollTests() {
     expect(ready.readSockets, equals(<int>{40}));
   });
 
-  test('epoll close and unknown poll id paths throw deterministically', () async {
-    final source = _FakeSocketEventSource();
-    addTearDown(source.close);
+  test(
+    'epoll close and unknown poll id paths throw deterministically',
+    () async {
+      final source = _FakeSocketEventSource();
+      addTearDown(source.close);
 
-    final epoll = UdtEpoll(eventSource: source);
-    final pollId = epoll.create();
-    epoll.addUdtSocket(pollId, 50);
+      final epoll = UdtEpoll(eventSource: source);
+      final pollId = epoll.create();
+      epoll.addUdtSocket(pollId, 50);
 
-    epoll.close(pollId);
+      epoll.close(pollId);
 
-    expect(() => epoll.close(pollId), throwsA(isA<ArgumentError>()));
-    expect(
-      () => epoll.wait(pollId, timeout: const Duration(milliseconds: 1)),
-      throwsA(isA<ArgumentError>()),
-    );
-    expect(() => epoll.addUdtSocket(pollId, 50), throwsA(isA<ArgumentError>()));
-    await expectLater(
-      epoll.removeUdtSocket(pollId, 50),
-      throwsA(isA<ArgumentError>()),
-    );
-  });
+      expect(() => epoll.close(pollId), throwsA(isA<ArgumentError>()));
+      expect(
+        () => epoll.wait(pollId, timeout: const Duration(milliseconds: 1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => epoll.addUdtSocket(pollId, 50),
+        throwsA(isA<ArgumentError>()),
+      );
+      await expectLater(
+        epoll.removeUdtSocket(pollId, 50),
+        throwsA(isA<ArgumentError>()),
+      );
+    },
+  );
 
   test('epoll remove stops reporting events for removed sockets', () async {
     final source = _FakeSocketEventSource();
@@ -539,7 +615,10 @@ void _epollTests() {
     await epoll.removeUdtSocket(pollId, 30);
     source.emit(30, UdtPollEvent.inEvent);
 
-    final ready = await epoll.wait(pollId, timeout: const Duration(milliseconds: 1));
+    final ready = await epoll.wait(
+      pollId,
+      timeout: const Duration(milliseconds: 1),
+    );
     expect(ready.isEmpty, isTrue);
   });
 }

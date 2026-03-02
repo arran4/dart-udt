@@ -334,7 +334,11 @@ final class UdtControlPacket {
 
     final data = ByteData.sublistView(controlInformation);
     final words = <int>[];
-    for (var offset = 0; offset < controlInformation.lengthInBytes; offset += 4) {
+    for (
+      var offset = 0;
+      offset < controlInformation.lengthInBytes;
+      offset += 4
+    ) {
       words.add(data.getInt32(offset, Endian.big));
     }
     return words;

@@ -30,9 +30,7 @@ void main() {
         reorderRate: 0.02,
         maxJitterMillis: 10,
       ),
-      packets: [
-        UdtImpairmentInput(sequence: i, baseDelayMillis: 5 + (i % 5)),
-      ],
+      packets: [UdtImpairmentInput(sequence: i, baseDelayMillis: 5 + (i % 5))],
     );
     payloadSum += outcomes.first.delayMillis;
   }

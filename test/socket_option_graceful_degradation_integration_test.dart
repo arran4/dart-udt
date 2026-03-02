@@ -39,87 +39,92 @@ final class _DegradeOptionTarget
 }
 
 void main() {
-  test('optional socket-option failure degrades gracefully and runtime bind continues',
-      () async {
-    const builder = UdtCompatibilityProfileBuilder();
-    final profile = builder.build(
-      platform: 'linux',
-      ipMode: UdtIpMode.dualStack,
-      ipv6: true,
-      mobileInput: const UdtMobilePolicyInput(
-        appState: UdtMobileAppState.foreground,
-        networkType: UdtMobileNetworkType.wifi,
-        allowBackgroundNetwork: true,
-        batterySaverEnabled: false,
-      ),
-    );
+  test(
+    'optional socket-option failure degrades gracefully and runtime bind continues',
+    () async {
+      const builder = UdtCompatibilityProfileBuilder();
+      final profile = builder.build(
+        platform: 'linux',
+        ipMode: UdtIpMode.dualStack,
+        ipv6: true,
+        mobileInput: const UdtMobilePolicyInput(
+          appState: UdtMobileAppState.foreground,
+          networkType: UdtMobileNetworkType.wifi,
+          allowBackgroundNetwork: true,
+          batterySaverEnabled: false,
+        ),
+      );
 
-    final target = _DegradeOptionTarget(failReusePort: true);
+      final target = _DegradeOptionTarget(failReusePort: true);
 
-    const planner = UdtSocketRuntimePlanner();
-    final runtimePlan = await planner.buildPlan(
-      profile: profile,
-      optionTarget: target,
-    );
+      const planner = UdtSocketRuntimePlanner();
+      final runtimePlan = await planner.buildPlan(
+        profile: profile,
+        optionTarget: target,
+      );
 
-    expect(runtimePlan.hasBlockingFailure, isFalse);
-    expect(
-      runtimePlan.applyReport.results.any(
-        (result) =>
-            result.key == UdtSocketOptionKey.reusePort &&
-            result.status == UdtSocketOptionApplyStatus.skippedUnsupported,
-      ),
-      isTrue,
-    );
+      expect(runtimePlan.hasBlockingFailure, isFalse);
+      expect(
+        runtimePlan.applyReport.results.any(
+          (result) =>
+              result.key == UdtSocketOptionKey.reusePort &&
+              result.status == UdtSocketOptionApplyStatus.skippedUnsupported,
+        ),
+        isTrue,
+      );
 
-    const executor = UdtSocketRuntimeExecutor();
-    final execution = await executor.executeBindPlan(
-      target: target,
-      runtimePlan: runtimePlan,
-    );
+      const executor = UdtSocketRuntimeExecutor();
+      final execution = await executor.executeBindPlan(
+        target: target,
+        runtimePlan: runtimePlan,
+      );
 
-    expect(execution.isBound, isTrue);
-  });
+      expect(execution.isBound, isTrue);
+    },
+  );
 
-  test('required socket-option failure blocks runtime bind execution', () async {
-    const builder = UdtCompatibilityProfileBuilder();
-    final profile = builder.build(
-      platform: 'linux',
-      ipMode: UdtIpMode.ipv6Only,
-      ipv6: true,
-      mobileInput: const UdtMobilePolicyInput(
-        appState: UdtMobileAppState.foreground,
-        networkType: UdtMobileNetworkType.wifi,
-        allowBackgroundNetwork: true,
-        batterySaverEnabled: false,
-      ),
-    );
+  test(
+    'required socket-option failure blocks runtime bind execution',
+    () async {
+      const builder = UdtCompatibilityProfileBuilder();
+      final profile = builder.build(
+        platform: 'linux',
+        ipMode: UdtIpMode.ipv6Only,
+        ipv6: true,
+        mobileInput: const UdtMobilePolicyInput(
+          appState: UdtMobileAppState.foreground,
+          networkType: UdtMobileNetworkType.wifi,
+          allowBackgroundNetwork: true,
+          batterySaverEnabled: false,
+        ),
+      );
 
-    final target = _DegradeOptionTarget(failIpv6Only: true);
+      final target = _DegradeOptionTarget(failIpv6Only: true);
 
-    const planner = UdtSocketRuntimePlanner();
-    final runtimePlan = await planner.buildPlan(
-      profile: profile,
-      optionTarget: target,
-    );
+      const planner = UdtSocketRuntimePlanner();
+      final runtimePlan = await planner.buildPlan(
+        profile: profile,
+        optionTarget: target,
+      );
 
-    expect(runtimePlan.hasBlockingFailure, isTrue);
-    expect(
-      runtimePlan.applyReport.results.any(
-        (result) =>
-            result.key == UdtSocketOptionKey.ipv6Only &&
-            result.status == UdtSocketOptionApplyStatus.failedRequired,
-      ),
-      isTrue,
-    );
+      expect(runtimePlan.hasBlockingFailure, isTrue);
+      expect(
+        runtimePlan.applyReport.results.any(
+          (result) =>
+              result.key == UdtSocketOptionKey.ipv6Only &&
+              result.status == UdtSocketOptionApplyStatus.failedRequired,
+        ),
+        isTrue,
+      );
 
-    const executor = UdtSocketRuntimeExecutor();
-    final execution = await executor.executeBindPlan(
-      target: target,
-      runtimePlan: runtimePlan,
-    );
+      const executor = UdtSocketRuntimeExecutor();
+      final execution = await executor.executeBindPlan(
+        target: target,
+        runtimePlan: runtimePlan,
+      );
 
-    expect(execution.isBound, isFalse);
-    expect(execution.attempts, isEmpty);
-  });
+      expect(execution.isBound, isFalse);
+      expect(execution.attempts, isEmpty);
+    },
+  );
 }

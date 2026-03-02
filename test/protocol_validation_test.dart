@@ -13,7 +13,10 @@ void main() {
     });
 
     test('packet parse rejects shorter-than-header datagram', () {
-      expect(() => UdtPacket.parse(Uint8List(10)), throwsA(isA<ArgumentError>()));
+      expect(
+        () => UdtPacket.parse(Uint8List(10)),
+        throwsA(isA<ArgumentError>()),
+      );
     });
 
     test('data and control constructors validate numeric ranges', () {
@@ -78,12 +81,21 @@ void main() {
 
   group('control-packet validation and mismatch branches', () {
     test('control type lookup rejects unknown value', () {
-      expect(() => UdtControlType.fromCode(0x1235), throwsA(isA<ArgumentError>()));
+      expect(
+        () => UdtControlType.fromCode(0x1235),
+        throwsA(isA<ArgumentError>()),
+      );
     });
 
     test('ACK and message-drop payload codecs validate lengths', () {
-      expect(() => UdtAckControlInfo.parse(Uint8List(0)), throwsA(isA<ArgumentError>()));
-      expect(() => UdtAckControlInfo.parse(Uint8List(6)), throwsA(isA<ArgumentError>()));
+      expect(
+        () => UdtAckControlInfo.parse(Uint8List(0)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => UdtAckControlInfo.parse(Uint8List(6)),
+        throwsA(isA<ArgumentError>()),
+      );
 
       expect(
         () => UdtMessageDropRequestControlInfo.parse(Uint8List(7)),
@@ -100,15 +112,24 @@ void main() {
         ),
       );
 
-      expect(() => UdtControlPacket.parse(dataPacket), throwsA(isA<ArgumentError>()));
+      expect(
+        () => UdtControlPacket.parse(dataPacket),
+        throwsA(isA<ArgumentError>()),
+      );
     });
 
     test('typed control parsers fail on mismatched packet kind', () {
-      final keepAlive = UdtControlPacket.keepAlive(timestamp: 5, destinationSocketId: 6);
+      final keepAlive = UdtControlPacket.keepAlive(
+        timestamp: 5,
+        destinationSocketId: 6,
+      );
 
       expect(() => keepAlive.parseAckControlInfo(), throwsA(isA<StateError>()));
       expect(() => keepAlive.parseHandshake(), throwsA(isA<StateError>()));
-      expect(() => keepAlive.parseMessageDropRequest(), throwsA(isA<StateError>()));
+      expect(
+        () => keepAlive.parseMessageDropRequest(),
+        throwsA(isA<StateError>()),
+      );
       expect(() => keepAlive.parseNakLossList(), throwsA(isA<StateError>()));
     });
 

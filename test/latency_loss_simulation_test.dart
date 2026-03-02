@@ -30,8 +30,14 @@ void main() {
   });
 
   test('simulator bounds jitter and preserves minimum base delay', () {
-    const simulator = UdtLatencyLossSimulator(random: UdtSeededRandomSource(99));
-    const config = UdtImpairmentConfig(lossRate: 0, reorderRate: 0, maxJitterMillis: 20);
+    const simulator = UdtLatencyLossSimulator(
+      random: UdtSeededRandomSource(99),
+    );
+    const config = UdtImpairmentConfig(
+      lossRate: 0,
+      reorderRate: 0,
+      maxJitterMillis: 20,
+    );
     final packets = List.generate(
       10,
       (index) => UdtImpairmentInput(sequence: index, baseDelayMillis: 7),
