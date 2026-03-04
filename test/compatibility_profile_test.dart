@@ -22,7 +22,10 @@ void main() {
     expect(profile.ipMode, UdtIpMode.dualStack);
     expect(profile.socketOptions, isNotEmpty);
     expect(
-      profile.socketOptions.any((o) => o.key == UdtSocketOptionKey.ipv6Only),
+      profile.socketOptions.any(
+        (UdtSocketOptionRecommendation o) =>
+            o.key == UdtSocketOptionKey.ipv6Only,
+      ),
       isTrue,
     );
     expect(profile.mtu.recommendedMtu, 1300);
@@ -45,7 +48,10 @@ void main() {
     );
 
     expect(
-      profile.socketOptions.where((o) => o.key == UdtSocketOptionKey.ipv6Only),
+      profile.socketOptions.where(
+        (UdtSocketOptionRecommendation o) =>
+            o.key == UdtSocketOptionKey.ipv6Only,
+      ),
       isEmpty,
     );
     expect(profile.mtu.recommendedMtu, 1400);
