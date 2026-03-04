@@ -29,7 +29,10 @@ final class UdtReceiveUserList<T> {
   UdtReceiveNode<T>? get head => _nodes.isEmpty ? null : _nodes.first;
   UdtReceiveNode<T>? get tail => _nodes.isEmpty ? null : _nodes.last;
 
-  List<int> get socketOrder => _nodes.map((node) => node.socketId).toList();
+  List<int>? _cachedSocketOrder;
+
+  List<int> get socketOrder =>
+      _cachedSocketOrder ??= _nodes.map((node) => node.socketId).toList();
 
   void insert({
     required int socketId,
@@ -48,6 +51,7 @@ final class UdtReceiveUserList<T> {
     node.onList = true;
     _nodes.addLast(node);
     _bySocketId[socketId] = node;
+    _cachedSocketOrder = null;
   }
 
   void remove(int socketId) {
@@ -58,6 +62,7 @@ final class UdtReceiveUserList<T> {
 
     node.onList = false;
     _nodes.remove(node);
+    _cachedSocketOrder = null;
   }
 
   void update(int socketId, {required int timestampMicros}) {
@@ -74,6 +79,7 @@ final class UdtReceiveUserList<T> {
 
     _nodes.remove(node);
     _nodes.addLast(node);
+    _cachedSocketOrder = null;
   }
 }
 
