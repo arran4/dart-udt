@@ -6,13 +6,11 @@ final class _FakeRuntimeTarget implements UdtSocketRuntimeTarget {
   bool dualStack = false;
   bool closed = false;
 
-  @override
   Future<void> bind(UdtBindFamily family, {required bool dualStack}) async {
     boundFamily = family;
     this.dualStack = dualStack;
   }
 
-  @override
   Future<void> close() async {
     closed = true;
   }
